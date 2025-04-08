@@ -2,6 +2,9 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+    // - - - - - - - - - - - - - - - - - - - - -
+    // 필드
+    // - - - - - - - - - - - - - - - - - - - - -
     public static GameManager Instance;
 
     public GameObject[] Board; // 2, 4, 8... 프리팹 배열 (index = log2 - 1)
@@ -15,23 +18,41 @@ public class GameManager : MonoBehaviour
     private bool move;
     private Vector3 firstPos, gap;
 
-    GameObject[,] Square = new GameObject[4, 4];
+    private GameObject[,] Square = new GameObject[4, 4];
 
+    public DamageInvoker damageInvoker;
+
+    // - - - - - - - - - - - - - - - - - - - - -
+    // Unity 콜백
+    // - - - - - - - - - - - - - - - - - - - - -
     void Awake()
     {
         if (Instance == null) Instance = this;
         else Destroy(gameObject);
+        damageInvoker = new DamageInvoker();
     }
 
     void Start()
     {
+        
         curTurns = maxTurns;
         Debug.Log($"게임 시작! 남은 이동 횟수: {curTurns}");
+
         Spawn();
         Spawn();
     }
 
     void Update()
+    {
+        GetMouseOrTouch();
+    }
+
+
+
+    // - - - - - - - - - - - - - - - - - - - - -
+    // 입력 받기
+    // - - - - - - - - - - - - - - - - - - - - -
+    private void GetMouseOrTouch()
     {
         if (Input.GetMouseButtonDown(0) || (Input.touchCount == 1 && Input.GetTouch(0).phase == TouchPhase.Began))
         {
@@ -45,65 +66,75 @@ public class GameManager : MonoBehaviour
 
             if (gap.magnitude < 100) return;
             gap.Normalize();
+            What();
+        }
+    }
 
-            if (wait)
+        // 메서드 이름
+    private void What() 
+    {
+        if (wait)
+        {
+            wait = false;
+
+            // 방향 판별 후 MoveOrCombine 호출
+            if (gap.y > 0 && Mathf.Abs(gap.x) < 0.5f) // 위
             {
-                wait = false;
+                for (x = 0; x < 4; x++)
+                    for (y = 0; y < 3; y++)
+                        for (i = 3; i > y; i--)
+                            MoveOrCombine(x, i - 1, x, i);
+            }
+            else if (gap.y < 0 && Mathf.Abs(gap.x) < 0.5f) // 아래
+            {
+                for (x = 0; x < 4; x++)
+                    for (y = 3; y > 0; y--)
+                        for (i = 0; i < y; i++)
+                            MoveOrCombine(x, i + 1, x, i);
+            }
+            else if (gap.x > 0 && Mathf.Abs(gap.y) < 0.5f) // 오른쪽
+            {
+                for (y = 0; y < 4; y++)
+                    for (x = 0; x < 3; x++)
+                        for (i = 3; i > x; i--)
+                            MoveOrCombine(i - 1, y, i, y);
+            }
+            else if (gap.x < 0 && Mathf.Abs(gap.y) < 0.5f) // 왼쪽
+            {
+                for (y = 0; y < 4; y++)
+                    for (x = 3; x > 0; x--)
+                        for (i = 0; i < x; i++)
+                            MoveOrCombine(i + 1, y, i, y);
+            }
 
-                // 방향 판별 후 MoveOrCombine 호출
-                if (gap.y > 0 && Mathf.Abs(gap.x) < 0.5f) // 위
-                {
-                    for (x = 0; x < 4; x++)
-                        for (y = 0; y < 3; y++)
-                            for (i = 3; i > y; i--)
-                                MoveOrCombine(x, i - 1, x, i);
-                }
-                else if (gap.y < 0 && Mathf.Abs(gap.x) < 0.5f) // 아래
-                {
-                    for (x = 0; x < 4; x++)
-                        for (y = 3; y > 0; y--)
-                            for (i = 0; i < y; i++)
-                                MoveOrCombine(x, i + 1, x, i);
-                }
-                else if (gap.x > 0 && Mathf.Abs(gap.y) < 0.5f) // 오른쪽
-                {
+            // 이동이 발생했으면 처리
+            if (move)
+            {
+                move = false;
+                curTurns--;
+                Debug.Log($"이동! 남은 이동 횟수: {curTurns}");
+
+                Spawn();
+
+                for (x = 0; x < 4; x++)
                     for (y = 0; y < 4; y++)
-                        for (x = 0; x < 3; x++)
-                            for (i = 3; i > x; i--)
-                                MoveOrCombine(i - 1, y, i, y);
-                }
-                else if (gap.x < 0 && Mathf.Abs(gap.y) < 0.5f) // 왼쪽
-                {
-                    for (y = 0; y < 4; y++)
-                        for (x = 3; x > 0; x--)
-                            for (i = 0; i < x; i++)
-                                MoveOrCombine(i + 1, y, i, y);
-                }
+                        if (Square[x, y] != null)
+                            Square[x, y].tag = "Untagged";
 
-                // 이동이 발생했으면 처리
-                if (move)
-                {
-                    move = false;
-                    curTurns--;
-                    Debug.Log($"이동! 남은 이동 횟수: {curTurns}");
-
-                    Spawn();
-
-                    for (x = 0; x < 4; x++)
-                        for (y = 0; y < 4; y++)
-                            if (Square[x, y] != null)
-                                Square[x, y].tag = "Untagged";
-
-                    if (curTurns <= 0)
-                        {
-                            Debug.Log("이동 횟수 소진! 게임 종료!");
-                            ResetGame();
-                        }
-                }
+                if (curTurns <= 0)
+                    {
+                        Debug.Log("이동 횟수 소진! 게임 종료!");
+                        ResetGame();
+                    }
             }
         }
     }
 
+
+
+    // - - - - - - - - - - - - - - - - - - - - -
+    // 2048 로직
+    // - - - - - - - - - - - - - - - - - - - - -
     void MoveOrCombine(int x1, int y1, int x2, int y2)
     {
         // 이동
@@ -127,9 +158,8 @@ public class GameManager : MonoBehaviour
 
             // 데미지 계산
             int value = Square[x2, y2].GetComponent<Board>().value;
-            int damage = (int)Mathf.Log(value * 2, 2);
-            gold += damage;
-            Debug.Log($"{value * 2}로 병합! > 데미지 {damage}");
+            // gold += damage;
+            damageInvoker.OnCombine(value);
 
             for (j = 0; j < Board.Length; j++)
             {
@@ -160,26 +190,31 @@ public class GameManager : MonoBehaviour
         }
     }
 
+
+
+    // - - - - - - - - - - - - - - - - - - - - -
+    // 재시작
+    // - - - - - - - - - - - - - - - - - - - - -
     void ResetGame()
-{
-    Debug.Log("게임 재시작!");
+    {
+        Debug.Log("게임 재시작!");
 
-    // 기존 블록 삭제
-    for (int x = 0; x < 4; x++)
-        for (int y = 0; y < 4; y++)
-        {
-            if (Square[x, y] != null)
+        // 기존 블록 삭제
+        for (int x = 0; x < 4; x++)
+            for (int y = 0; y < 4; y++)
             {
-                Destroy(Square[x, y]);
-                Square[x, y] = null;
+                if (Square[x, y] != null)
+                {
+                    Destroy(Square[x, y]);
+                    Square[x, y] = null;
+                }
             }
-        }
 
-    curTurns = maxTurns;
+        curTurns = maxTurns;
 
-    Spawn();
-    Spawn();
+        Spawn();
+        Spawn();
 
-    Debug.Log($"게임 재시작! 이동 횟수: {curTurns}");
-}
+        Debug.Log($"게임 재시작! 이동 횟수: {curTurns}");
+    }
 }
