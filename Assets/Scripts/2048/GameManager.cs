@@ -8,7 +8,13 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance;
 
     public GameObject[] Board; // 2, 4, 8... 프리팹 배열 (index = log2 - 1)
+
+    public const float xStart = -2.54f; //[1,1]의 x좌표와 y좌표, 그후 증가할때마다의 좌표 차이
+    public const float yStart = -4.13f;
+    public const float xOffset = 1.28f;
+    public const float yOffset = 1.25f;
     public int maxTurns = 50;
+    public int probablity_4 = 15;
 
     private int curTurns;
     private int gold;
@@ -17,8 +23,8 @@ public class GameManager : MonoBehaviour
     private bool wait;
     private bool move;
     private Vector3 firstPos, gap;
-
-    private GameObject[,] Square = new GameObject[4, 4];
+    [SerializeField]
+    private GameObject[,] Square = new GameObject[5, 5];
 
     public DamageInvoker damageInvoker;
 
@@ -34,7 +40,7 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-        
+
         curTurns = maxTurns;
         Debug.Log($"게임 시작! 남은 이동 횟수: {curTurns}");
 
@@ -66,12 +72,12 @@ public class GameManager : MonoBehaviour
 
             if (gap.magnitude < 100) return;
             gap.Normalize();
-            What();
+            ExecuteTurn();
         }
     }
 
-        // 메서드 이름
-    private void What() 
+    // 메서드 이름
+    private void ExecuteTurn()
     {
         if (wait)
         {
@@ -80,29 +86,29 @@ public class GameManager : MonoBehaviour
             // 방향 판별 후 MoveOrCombine 호출
             if (gap.y > 0 && Mathf.Abs(gap.x) < 0.5f) // 위
             {
-                for (x = 0; x < 4; x++)
-                    for (y = 0; y < 3; y++)
-                        for (i = 3; i > y; i--)
+                for (x = 0; x < 5; x++)
+                    for (y = 0; y < 4; y++)
+                        for (i = 4; i > y; i--)
                             MoveOrCombine(x, i - 1, x, i);
             }
             else if (gap.y < 0 && Mathf.Abs(gap.x) < 0.5f) // 아래
             {
-                for (x = 0; x < 4; x++)
-                    for (y = 3; y > 0; y--)
+                for (x = 0; x < 5; x++)
+                    for (y = 4; y > 0; y--)
                         for (i = 0; i < y; i++)
                             MoveOrCombine(x, i + 1, x, i);
             }
             else if (gap.x > 0 && Mathf.Abs(gap.y) < 0.5f) // 오른쪽
             {
-                for (y = 0; y < 4; y++)
-                    for (x = 0; x < 3; x++)
-                        for (i = 3; i > x; i--)
+                for (y = 0; y < 5; y++)
+                    for (x = 0; x < 4; x++)
+                        for (i = 4; i > x; i--)
                             MoveOrCombine(i - 1, y, i, y);
             }
             else if (gap.x < 0 && Mathf.Abs(gap.y) < 0.5f) // 왼쪽
             {
-                for (y = 0; y < 4; y++)
-                    for (x = 3; x > 0; x--)
+                for (y = 0; y < 5; y++)
+                    for (x = 4; x > 0; x--)
                         for (i = 0; i < x; i++)
                             MoveOrCombine(i + 1, y, i, y);
             }
@@ -116,16 +122,16 @@ public class GameManager : MonoBehaviour
 
                 Spawn();
 
-                for (x = 0; x < 4; x++)
-                    for (y = 0; y < 4; y++)
+                for (x = 0; x < 5; x++)
+                    for (y = 0; y < 5; y++)
                         if (Square[x, y] != null)
                             Square[x, y].tag = "Untagged";
 
                 if (curTurns <= 0)
-                    {
-                        Debug.Log("이동 횟수 소진! 게임 종료!");
-                        ResetGame();
-                    }
+                {
+                    Debug.Log("이동 횟수 소진! 게임 종료!");
+                    ResetGame();
+                }
             }
         }
     }
@@ -169,7 +175,7 @@ public class GameManager : MonoBehaviour
             Square[x1, y1].GetComponent<Board>().Move(x2, y2, true);
             Destroy(Square[x2, y2]);
             Square[x1, y1] = null;
-            Square[x2, y2] = Instantiate(Board[j + 1], new Vector3(-1.63f + 1.08f * x2, -3.41f + 1.05f * y2, 0), Quaternion.identity);
+            Square[x2, y2] = Instantiate(Board[j + 1], new Vector3(xStart + xOffset * x2, yStart + yOffset * y2, 0), Quaternion.identity);
             Square[x2, y2].GetComponent<Board>().value = value * 2;
             Square[x2, y2].tag = "Combine";
         }
@@ -179,13 +185,22 @@ public class GameManager : MonoBehaviour
     {
         while (true)
         {
-            x = Random.Range(0, 4);
-            y = Random.Range(0, 4);
+            x = Random.Range(0, 5);
+            y = Random.Range(0, 5);
             if (Square[x, y] == null)
             {
-                Square[x, y] = Instantiate(Board[0], new Vector3(-1.63f + 1.08f * x, -3.41f + 1.05f * y, 0), Quaternion.identity);
-                Square[x, y].GetComponent<Board>().value = 2;
-                break;
+                if (Random.Range(1, 100) > probablity_4)
+                {
+                    Square[x, y] = Instantiate(Board[0], new Vector3(xStart + xOffset * x, yStart + yOffset * y, 0), Quaternion.identity);
+                    Square[x, y].GetComponent<Board>().value = 2;
+                    break;
+                }
+                else
+                {
+                    Square[x, y] = Instantiate(Board[1], new Vector3(xStart + xOffset * x, yStart + yOffset * y, 0), Quaternion.identity);
+                    Square[x, y].GetComponent<Board>().value = 4;
+                    break;
+                }
             }
         }
     }
@@ -200,8 +215,8 @@ public class GameManager : MonoBehaviour
         Debug.Log("게임 재시작!");
 
         // 기존 블록 삭제
-        for (int x = 0; x < 4; x++)
-            for (int y = 0; y < 4; y++)
+        for (int x = 0; x < 5; x++)
+            for (int y = 0; y < 5; y++)
             {
                 if (Square[x, y] != null)
                 {
