@@ -9,10 +9,10 @@ public class GameManager : MonoBehaviour
 
     public GameObject[] Board; // 2, 4, 8... 프리팹 배열 (index = log2 - 1)
 
-    public const float xStart = -2.54f; //[1,1]의 x좌표와 y좌표, 그후 증가할때마다의 좌표 차이
-    public const float yStart = -4.13f;
-    public const float xOffset = 1.28f;
-    public const float yOffset = 1.25f;
+    public const float xStart = -2.12f; //[1,1]의 x좌표와 y좌표, 그후 증가할때마다의 좌표 차이
+    public const float yStart = -3.71f;
+    public const float xOffset = 1.06f;
+    public const float yOffset = 1.05f;
     public int maxTurns = 50;
     public int probablity_4 = 15;
 
