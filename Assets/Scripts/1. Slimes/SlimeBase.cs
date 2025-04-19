@@ -43,8 +43,6 @@ public abstract class SlimeBase : MonoBehaviour, ITurnListener
     {
         TextMeshProUGUI _damageText = Instantiate(damageText, slimeCanvas);
         _damageText.text = "-" + damage.ToString();
-
-        // 추후 DOTween으로 애니메이션 구현 예정
     }
 
     private void Die()

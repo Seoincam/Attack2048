@@ -1,6 +1,6 @@
 // - - - - - - - - - - - - - - - - - -
 // EventManger.cs
-//  - GameEvent 열거형으로 이벤트를 등록하고 실행하는 클래스.
+//  - GameEvent 열거형으로 이벤트를 구독하고 실행하는 클래스.
 //  - Subscribe(), Unsubscribe(), Publish()로 작동.
 // - - - - - - - - - - - - - - - - - -
 
@@ -29,9 +29,7 @@ public class EventManager
     // 이벤트에 리스너(메서드)를 구독합니다.
     // 이벤트가 존재하지 않으면 새로 생성 후 구독합니다.
     public static void Subscribe(GameEvent gameEvent, UnityAction listener) {
-        UnityEvent thisEvent;
-
-        if(Events.TryGetValue(gameEvent, out thisEvent)) {
+        if(Events.TryGetValue(gameEvent, out UnityEvent thisEvent)) {
             thisEvent.AddListener(listener); // 기존 이벤트에 리스너 등록
         }
 
@@ -44,11 +42,9 @@ public class EventManager
 
 
     // 이벤트에 리스너(메서드)를 제거합니다.
-    // 더 이상 특정 리스너를 사용 안 한다면 꼭 사용해주세요.
+    // 더 이상 특정 리스너를 사용 안 한다면 꼭 제거해주세요.
     public static void Unsubscribe(GameEvent gameEvent, UnityAction listener) {
-        UnityEvent thisEvent;
-
-        if(Events.TryGetValue(gameEvent, out thisEvent)) {
+        if(Events.TryGetValue(gameEvent, out UnityEvent thisEvent)) {
             thisEvent.RemoveListener(listener);
         }
     }
@@ -56,9 +52,7 @@ public class EventManager
 
     // 이벤트에 구독된 모든 리스너(메서드)를 실행시킵니다. 
     public static void Publish(GameEvent gameEvent) {
-        UnityEvent thisEvent;
-
-        if(Events.TryGetValue(gameEvent, out thisEvent)) {
+        if(Events.TryGetValue(gameEvent, out UnityEvent thisEvent)) {
             thisEvent.Invoke();
         }
     }

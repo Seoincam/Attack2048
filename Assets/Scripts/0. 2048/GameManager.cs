@@ -116,6 +116,8 @@ public class GameManager : MonoBehaviour
             // 이동이 발생했으면 처리
             if (move)
             {
+                EventManager.Publish(GameEvent.NewTurn); // 새로운 턴임을 Event Manager에 알리기.
+                
                 move = false;
                 curTurns--;
                 Debug.Log($"이동! 남은 이동 횟수: {curTurns}");
