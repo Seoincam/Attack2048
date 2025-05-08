@@ -11,8 +11,9 @@ public abstract class SlimeActionBase : MonoBehaviour, ITurnListener
     // - - - - - - - - - - - - - - - - - - - - -
     // 필드
     // - - - - - - - - - - - - - - - - - - - - -
-    protected virtual int Life => 0; // 수명. 자식 클래스에 각각 설정.
-    private int _lifeCounter;
+    
+    [Tooltip("수명")] [SerializeField]      private int Life; // Inspector에서 설정
+    [Tooltip("남은 수명")][SerializeField]   private int _lifeCounter;
 
 
     // - - - - - - - - - - - - - - - - - - - - -

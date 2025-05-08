@@ -5,8 +5,6 @@
 
 public class Imprision : SlimeActionBase
 {
-    protected override int Life => 3; // 수명.
-
     protected override void Execute()
     {
         // TODO: GameManager에 감금 삭제 알리기

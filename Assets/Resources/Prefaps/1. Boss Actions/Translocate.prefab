@@ -184,6 +184,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6489825038915875614}
   - component: {fileID: 5820375041074757602}
+  - component: {fileID: 3119689982618020182}
   m_Layer: 0
   m_Name: Translocate
   m_TagString: Untagged
@@ -263,3 +264,16 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &3119689982618020182
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8089725795113781931}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0aea20cc836624340a578334e87bc508, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Life: 0

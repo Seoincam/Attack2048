@@ -51,7 +51,6 @@ public class SlimeActionManager : MonoBehaviour
     // 벽
     private void Wall()
     {
-        Debug.Log("[Slime Action Manager] 벽");
         Wall wall = Instantiate(_wallPrefab).GetComponent<Wall>();
         // TODO: 위치 설정 -> 위치 정하여 Wall.cs에서 위치 설정
         int x1 = Random.Range(1, 4);
@@ -90,6 +89,7 @@ public class SlimeActionManager : MonoBehaviour
         // TODO: 위치 설정
         // TODO: GameManager에 알려야함.
     }
+    
     // 설치할 방향 랜덤 설정 
     private Vector2Int GetRandomDirection()
     {

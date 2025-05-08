@@ -3,58 +3,79 @@
 //  - 방패 슬라임 클래스.
 // - - - - - - - - - - - - - - - - - -
 
+using UnityEngine;
+
 public class ShieldSlime : SlimeBase
 {
-    // - - - - - - - - - - - - - - - - - - - - -
+    // - - - - - - - - - -
     // 필드
-    // - - - - - - - - - - - - - - - - - - - - -
-    private const int ShieldInterval = 8; // 받는 데미지를 0으로 하는 간격.
-    private int _shieldCounter;
+    // - - - - - - - - - -
+    [Header("[ Shield Slime Logic ]")]
+    [SerializeField, Tooltip( "방패 생성 간격" )]  private int ShieldInterval;
+    [SerializeField, Tooltip( "방패 남은 턴 수" )] private int _shieldCounter;
+    private bool _hasShield;
+    private bool HasShield { 
+        get => _hasShield;
+        set { _hasShield = value; hasShieldText.SetActive(value); }
+    }
 
-    private bool _isWeakened = false; // 1.5배 데미지 받을지 여부. (ShieldInterval 다음 턴에)
-    // TODO: 1.5배 데미지 받기 구현.
+    private bool _isWeakened = false;
+    private bool IsWeakened { 
+        get => _isWeakened;
+        set { _isWeakened = value; isWeakendText.SetActive(value); }
+    }
 
-    private const int WallInterval = 3; // 벽 생성할 간격.
-    private int _wallCounter;
+    [Space, SerializeField, Tooltip( "벽 생성 간격" )] private int WallInterval;
+    [SerializeField, Tooltip( "벽 생성 남은 턴 수" )]   private int _wallCounter;
+
+    [Space, SerializeField] private GameObject hasShieldText;
+    [SerializeField] private GameObject isWeakendText;
 
 
 
-    // - - - - - - - - - - - - - - - - - - - - -
+    // - - - - - - - - - - 
     // Unity 콜백
-    // - - - - - - - - - - - - - - - - - - - - -
+    // - - - - - - - - - - 
     protected override void Start() {
-        maxHealth = 20;
         base.Start();
         
         _shieldCounter = ShieldInterval;
-        _wallCounter = 1;
+        _wallCounter = WallInterval;
+        IsWeakened = false;
+        HasShield = false;
     } 
 
 
 
-    // - - - - - - - - - - - - - - - - - - - - -
-    // 로직
-    // - - - - - - - - - - - - - - - - - - - - -
-    
-    // 턴이 바뀔 때마다 실행.
+    // - - - - - - - - -
+    // ITurnListener
+    // - - - - - - - - -
     public override void OnTurnChanged()
     {
         CalShield();
         CalWall();
     }
 
-    // 방패 생성 간격을 계산 및 실행.
+
+    // - - - - - - - - -
+    // 방패
+    // - - - - - - - - -
     private void CalShield() {
+        if(HasShield) { return; } // 방패가 있다면 _shieldCounter 유지
+    
         _shieldCounter --;
 
         if(_shieldCounter == 0) {
-            // TODO: 방패 생성 호출
+            Debug.Log(" [방패 슬라임] 방패 생성");
             _shieldCounter = ShieldInterval;
-            _isWeakened = true;
+            HasShield = true;
         }
     }
 
-    // 벽 생성 간격을 계산 및 실행.
+
+    // - - - - - - - - -
+    // 벽
+    // - - - - - - - - -
     private void CalWall() {
         _wallCounter --;
 
@@ -62,5 +83,36 @@ public class ShieldSlime : SlimeBase
             EventManager.Publish(GameEvent.Wall);
             _wallCounter = WallInterval;
         }
+    }
+
+
+
+    // - - - - - - - - -
+    // 데미지 로직 override (방패 & 약화 적용 위해서)
+    // - - - - - - - - -
+    protected override void GetDamge(float damage)
+    {
+        // 방패 있을 때 데미지 발생하면
+        //  - 데미지 안 받기
+        //  - 다음 턴 약화
+        if(HasShield) { 
+            Debug.Log(" [방패 슬라임] 방패 사용");
+
+            HasShield = false; 
+            IsWeakened = true; 
+
+            return; 
+        }
+
+        // 약화일 때 데미지 발생하면
+        else if(IsWeakened) { 
+            Debug.Log(" [방패 슬라임] 약화");
+            Debug.Log($"데미지 : {damage} * 1.5배 = {damage * 1.5f}");
+            
+            damage = (int)(damage * 1.5f); 
+            IsWeakened = false;
+        }
+
+        base.GetDamge(damage);
     }
 }

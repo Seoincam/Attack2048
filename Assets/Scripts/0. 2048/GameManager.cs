@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -13,7 +14,7 @@ public class GameManager : MonoBehaviour
     public const float yStart = -3.71f;
     public const float xOffset = 1.06f;
     public const float yOffset = 1.05f;
-    public int maxTurns = 50;
+    [Tooltip("최대 턴")] public int maxTurns;
     public int probablity_4 = 15;
 
     private int curTurns;
@@ -29,6 +30,7 @@ public class GameManager : MonoBehaviour
     // 방향 : 0 = 하, 1 = 상, 2 = 좌, 3 = 우
 
     public DamageInvoker damageInvoker;
+    [SerializeField] private TextMeshProUGUI remainingTurnsText;
 
     // - - - - - - - - - - - - - - - - - - - - -
     // Unity 콜백
@@ -44,7 +46,8 @@ public class GameManager : MonoBehaviour
     {
 
         curTurns = maxTurns;
-        Debug.Log($"게임 시작! 남은 이동 횟수: {curTurns}");
+        Debug.Log("게임 시작!");
+        remainingTurnsText.text = $"Remaining Turns: {curTurns}";
 
         Spawn();
         Spawn();
@@ -118,11 +121,13 @@ public class GameManager : MonoBehaviour
             // 이동이 발생했으면 처리
             if (move)
             {
+                damageInvoker.InvokeDamage(); // 데미지 합산 전부 끝내고 데미지 부과
                 EventManager.Publish(GameEvent.NewTurn); // 새로운 턴임을 Event Manager에 알리기.
 
                 move = false;
                 curTurns--;
-                Debug.Log($"이동! 남은 이동 횟수: {curTurns}");
+                // Debug.Log($"이동! 남은 이동 횟수: {curTurns}");
+                remainingTurnsText.text = $"Remaining Turns: {curTurns}";
 
                 Spawn();
 
@@ -171,7 +176,7 @@ public class GameManager : MonoBehaviour
             // 데미지 계산
             int value = Square[x2, y2].GetComponent<Board>().value;
             // gold += damage;
-            damageInvoker.OnCombine(value);
+            damageInvoker.SumDamage(value);
 
             for (j = 0; j < Board.Length; j++)
             {

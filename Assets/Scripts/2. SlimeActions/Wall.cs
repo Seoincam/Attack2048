@@ -5,7 +5,6 @@
 using UnityEngine;
 public class Wall : SlimeActionBase
 {
-    protected override int Life => 2; // 수명.
     private int x1, y1, x2, y2;
     //Wall의 실제 위치를 지정하고 gamemanager에 알림
     public void Init(int x1, int y1, int x2, int y2)
