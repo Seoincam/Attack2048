@@ -18,7 +18,6 @@ public class GameManager : MonoBehaviour
     public int probablity_4 = 15;
 
     private int curTurns;
-    private int gold;
 
     private int x, y, i, j;
     private bool wait;
@@ -29,7 +28,9 @@ public class GameManager : MonoBehaviour
     private bool[,,] Wall = new bool[5, 5, 4]; // Wall의 위치,방향을 담은 논리 배열
     // 방향 : 0 = 하, 1 = 상, 2 = 좌, 3 = 우
 
+
     public DamageInvoker damageInvoker;
+    private PointManager pointManager;
     [SerializeField] private TextMeshProUGUI remainingTurnsText;
 
     // - - - - - - - - - - - - - - - - - - - - -
@@ -39,7 +40,9 @@ public class GameManager : MonoBehaviour
     {
         if (Instance == null) Instance = this;
         else Destroy(gameObject);
+
         damageInvoker = new DamageInvoker();
+        pointManager = GetComponent<PointManager>();
     }
 
     void Start()
@@ -126,7 +129,6 @@ public class GameManager : MonoBehaviour
 
                 move = false;
                 curTurns--;
-                // Debug.Log($"이동! 남은 이동 횟수: {curTurns}");
                 remainingTurnsText.text = $"Remaining Turns: {curTurns}";
 
                 Spawn();
@@ -175,7 +177,6 @@ public class GameManager : MonoBehaviour
 
             // 데미지 계산
             int value = Square[x2, y2].GetComponent<Board>().value;
-            // gold += damage;
             damageInvoker.SumDamage(value);
 
             for (j = 0; j < Board.Length; j++)
@@ -189,6 +190,9 @@ public class GameManager : MonoBehaviour
             Square[x2, y2] = Instantiate(Board[j + 1], new Vector3(xStart + xOffset * x2, yStart + yOffset * y2, 0), Quaternion.identity);
             Square[x2, y2].GetComponent<Board>().value = value * 2;
             Square[x2, y2].tag = "Combine";
+
+            // 32 이상의 타일을 만들면 포인트 획득
+            if(Square[x2, y2].GetComponent<Board>().value >= 32) { pointManager.GetPoint(Square[x2, y2].GetComponent<Board>().value); }
         }
     }
 

@@ -96,8 +96,6 @@ public class ShieldSlime : SlimeBase
         //  - 데미지 안 받기
         //  - 다음 턴 약화
         if(HasShield) { 
-            Debug.Log(" [방패 슬라임] 방패 사용");
-
             HasShield = false; 
             IsWeakened = true; 
 
@@ -106,10 +104,9 @@ public class ShieldSlime : SlimeBase
 
         // 약화일 때 데미지 발생하면
         else if(IsWeakened) { 
-            Debug.Log(" [방패 슬라임] 약화");
-            Debug.Log($"데미지 : {damage} * 1.5배 = {damage * 1.5f}");
+            Debug.Log($"[약화] >> 데미지 : {damage} * 1.5배 = {damage * 1.5f}");
             
-            damage = (int)(damage * 1.5f); 
+            damage = damage * 1.5f; 
             IsWeakened = false;
         }
 

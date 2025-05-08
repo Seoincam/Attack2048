@@ -5,6 +5,7 @@ public class DamageInvoker
     public delegate void Combine(float damage);
     public event Combine OnCombine;
 
+    // 합산된 데미지
     private float totalDamage;
 
     // 데미지 합산
