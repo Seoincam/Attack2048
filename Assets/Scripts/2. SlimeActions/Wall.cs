@@ -2,7 +2,7 @@
 // Wall.cs
 //  - 벽 클래스.
 // - - - - - - - - - - - - - - - - - -
-
+using UnityEngine;
 public class Wall : SlimeActionBase
 {
     protected override int Life => 2; // 수명.
@@ -20,11 +20,12 @@ public class Wall : SlimeActionBase
         transform.position = new UnityEngine.Vector3(worldX, worldY, 0);
         // 벽의 위치에 따라 회전 e.g. 위, 아래에 생성될 경우 90도 회전
         if (x1 == x2)
-            transform.rotation = UnityEngine.Quaternion.identity;
-        else
             transform.rotation = UnityEngine.Quaternion.Euler(0, 0, 90);
+        else
+            transform.rotation = UnityEngine.Quaternion.identity;
         // Gamemanager의 Wall논리배열에 생성됨을 알림
         GameManager.Instance.PlaceWallBetween(x1, y1, x2, y2);
+
     }
     protected override void Execute()
     {
