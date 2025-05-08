@@ -25,6 +25,8 @@ public class GameManager : MonoBehaviour
     private Vector3 firstPos, gap;
     [SerializeField]
     private GameObject[,] Square = new GameObject[5, 5];
+    private bool[,,] Wall = new bool[5, 5, 4]; // Wall의 위치,방향을 담은 논리 배열
+    // 방향 : 0 = 하, 1 = 상, 2 = 좌, 3 = 우
 
     public DamageInvoker damageInvoker;
 
@@ -117,7 +119,7 @@ public class GameManager : MonoBehaviour
             if (move)
             {
                 EventManager.Publish(GameEvent.NewTurn); // 새로운 턴임을 Event Manager에 알리기.
-                
+
                 move = false;
                 curTurns--;
                 Debug.Log($"이동! 남은 이동 횟수: {curTurns}");
@@ -145,6 +147,8 @@ public class GameManager : MonoBehaviour
     // - - - - - - - - - - - - - - - - - - - - -
     void MoveOrCombine(int x1, int y1, int x2, int y2)
     {
+        // 이동 전 벽 존재 여부 확인
+        if (IsBlocked(x1, y1, x2, y2)) return; // 추후 막히는 애니메이션 추가
         // 이동
         if (Square[x2, y2] == null && Square[x1, y1] != null)
         {
@@ -233,5 +237,57 @@ public class GameManager : MonoBehaviour
         Spawn();
 
         Debug.Log($"게임 재시작! 이동 횟수: {curTurns}");
+    }
+    // - - - - - - - - - - - - - - - - - - - - -
+    // Wall 배열 관련 함수
+    // - - - - - - - - - - - - - - - - - - - - -
+    // Wall 논리 배열에 존재여부 추가
+    public void PlaceWallBetween(int x1, int y1, int x2, int y2)
+    {
+        if (Mathf.Abs(x1 - x2) + Mathf.Abs(y1 - y2) != 1) return; // Wall이 한칸 사이에 존재하는지 확인
+
+        if (x1 == x2)
+        {
+            if (y1 < y2) { Wall[x1, y1, 1] = true; Wall[x2, y2, 0] = true; }
+            else { Wall[x1, y1, 0] = true; Wall[x2, y2, 1] = true; }
+        }
+        else if (y1 == y2)
+        {
+            if (x1 < x2) { Wall[x1, y1, 3] = true; Wall[x2, y2, 2] = true; }
+            else { Wall[x1, y1, 2] = true; Wall[x2, y2, 3] = true; }
+        }
+    }
+
+    // 이동해야할 보드 사이에 벽 존재여부 확인
+    public bool IsBlocked(int x1, int y1, int x2, int y2)
+    {
+        if (x1 == x2)
+        {
+            if (y2 == y1 + 1) return Wall[x1,y1,1];
+            if (y2 == y1 - 1) return Wall[x1,y1,0];
+        }
+        else if (y1 == y2)
+        {
+            if (x2 == x1 + 1) return Wall[x1, y1, 3];
+            if (x2 == x1 - 1) return Wall[x1, y1, 2];
+        }
+        return true;
+    }
+
+    //Wall이 사라질때 논리배열에서 false로 바꿈
+    public void RemoveWallBetween(int x1, int y1, int x2, int y2)
+    {
+        if (Mathf.Abs(x1 - x2) + Mathf.Abs(y1 - y2) != 1) return;
+
+        if (x1 == x2)
+        {
+            if (y1 < y2) { Wall[x1, y1, 1] = false; Wall[x2, y2, 0] = false; }
+            else { Wall[x1, y1, 0] = false; Wall[x2, y2, 1] = false; }
+        }
+        else if (y1 == y2)
+        {
+            if (x1 < x2) { Wall[x1, y1, 3] = false; Wall[x2, y2, 2] = false; }
+            else { Wall[x1, y1, 2] = false; Wall[x2, y2, 3] = false; }
+        }
     }
 }

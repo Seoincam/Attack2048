@@ -3,7 +3,7 @@
 //  - 슬라임의 액션을 여기서 실행.
 //  - 명령은 슬라임 클래스에서 하고, 여기선 단순히 '실제 생성'만.
 // - - - - - - - - - - - - - - - - - -
- 
+
 using UnityEngine;
 
 public class SlimeActionManager : MonoBehaviour
@@ -25,7 +25,8 @@ public class SlimeActionManager : MonoBehaviour
     // - - - - - - - - - - - - - - - - - - - - -
 
     // 이벤트 매니저에 각 메서드를 구독.
-    void Awake() { 
+    void Awake()
+    {
         EventManager.Subscribe(GameEvent.Delete, Delete);
         EventManager.Subscribe(GameEvent.Wall, Wall);
         EventManager.Subscribe(GameEvent.Petrify, Petrify);
@@ -40,22 +41,32 @@ public class SlimeActionManager : MonoBehaviour
     // - - - - - - - - - - - - - - - - - - - - -
 
     // 삭제
-    private void Delete() {
+    private void Delete()
+    {
         Debug.Log("[Slime Action Manager] 삭제");
         // TODO: 삭제할 타일 위치 설정
         // TODO: 삭제 및 GameManager에 알리기.
     }
 
     // 벽
-    private void Wall() {
+    private void Wall()
+    {
         Debug.Log("[Slime Action Manager] 벽");
         Wall wall = Instantiate(_wallPrefab).GetComponent<Wall>();
-        // TODO: 위치 설정
-        // TODO: GameManager에 알려야함.
+        // TODO: 위치 설정 -> 위치 정하여 Wall.cs에서 위치 설정
+        int x1 = Random.Range(1, 4);
+        int y1 = Random.Range(1, 4);
+        Vector2Int dir = GetRandomDirection();
+        int x2 = x1 + dir.x;
+        int y2 = y1 + dir.y;
+
+        // TODO: GameManager에 알려야함. -> Wall.cs에서 알림
+        wall.Init(x1, y1, x2, y2);
     }
 
     // 석화
-    private void Petrify() {
+    private void Petrify()
+    {
         Debug.Log("[Slime Action Manager] 석화");
         Petrify petrify = Instantiate(_petrifyPrefab).GetComponent<Petrify>();
         // TODO: 위치 설정
@@ -63,7 +74,8 @@ public class SlimeActionManager : MonoBehaviour
     }
 
     // 감금
-    private void Imprison() {
+    private void Imprison()
+    {
         Debug.Log("[Slime Action Manager] 감금");
         Imprision imprision = Instantiate(_imprisonPrefab).GetComponent<Imprision>();
         // TODO: 위치 설정
@@ -71,10 +83,24 @@ public class SlimeActionManager : MonoBehaviour
     }
 
     // 이동
-    private void Translocate() {
+    private void Translocate()
+    {
         Debug.Log("[Slime Action Manager] 이동");
         Translocate translocate = Instantiate(_translocatePrefab).GetComponent<Translocate>();
         // TODO: 위치 설정
         // TODO: GameManager에 알려야함.
+    }
+    // 설치할 방향 랜덤 설정 
+    private Vector2Int GetRandomDirection()
+    {
+        Vector2Int[] directions = new Vector2Int[]
+        {
+            new Vector2Int(0,1), // 위
+            new Vector2Int(0,-1), // 아래
+            new Vector2Int(1,0), // 오른쪽
+            new Vector2Int(-1, 0) // 왼쪽
+        };
+
+        return directions[Random.Range(0, directions.Length)];
     }
 }
