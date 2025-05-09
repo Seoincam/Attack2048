@@ -1056,6 +1056,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 856d06f606ebf4b3e878541849f95668, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _destroyPrefab: {fileID: 1811434947358909584, guid: 20dad5c7a239a45a5a81fb7b5afc1d5d, type: 3}
   _wallPrefab: {fileID: 828993043930697507, guid: a4dca54e46d6448b48fc857d53f9c492, type: 3}
   _petrifyPrefab: {fileID: 1811434947358909584, guid: c78b3dbe301f14a99ba4af06d2fd2114, type: 3}
   _imprisonPrefab: {fileID: 3541469622638263591, guid: c6df75a33cba0434abd8129dafc72c61, type: 3}
