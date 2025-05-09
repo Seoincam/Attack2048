@@ -18,9 +18,11 @@ public class GameManager : MonoBehaviour
     public int probablity_4 = 15;
 
     private int _curTurns;
-    private int CurTurns {
+    private int CurTurns
+    {
         get => _curTurns;
-        set {
+        set
+        {
             _curTurns = value;
             remainingTurnsText.text = $"Remaining Turns: {_curTurns}";
         }
@@ -67,8 +69,8 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
-        if(_isPaused) return;
-        
+        if (_isPaused) return;
+
         GetMouseOrTouch();
     }
 
@@ -199,10 +201,13 @@ public class GameManager : MonoBehaviour
             Square[x1, y1] = null;
             Square[x2, y2] = Instantiate(Board[j + 1], new Vector3(xStart + xOffset * x2, yStart + yOffset * y2, 0), Quaternion.identity);
             Square[x2, y2].GetComponent<Board>().value = value * 2;
+            //결합시에도 위치 전달
+            Square[x2, y2].GetComponent<Board>().x = x2;
+            Square[x2, y2].GetComponent<Board>().y = y2;
             Square[x2, y2].tag = "Combine";
 
             // 32 이상의 타일을 만들면 포인트 획득
-            if(Square[x2, y2].GetComponent<Board>().value >= 32) { _pointManager.GetPoint(Square[x2, y2].GetComponent<Board>().value); }
+            if (Square[x2, y2].GetComponent<Board>().value >= 32) { _pointManager.GetPoint(Square[x2, y2].GetComponent<Board>().value); }
         }
     }
 
@@ -218,6 +223,9 @@ public class GameManager : MonoBehaviour
                 {
                     Square[x, y] = Instantiate(Board[0], new Vector3(xStart + xOffset * x, yStart + yOffset * y, 0), Quaternion.identity);
                     Square[x, y].GetComponent<Board>().value = 2;
+                    //보드 생성 시 Board에 위치 전달
+                    Square[x, y].GetComponent<Board>().x = x;
+                    Square[x, y].GetComponent<Board>().y = y;
                     break;
                 }
                 else
@@ -284,8 +292,8 @@ public class GameManager : MonoBehaviour
     {
         if (x1 == x2)
         {
-            if (y2 == y1 + 1) return Wall[x1,y1,1];
-            if (y2 == y1 - 1) return Wall[x1,y1,0];
+            if (y2 == y1 + 1) return Wall[x1, y1, 1];
+            if (y2 == y1 - 1) return Wall[x1, y1, 0];
         }
         else if (y1 == y2)
         {

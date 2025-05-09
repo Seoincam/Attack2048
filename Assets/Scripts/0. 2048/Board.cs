@@ -3,8 +3,10 @@ using UnityEngine;
 public class Board : MonoBehaviour
 {
     public int value;
+    public int x, y; //현재 좌표
     bool move, _combine;
     int _x2, _y2;
+
 
     void Update()
     {
@@ -20,6 +22,9 @@ public class Board : MonoBehaviour
         _x2 = x2;
         _y2 = y2;
         _combine = combine;
+        //현재 좌표를 새로운 위치로 갱신
+        x = x2;
+        y = y2;
 
         Vector3 targetPos = new Vector3(GameManager.xStart + GameManager.xOffset * x2,
                                         GameManager.yStart + GameManager.yOffset * y2, 0);
