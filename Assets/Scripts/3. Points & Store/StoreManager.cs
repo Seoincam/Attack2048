@@ -73,24 +73,30 @@ public class StoreManager : MonoBehaviour
                 if(_isPreventing) PreventDestroy(hit.collider);
                 else if(_isDestroying) DestroyTile(hit.collider);
             }
+
+            // 다른데 누르면 취소
+            else {
+                if(_isPreventing) IsPreventing = false;
+                else if(_isDestroying) IsDestroying = false;
+            }
         }
     }
 
     public void PreventDestroyBtn() {
         // 포인트 부족하면 return 
-        if( !_pointManager.UsePoint(PreventDestroyCost) ) return;
+        if( !_pointManager.CheckPoint(PreventDestroyCost) ) return;
         IsPreventing = true;
     }
 
     public void DestoryTileBtn() {
         // 포인트 부족하면 return 
-        if( !_pointManager.UsePoint(DestoryTileCost) ) return;
+        if( !_pointManager.CheckPoint(DestoryTileCost) ) return;
         IsDestroying = true;
     }
 
     public void AddTurnBtn() {
         // 포인트 부족하면 return 
-        if( !_pointManager.UsePoint(AddTurnCost) ) return;
+        if( !_pointManager.CheckPoint(AddTurnCost) ) return;
     }
 
 
@@ -111,6 +117,7 @@ public class StoreManager : MonoBehaviour
         
         // 오류 방지
         if(GameManager.Instance.DestroyTile(x,y)) {
+            _pointManager.UsePoint(DestoryTileCost);
             IsDestroying = false;
         }
     }

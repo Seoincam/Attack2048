@@ -55,11 +55,15 @@ public class PointManager : MonoBehaviour
         }
     }
 
-    public bool UsePoint(int amount) {
+    // 돈 충분한가 체크
+    public bool CheckPoint(int amount) {
         if(Points >= amount) {
-            Points -= amount;
             return true;
         }
         else return false;
+    }
+
+    public void UsePoint(int amount) {
+        Points -= amount;
     }
 }
