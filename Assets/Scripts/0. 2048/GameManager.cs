@@ -137,6 +137,7 @@ public class GameManager : MonoBehaviour
             // 이동이 발생했으면 처리
             if (move)
             {
+                Debug.Log("이동");
                 _damageInvoker.InvokeDamage(); // 데미지 합산 전부 끝내고 데미지 부과
                 EventManager.Publish(GameEvent.NewTurn); // 새로운 턴임을 Event Manager에 알리기.
 
@@ -232,6 +233,9 @@ public class GameManager : MonoBehaviour
                 {
                     Square[x, y] = Instantiate(Board[1], new Vector3(xStart + xOffset * x, yStart + yOffset * y, 0), Quaternion.identity);
                     Square[x, y].GetComponent<Board>().value = 4;
+                    //보드 생성 시 Board에 위치 전달
+                    Square[x, y].GetComponent<Board>().x = x;
+                    Square[x, y].GetComponent<Board>().y = y;
                     break;
                 }
             }
@@ -318,5 +322,19 @@ public class GameManager : MonoBehaviour
             if (x1 < x2) { Wall[x1, y1, 3] = false; Wall[x2, y2, 2] = false; }
             else { Wall[x1, y1, 2] = false; Wall[x2, y2, 3] = false; }
         }
+    }
+
+
+    // - - - - - - - - - - - - - - - - - - - - -
+    // 타일 삭제
+    // - - - - - - - - - - - - - - - - - - - - -
+    public bool DestroyTile(int x, int y) {
+        if(Square[x,y] != null) {
+            Destroy(Square[x,y]);
+            Square[x,y] = null;
+            return true;
+        }
+
+        return false; 
     }
 }

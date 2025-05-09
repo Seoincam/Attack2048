@@ -3,6 +3,7 @@
 //  - 상점 관리 클래스.
 // - - - - - - - - - - - - - - - - - -
 
+using System.Collections;
 using UnityEngine;
 
 public class StoreManager : MonoBehaviour
@@ -18,8 +19,11 @@ public class StoreManager : MonoBehaviour
         set {
             _isPreventing = value;
             _isDestroying = false; //오류 방지
-            GameManager.Instance.IsPaused = value;
             darkBackground.SetActive(value);
+
+            // 터치 오류 방지
+            if(value) { GameManager.Instance.IsPaused = true; }
+            else { StartCoroutine(FinishPause()); }
         }
     }
 
@@ -28,8 +32,11 @@ public class StoreManager : MonoBehaviour
         set {
             _isDestroying = value;
             _isPreventing = false; //오류 방지
-            GameManager.Instance.IsPaused = value;
             darkBackground.SetActive(value);
+
+            // 터치 오류 방지
+            if(value) { GameManager.Instance.IsPaused = true; }
+            else { StartCoroutine(FinishPause()); }
         }
     }
 
@@ -62,6 +69,7 @@ public class StoreManager : MonoBehaviour
             RaycastHit2D hit = Physics2D.Raycast(touchPos, Vector2.zero);
 
             if(hit.collider != null) { 
+                Debug.Log(hit.collider.name);
                 if(_isPreventing) PreventDestroy(hit.collider);
                 else if(_isDestroying) DestroyTile(hit.collider);
             }
@@ -75,11 +83,13 @@ public class StoreManager : MonoBehaviour
     }
 
     public void DestoryTileBtn() {
+        // 포인트 부족하면 return 
         if( !_pointManager.UsePoint(DestoryTileCost) ) return;
         IsDestroying = true;
     }
 
     public void AddTurnBtn() {
+        // 포인트 부족하면 return 
         if( !_pointManager.UsePoint(AddTurnCost) ) return;
     }
 
@@ -88,9 +98,20 @@ public class StoreManager : MonoBehaviour
     // - - - - - - - - - -
     // 로직
     // - - - - - - - - - -
+    private IEnumerator FinishPause() {
+        yield return new WaitForSeconds(0.3f);
+        GameManager.Instance.IsPaused = false;
+    }
+
     private void PreventDestroy(Collider2D selectedTile) {}
+
     private void DestroyTile(Collider2D selectedTile) {
-        selectedTile.GetComponent<Board>();
-        // TODO. 삭제 구현
+        int x= selectedTile.GetComponent<Board>().x;
+        int y= selectedTile.GetComponent<Board>().y;
+        
+        // 오류 방지
+        if(GameManager.Instance.DestroyTile(x,y)) {
+            IsDestroying = false;
+        }
     }
 }
