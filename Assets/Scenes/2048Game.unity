@@ -206,7 +206,7 @@ GameObject:
   - component: {fileID: 450044240}
   - component: {fileID: 450044239}
   m_Layer: 0
-  m_Name: Slime Name
+  m_Name: Slime Name Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -959,6 +959,7 @@ GameObject:
   - component: {fileID: 1024858047}
   - component: {fileID: 1024858049}
   - component: {fileID: 1024858050}
+  - component: {fileID: 1024858051}
   m_Layer: 0
   m_Name: Managers
   m_TagString: Untagged
@@ -996,7 +997,7 @@ MonoBehaviour:
   - {fileID: 6047435193558059963, guid: 853aa6daa65e1447f8299c5198d83afe, type: 3}
   - {fileID: 691568085597732685, guid: cc0991b7fd03045dbbed2909b0bfa763, type: 3}
   - {fileID: 2976873772146142562, guid: 6ea36061cca524241a58bc733e410901, type: 3}
-  maxTurns: 50
+  maxTurns: 80
   probablity_4: 15
   remainingTurnsText: {fileID: 1769213545}
 --- !u!4 &1024858048
@@ -1028,20 +1029,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pointsText: {fileID: 1088444605}
   PointRules:
-  - squareValue: 32
+  - tileValue: 32
     point: 1
-  - squareValue: 64
+  - tileValue: 64
     point: 2
-  - squareValue: 128
+  - tileValue: 128
     point: 4
-  - squareValue: 256
+  - tileValue: 256
     point: 10
-  - squareValue: 512
+  - tileValue: 512
     point: 30
-  - squareValue: 1024
+  - tileValue: 1024
     point: 50
-  - squareValue: 2048
+  - tileValue: 2048
     point: 100
+  TestPoints: 20
 --- !u!114 &1024858050
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1058,6 +1060,22 @@ MonoBehaviour:
   _petrifyPrefab: {fileID: 1811434947358909584, guid: c78b3dbe301f14a99ba4af06d2fd2114, type: 3}
   _imprisonPrefab: {fileID: 3541469622638263591, guid: c6df75a33cba0434abd8129dafc72c61, type: 3}
   _translocatePrefab: {fileID: 8089725795113781931, guid: 31b7db8250d3d44cb9b37aa21abbcbea, type: 3}
+--- !u!114 &1024858051
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1024858046}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 228a520e18f914acdad51e87578ee879, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  darkBackground: {fileID: 1208836823}
+  PreventDestroyCost: 10
+  DestoryTileCost: 10
+  AddTurnCost: 10
 --- !u!1 &1038038202
 GameObject:
   m_ObjectHideFlags: 0
@@ -1339,6 +1357,81 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1174188922}
   m_CullTransparentMesh: 1
+--- !u!1 &1208836823
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1208836824}
+  - component: {fileID: 1208836826}
+  - component: {fileID: 1208836825}
+  m_Layer: 5
+  m_Name: Dark Background
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!224 &1208836824
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1208836823}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1604864861}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1208836825
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1208836823}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 0, g: 0, b: 0, a: 0.78431374}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 0}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &1208836826
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1208836823}
+  m_CullTransparentMesh: 1
 --- !u!1 &1224829852
 GameObject:
   m_ObjectHideFlags: 0
@@ -1352,7 +1445,7 @@ GameObject:
   - component: {fileID: 1224829855}
   - component: {fileID: 1224829854}
   m_Layer: 5
-  m_Name: Destroy Btn
+  m_Name: Destroy Tile Btn
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1421,7 +1514,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1224829855}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1024858051}
+        m_TargetAssemblyTypeName: StoreManager, Assembly-CSharp
+        m_MethodName: DestoryTileBtn
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1224829855
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1551,7 +1656,7 @@ GameObject:
   - component: {fileID: 1330086459}
   - component: {fileID: 1330086458}
   m_Layer: 0
-  m_Name: Is Weakened?
+  m_Name: Is Weakened? Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2083,6 +2188,7 @@ RectTransform:
   - {fileID: 1088444604}
   - {fileID: 1627479696}
   - {fileID: 848207989}
+  - {fileID: 1208836824}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -2372,7 +2478,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1697581730}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1024858051}
+        m_TargetAssemblyTypeName: StoreManager, Assembly-CSharp
+        m_MethodName: PreventDestroyBtn
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1697581730
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2672,7 +2790,7 @@ GameObject:
   - component: {fileID: 1816742552}
   - component: {fileID: 1816742551}
   m_Layer: 0
-  m_Name: Has Shield?
+  m_Name: Has Shield? Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2753,7 +2871,7 @@ GameObject:
   - component: {fileID: 1834363861}
   - component: {fileID: 1834363860}
   m_Layer: 5
-  m_Name: Add Turn
+  m_Name: Add Turn Btn
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2822,7 +2940,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1834363861}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1024858051}
+        m_TargetAssemblyTypeName: StoreManager, Assembly-CSharp
+        m_MethodName: AddTurnBtn
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1834363861
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2913,7 +3043,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 0
     m_WrapAround: 0
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
@@ -2939,7 +3069,7 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
-  m_Interactable: 1
+  m_Interactable: 0
   m_TargetGraphic: {fileID: 0}
   m_FillRect: {fileID: 1921495086}
   m_HandleRect: {fileID: 0}

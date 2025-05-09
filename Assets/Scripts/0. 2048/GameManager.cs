@@ -17,7 +17,14 @@ public class GameManager : MonoBehaviour
     [Tooltip("최대 턴")] public int maxTurns;
     public int probablity_4 = 15;
 
-    private int curTurns;
+    private int _curTurns;
+    private int CurTurns {
+        get => _curTurns;
+        set {
+            _curTurns = value;
+            remainingTurnsText.text = $"Remaining Turns: {_curTurns}";
+        }
+    }
 
     private int x, y, i, j;
     private bool wait;
@@ -29,9 +36,12 @@ public class GameManager : MonoBehaviour
     // 방향 : 0 = 하, 1 = 상, 2 = 좌, 3 = 우
 
 
-    public DamageInvoker damageInvoker;
-    private PointManager pointManager;
+    public DamageInvoker _damageInvoker;
+    private PointManager _pointManager;
     [SerializeField] private TextMeshProUGUI remainingTurnsText;
+
+    private bool _isPaused; // 게임이 멈췄나? (설정, 도감, 상점 등)
+    public bool IsPaused { set => _isPaused = value; }
 
     // - - - - - - - - - - - - - - - - - - - - -
     // Unity 콜백
@@ -41,16 +51,15 @@ public class GameManager : MonoBehaviour
         if (Instance == null) Instance = this;
         else Destroy(gameObject);
 
-        damageInvoker = new DamageInvoker();
-        pointManager = GetComponent<PointManager>();
+        _damageInvoker = new DamageInvoker();
+        _pointManager = GetComponent<PointManager>();
     }
 
     void Start()
     {
 
-        curTurns = maxTurns;
+        CurTurns = maxTurns;
         Debug.Log("게임 시작!");
-        remainingTurnsText.text = $"Remaining Turns: {curTurns}";
 
         Spawn();
         Spawn();
@@ -58,6 +67,8 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
+        if(_isPaused) return;
+        
         GetMouseOrTouch();
     }
 
@@ -124,12 +135,11 @@ public class GameManager : MonoBehaviour
             // 이동이 발생했으면 처리
             if (move)
             {
-                damageInvoker.InvokeDamage(); // 데미지 합산 전부 끝내고 데미지 부과
+                _damageInvoker.InvokeDamage(); // 데미지 합산 전부 끝내고 데미지 부과
                 EventManager.Publish(GameEvent.NewTurn); // 새로운 턴임을 Event Manager에 알리기.
 
                 move = false;
-                curTurns--;
-                remainingTurnsText.text = $"Remaining Turns: {curTurns}";
+                CurTurns--;
 
                 Spawn();
 
@@ -138,7 +148,7 @@ public class GameManager : MonoBehaviour
                         if (Square[x, y] != null)
                             Square[x, y].tag = "Untagged";
 
-                if (curTurns <= 0)
+                if (CurTurns <= 0)
                 {
                     Debug.Log("이동 횟수 소진! 게임 종료!");
                     ResetGame();
@@ -177,7 +187,7 @@ public class GameManager : MonoBehaviour
 
             // 데미지 계산
             int value = Square[x2, y2].GetComponent<Board>().value;
-            damageInvoker.SumDamage(value);
+            _damageInvoker.SumDamage(value);
 
             for (j = 0; j < Board.Length; j++)
             {
@@ -192,7 +202,7 @@ public class GameManager : MonoBehaviour
             Square[x2, y2].tag = "Combine";
 
             // 32 이상의 타일을 만들면 포인트 획득
-            if(Square[x2, y2].GetComponent<Board>().value >= 32) { pointManager.GetPoint(Square[x2, y2].GetComponent<Board>().value); }
+            if(Square[x2, y2].GetComponent<Board>().value >= 32) { _pointManager.GetPoint(Square[x2, y2].GetComponent<Board>().value); }
         }
     }
 
@@ -240,13 +250,15 @@ public class GameManager : MonoBehaviour
                 }
             }
 
-        curTurns = maxTurns;
+        CurTurns = maxTurns;
 
         Spawn();
         Spawn();
 
-        Debug.Log($"게임 재시작! 이동 횟수: {curTurns}");
+        Debug.Log($"게임 재시작! 이동 횟수: {CurTurns}");
     }
+
+
     // - - - - - - - - - - - - - - - - - - - - -
     // Wall 배열 관련 함수
     // - - - - - - - - - - - - - - - - - - - - -

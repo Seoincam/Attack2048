@@ -26,7 +26,7 @@ public abstract class SlimeBase : MonoBehaviour, ITurnListener
     // - - - - - - - - 
     protected virtual void Start()
     {
-        GameManager.Instance.damageInvoker.OnCombine += GetDamge;
+        GameManager.Instance._damageInvoker.OnCombine += GetDamge;
         curHealth = maxHealth;
         Subscribe_NewTurn();
 
@@ -60,7 +60,7 @@ public abstract class SlimeBase : MonoBehaviour, ITurnListener
     // 사망 로직
     // - - - - - - - - - - 
     private void Die() {
-        GameManager.Instance.damageInvoker.OnCombine -= GetDamge;
+        GameManager.Instance._damageInvoker.OnCombine -= GetDamge;
         gameObject.SetActive(false);
     }
 

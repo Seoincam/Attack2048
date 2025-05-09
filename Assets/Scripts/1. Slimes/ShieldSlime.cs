@@ -66,7 +66,6 @@ public class ShieldSlime : SlimeBase
         _shieldCounter --;
 
         if(_shieldCounter == 0) {
-            Debug.Log(" [방패 슬라임] 방패 생성");
             _shieldCounter = ShieldInterval;
             HasShield = true;
         }
