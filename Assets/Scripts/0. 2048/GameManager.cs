@@ -200,7 +200,7 @@ public class GameManager : MonoBehaviour
             Square[x1, y1].GetComponent<Board>().Move(x2, y2, true);
             Destroy(Square[x2, y2]);
             Square[x1, y1] = null;
-            Square[x2, y2] = Instantiate(Board[j + 1], new Vector3(xStart + xOffset * x2, yStart + yOffset * y2, 0), Quaternion.identity);
+            Square[x2, y2] = Instantiate(Board[j + 1], LocateTile(x2, y2), Quaternion.identity);
             Square[x2, y2].GetComponent<Board>().value = value * 2;
             //결합시에도 위치 전달
             Square[x2, y2].GetComponent<Board>().x = x2;
@@ -222,7 +222,7 @@ public class GameManager : MonoBehaviour
             {
                 if (Random.Range(1, 100) > probablity_4)
                 {
-                    Square[x, y] = Instantiate(Board[0], new Vector3(xStart + xOffset * x, yStart + yOffset * y, 0), Quaternion.identity);
+                    Square[x, y] = Instantiate(Board[0], LocateTile(x,y), Quaternion.identity);
                     Square[x, y].GetComponent<Board>().value = 2;
                     //보드 생성 시 Board에 위치 전달
                     Square[x, y].GetComponent<Board>().x = x;
@@ -231,7 +231,7 @@ public class GameManager : MonoBehaviour
                 }
                 else
                 {
-                    Square[x, y] = Instantiate(Board[1], new Vector3(xStart + xOffset * x, yStart + yOffset * y, 0), Quaternion.identity);
+                    Square[x, y] = Instantiate(Board[1], LocateTile(x,y), Quaternion.identity);
                     Square[x, y].GetComponent<Board>().value = 4;
                     //보드 생성 시 Board에 위치 전달
                     Square[x, y].GetComponent<Board>().x = x;
@@ -322,6 +322,25 @@ public class GameManager : MonoBehaviour
             if (x1 < x2) { Wall[x1, y1, 3] = false; Wall[x2, y2, 2] = false; }
             else { Wall[x1, y1, 2] = false; Wall[x2, y2, 3] = false; }
         }
+    }
+
+
+    // - - - - - - - - - - - - - - - - - - - - -
+    // 타일 위치 설정
+    // - - - - - - - - - - - - - - - - - - - - -
+    // 파라메터 x, y: Square 배열 상의 좌표
+    public Vector3 LocateTile(int x, int y) {
+        return new Vector3(xStart + xOffset * x, yStart + yOffset * y, 0);
+    }
+
+
+
+    // - - - - - - - - - - - - - - - - - - - - -
+    // 타일 있나 체크
+    // - - - - - - - - - - - - - - - - - - - - -
+    public bool CheckTile(int x, int y) {
+        if(Square[x,y] != null) return true;
+        return false;
     }
 
 

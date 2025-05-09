@@ -13,7 +13,7 @@ public abstract class SlimeActionBase : MonoBehaviour, ITurnListener
     // - - - - - - - - - - - - - - - - - - - - -
     
     [Tooltip("수명")] [SerializeField]      private int Life; // Inspector에서 설정
-    [Tooltip("남은 수명")][SerializeField]   private int _lifeCounter;
+    [Tooltip("남은 수명")][SerializeField]   protected int _lifeCounter;
 
 
     // - - - - - - - - - - - - - - - - - - - - -
@@ -35,7 +35,7 @@ public abstract class SlimeActionBase : MonoBehaviour, ITurnListener
     }
 
     // 턴이 바뀔 때마다 실행.
-    public void OnTurnChanged() {
+    public virtual void OnTurnChanged() {
         _lifeCounter --;
 
         if(_lifeCounter == 0) {

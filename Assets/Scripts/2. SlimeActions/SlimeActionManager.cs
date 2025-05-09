@@ -13,6 +13,7 @@ public class SlimeActionManager : MonoBehaviour
     // - - - - - - - - - - - - - - - - - - - - -
 
     // 각각 프리팹으로 저장해놓고 호출될 때 생성
+    [SerializeField] private GameObject _destroyPrefab; // 삭제
     [SerializeField] private GameObject _wallPrefab; // 벽
     [SerializeField] private GameObject _petrifyPrefab; // 석화
     [SerializeField] private GameObject _imprisonPrefab; // 감금
@@ -37,29 +38,31 @@ public class SlimeActionManager : MonoBehaviour
 
 
     // - - - - - - - - - - - - - - - - - - - - -
-    // Unity 콜백
+    // 생성 로직
     // - - - - - - - - - - - - - - - - - - - - -
 
     // 삭제
     private void Delete()
     {
-        Debug.Log("[Slime Action Manager] 삭제");
-        // TODO: 삭제할 타일 위치 설정
-        // TODO: 삭제 및 GameManager에 알리기.
+        Delete destroy = Instantiate(_destroyPrefab).GetComponent<Delete>();
+
+        // 삭제할 타일 위치 설정
+        Vector2Int selected = GetRandomPosition(false);
+        destroy.Init(selected.x, selected.y);
     }
 
     // 벽
     private void Wall()
     {
         Wall wall = Instantiate(_wallPrefab).GetComponent<Wall>();
-        // TODO: 위치 설정 -> 위치 정하여 Wall.cs에서 위치 설정
+        // 위치 정하여 Wall.cs에서 위치 설정
         int x1 = Random.Range(1, 4);
         int y1 = Random.Range(1, 4);
         Vector2Int dir = GetRandomDirection();
         int x2 = x1 + dir.x;
         int y2 = y1 + dir.y;
 
-        // TODO: GameManager에 알려야함. -> Wall.cs에서 알림
+        // GameManager에 알려야함. -> Wall.cs에서 알림
         wall.Init(x1, y1, x2, y2);
     }
 
@@ -90,6 +93,27 @@ public class SlimeActionManager : MonoBehaviour
         // TODO: GameManager에 알려야함.
     }
     
+
+
+    // - - - - - - - - - - - - - - - - - - - - -
+    // 랜덤 위치 설정
+    // - - - - - - - - - - - - - - - - - - - - -
+
+    // 5*5 보드 중 하나 랜덤 선택
+    // true: 이미 타일 있는 칸만, false: 그냥 아무 칸이나
+    private Vector2Int GetRandomPosition(bool onlyTile) {
+        Vector2Int selected = new Vector2Int(Random.Range(0,5), Random.Range(0,5));
+
+        if(onlyTile) {
+            while(GameManager.Instance.CheckTile(selected.x, selected.y)) {
+                selected = new Vector2Int(Random.Range(0,5), Random.Range(0,5));
+            }
+            return selected;
+        } 
+
+        return selected;
+    }
+
     // 설치할 방향 랜덤 설정 
     private Vector2Int GetRandomDirection()
     {
