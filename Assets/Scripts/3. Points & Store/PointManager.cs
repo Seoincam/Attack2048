@@ -8,7 +8,7 @@ using TMPro;
 using UnityEngine;
 
 [Serializable]
-public struct GettingPoint {
+public struct PointRule {
     [Tooltip("타일 숫자")] public int tileValue;
     [Tooltip("획득 포인트")] public int point;
 }
@@ -28,7 +28,7 @@ public class PointManager : MonoBehaviour
     }
     
     [SerializeField] private TextMeshProUGUI pointsText;
-    [SerializeField, Tooltip( "포인트 규칙" )] private GettingPoint[] PointRules;
+    [SerializeField, Tooltip( "포인트 규칙" )] private PointRule[] PointRules;
     [SerializeField, Tooltip( "(테스트용) 초기 포인트" )] private int TestPoints;
 
 
@@ -47,7 +47,7 @@ public class PointManager : MonoBehaviour
 
     // 계산 및 포인트 획득
     public void GetPoint(int tileValue) {
-        foreach(GettingPoint combineValue in PointRules) {
+        foreach(PointRule combineValue in PointRules) {
             if(combineValue.tileValue == tileValue) {
                 Points += combineValue.point;
                 break;

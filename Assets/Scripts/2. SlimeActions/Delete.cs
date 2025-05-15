@@ -3,6 +3,7 @@
 //  - 삭제 클래스.
 // - - - - - - - - - - - - - - - - - -
 
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -32,6 +33,12 @@ public class Delete : SlimeActionBase
 
     protected override void Execute()
     {
+        StartCoroutine(DelayExecute()); // 타일 이동하고 삭제 (시각적으로)
+    }
+
+    private IEnumerator DelayExecute()
+    {
+        yield return new WaitForSeconds(0.3f);
         GameManager.Instance.DestroyTile(_x,_y);
         Destroy(gameObject);
     }
