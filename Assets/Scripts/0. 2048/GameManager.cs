@@ -9,6 +9,8 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance;
 
     public GameObject[] Board; // 2, 4, 8... 프리팹 배열 (index = log2 - 1)
+    [SerializeField]
+    private Transform TileGroup;
 
     public const float xStart = -2.12f; //[1,1]의 x좌표와 y좌표, 그후 증가할때마다의 좌표 차이
     public const float yStart = -3.71f;
@@ -222,7 +224,7 @@ public class GameManager : MonoBehaviour
             {
                 if (Random.Range(1, 100) > probablity_4)
                 {
-                    Square[x, y] = Instantiate(Board[0], LocateTile(x,y), Quaternion.identity);
+                    Square[x, y] = Instantiate(Board[0], LocateTile(x,y), Quaternion.identity, TileGroup);
                     Square[x, y].GetComponent<Board>().value = 2;
                     //보드 생성 시 Board에 위치 전달
                     Square[x, y].GetComponent<Board>().x = x;
@@ -231,7 +233,7 @@ public class GameManager : MonoBehaviour
                 }
                 else
                 {
-                    Square[x, y] = Instantiate(Board[1], LocateTile(x,y), Quaternion.identity);
+                    Square[x, y] = Instantiate(Board[1], LocateTile(x,y), Quaternion.identity, TileGroup);
                     Square[x, y].GetComponent<Board>().value = 4;
                     //보드 생성 시 Board에 위치 전달
                     Square[x, y].GetComponent<Board>().x = x;

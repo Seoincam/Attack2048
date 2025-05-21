@@ -26,10 +26,9 @@ public class Board : MonoBehaviour
         x = x2;
         y = y2;
 
-        Vector3 targetPos = new Vector3(GameManager.xStart + GameManager.xOffset * x2,
-                                        GameManager.yStart + GameManager.yOffset * y2, 0);
+        Vector3 targetPos = GameManager.Instance.LocateTile(x2, y2);
 
-        transform.position = Vector3.MoveTowards(transform.position, targetPos, 0.1f);
+        transform.position = Vector3.MoveTowards(transform.position, targetPos, 0.35f);
 
         if (Vector3.Distance(transform.position, targetPos) < 0.01f)
         {

@@ -7,7 +7,7 @@
 using System.Collections.Generic;
 using UnityEngine.Events;
 
-public enum GameEvent 
+public enum GameEvent
 {
     // [게임 이벤트]
     NewTurn, // 새로운 턴
@@ -17,7 +17,8 @@ public enum GameEvent
     Wall, // 벽
     Petrify, // 석화
     Imprison, // 감금
-    Translocate, // 이동
+    Translocate3, // 이동 (3스테이지)
+    Translocate7 // 이동 (7스테이지)
 } 
 
 public class EventManager

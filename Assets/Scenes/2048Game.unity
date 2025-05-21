@@ -499,7 +499,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &534308374
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1200,6 +1200,7 @@ MonoBehaviour:
   - {fileID: 6047435193558059963, guid: 853aa6daa65e1447f8299c5198d83afe, type: 3}
   - {fileID: 691568085597732685, guid: cc0991b7fd03045dbbed2909b0bfa763, type: 3}
   - {fileID: 2976873772146142562, guid: 6ea36061cca524241a58bc733e410901, type: 3}
+  TileGroup: {fileID: 1197994822}
   maxTurns: 80
   probablity_4: 15
   remainingTurnsText: {fileID: 1769213545}
@@ -1263,7 +1264,8 @@ MonoBehaviour:
   _wallPrefab: {fileID: 828993043930697507, guid: a4dca54e46d6448b48fc857d53f9c492, type: 3}
   _petrifyPrefab: {fileID: 1811434947358909584, guid: c78b3dbe301f14a99ba4af06d2fd2114, type: 3}
   _imprisonPrefab: {fileID: 3541469622638263591, guid: c6df75a33cba0434abd8129dafc72c61, type: 3}
-  _translocatePrefab: {fileID: 8089725795113781931, guid: 31b7db8250d3d44cb9b37aa21abbcbea, type: 3}
+  _translocate3Prefab: {fileID: 0}
+  _translocate7Prefab: {fileID: 0}
 --- !u!114 &1024858051
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1561,6 +1563,37 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1174188922}
   m_CullTransparentMesh: 1
+--- !u!1 &1197994821
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1197994822}
+  m_Layer: 0
+  m_Name: Tile Group
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1197994822
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1197994821}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1208836823
 GameObject:
   m_ObjectHideFlags: 0
@@ -2020,7 +2053,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: -1
   m_Sprite: {fileID: -8167606613945934678, guid: 5c660280163074edc95afd5921131e2b, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -3404,7 +3437,7 @@ RectTransform:
   m_Father: {fileID: 448248983}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -3667,7 +3700,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_Sprite: {fileID: -2413806693520163455, guid: ebe73ca9363db456bacf42c025bb4847, type: 3}
   m_Color: {r: 0.2280616, g: 0.36189565, b: 0.38679248, a: 1}
   m_FlipX: 0
@@ -4031,7 +4064,7 @@ RectTransform:
   m_Father: {fileID: 1494230965}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -4595,6 +4628,7 @@ SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 1024858048}
-  - {fileID: 1814702292}
   - {fileID: 1604864861}
+  - {fileID: 1814702292}
   - {fileID: 1322250915}
+  - {fileID: 1197994822}

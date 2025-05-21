@@ -17,7 +17,8 @@ public class SlimeActionManager : MonoBehaviour
     [SerializeField] private GameObject _wallPrefab; // 벽
     [SerializeField] private GameObject _petrifyPrefab; // 석화
     [SerializeField] private GameObject _imprisonPrefab; // 감금
-    [SerializeField] private GameObject _translocatePrefab; // 이동
+    [SerializeField] private GameObject _translocate3Prefab; // 이동 (3 스테이지)
+    [SerializeField] private GameObject _translocate7Prefab; // 이동 (7 스테이지)
 
 
 
@@ -32,7 +33,8 @@ public class SlimeActionManager : MonoBehaviour
         EventManager.Subscribe(GameEvent.Wall, Wall);
         EventManager.Subscribe(GameEvent.Petrify, Petrify);
         EventManager.Subscribe(GameEvent.Imprison, Imprison);
-        EventManager.Subscribe(GameEvent.Translocate, Translocate);
+        EventManager.Subscribe(GameEvent.Translocate3, Translocate3);
+        EventManager.Subscribe(GameEvent.Translocate7, Translocate7);
     }
 
 
@@ -84,11 +86,18 @@ public class SlimeActionManager : MonoBehaviour
         // TODO: GameManager에 알려야함.
     }
 
-    // 이동
-    private void Translocate()
+    // 이동 (3 스테이지)
+    private void Translocate3()
     {
-        Debug.Log("[Slime Action Manager] 이동");
-        Translocate translocate = Instantiate(_translocatePrefab).GetComponent<Translocate>();
+        Translocate3 translocate = Instantiate(_translocate3Prefab).GetComponent<Translocate3>();
+        // TODO: 위치 설정
+        // TODO: GameManager에 알려야함.
+    }
+    
+    // 이동 (7 스테이지)
+    private void Translocate7()
+    {
+        Translocate7 translocate = Instantiate(_translocate7Prefab).GetComponent<Translocate7>();
         // TODO: 위치 설정
         // TODO: GameManager에 알려야함.
     }
@@ -101,15 +110,18 @@ public class SlimeActionManager : MonoBehaviour
 
     // 5*5 보드 중 하나 랜덤 선택
     // true: 이미 타일 있는 칸만, false: 그냥 아무 칸이나
-    private Vector2Int GetRandomPosition(bool onlyTile) {
-        Vector2Int selected = new Vector2Int(Random.Range(0,5), Random.Range(0,5));
+    private Vector2Int GetRandomPosition(bool onlyTile)
+    {
+        Vector2Int selected = new Vector2Int(Random.Range(0, 5), Random.Range(0, 5));
 
-        if(onlyTile) {
-            while(GameManager.Instance.CheckTile(selected.x, selected.y)) {
-                selected = new Vector2Int(Random.Range(0,5), Random.Range(0,5));
+        if (onlyTile)
+        {
+            while (GameManager.Instance.CheckTile(selected.x, selected.y))
+            {
+                selected = new Vector2Int(Random.Range(0, 5), Random.Range(0, 5));
             }
             return selected;
-        } 
+        }
 
         return selected;
     }
