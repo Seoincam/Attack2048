@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Board : MonoBehaviour
+public class Tile : MonoBehaviour
 {
     public int value;
     public int x, y; //현재 좌표

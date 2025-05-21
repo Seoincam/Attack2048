@@ -112,8 +112,8 @@ public class StoreManager : MonoBehaviour
     private void PreventDestroy(Collider2D selectedTile) {}
 
     private void DestroyTile(Collider2D selectedTile) {
-        int x= selectedTile.GetComponent<Board>().x;
-        int y= selectedTile.GetComponent<Board>().y;
+        int x= selectedTile.GetComponent<Tile>().x;
+        int y= selectedTile.GetComponent<Tile>().y;
         
         // 오류 방지
         if(GameManager.Instance.DestroyTile(x,y)) {

@@ -3,7 +3,7 @@
 //  - 감금 클래스.
 // - - - - - - - - - - - - - - - - - -
 
-public class Imprision : SlimeActionBase
+public class Imprison : SlimeActionBase
 {
     protected override void Execute()
     {

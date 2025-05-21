@@ -79,7 +79,7 @@ public class ShieldSlime : SlimeBase
         _wallCounter --;
 
         if(_wallCounter == 0) {
-            EventManager.Publish(GameEvent.Delete);
+            EventManager.Publish(GameEvent.Wall);
             _wallCounter = WallInterval;
         }
     }

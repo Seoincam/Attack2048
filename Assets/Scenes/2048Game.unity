@@ -1182,7 +1182,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fc641c295aae64073a7787dd751af74f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Board:
+  maxTurns: 80
+  probablity_4: 15
+  TilePrefabs:
   - {fileID: 4217666222071071648, guid: f56ed41e5fd5a4ae68b595a55093bae5, type: 3}
   - {fileID: 7246910368932569499, guid: e56e7b03930d3498aa769aadb72f3105, type: 3}
   - {fileID: 4249103774624802302, guid: 4e44cafc108c54228b89a626c8794afb, type: 3}
@@ -1201,8 +1203,6 @@ MonoBehaviour:
   - {fileID: 691568085597732685, guid: cc0991b7fd03045dbbed2909b0bfa763, type: 3}
   - {fileID: 2976873772146142562, guid: 6ea36061cca524241a58bc733e410901, type: 3}
   TileGroup: {fileID: 1197994822}
-  maxTurns: 80
-  probablity_4: 15
   remainingTurnsText: {fileID: 1769213545}
 --- !u!4 &1024858048
 Transform:

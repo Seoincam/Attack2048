@@ -81,7 +81,7 @@ public class SlimeActionManager : MonoBehaviour
     private void Imprison()
     {
         Debug.Log("[Slime Action Manager] 감금");
-        Imprision imprision = Instantiate(_imprisonPrefab).GetComponent<Imprision>();
+        Imprison imprision = Instantiate(_imprisonPrefab).GetComponent<Imprison>();
         // TODO: 위치 설정
         // TODO: GameManager에 알려야함.
     }
