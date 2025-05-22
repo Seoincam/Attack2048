@@ -21,7 +21,8 @@ public enum GameEvent
     Imprison, // 감금
     Change, // 숫자 랜덤 변경
     Translocate3, // 이동 (3스테이지)
-    Translocate7 // 이동 (7스테이지)
+    Translocate7, // 이동 (7스테이지)
+    ForcedMove, // 강제 이동(4스테이지)
 }
 
 public class EventManager

@@ -18,10 +18,11 @@ public class SlimeActionManager : MonoBehaviour
     [SerializeField] private GameObject _deletePrefab; // 삭제
     [SerializeField] private GameObject _wallPrefab; // 벽
     [SerializeField] private GameObject _petrifyPrepPrefab; // 석화 대기
-    [SerializeField] private GameObject _imprisonPrefab; // 감금
+    [SerializeField] private GameObject _imprisonPrepPrefab; // 감금 대기
     [SerializeField] private GameObject _changePrefab; // 숫자 랜덤 변경
     [SerializeField] private GameObject _translocate3Prefab; // 이동 (3 스테이지)
     [SerializeField] private GameObject _translocate7Prefab; // 이동 (7 스테이지)
+    [SerializeField] private GameObject _forcedMovePrefab; // 이동방향강제 (4 스테이지)
 
 
 
@@ -40,6 +41,7 @@ public class SlimeActionManager : MonoBehaviour
         EventManager.Subscribe(GameEvent.Change, Change);
         EventManager.Subscribe(GameEvent.Translocate3, Translocate3);
         EventManager.Subscribe(GameEvent.Translocate7, Translocate7);
+        EventManager.Subscribe(GameEvent.ForcedMove, ForcedMove);
     }
 
 
@@ -121,11 +123,11 @@ public class SlimeActionManager : MonoBehaviour
         petrifyPrep.Init(selected.x, selected.y);
     }
 
-    // 감금
+    // 감금 대기
     private void Imprison()
     {
-        Imprison imprison1 = Instantiate(_imprisonPrefab).GetComponent<Imprison>();
-        Imprison imprison2 = Instantiate(_imprisonPrefab).GetComponent<Imprison>();
+        ImprisonPrep imprison1 = Instantiate(_imprisonPrepPrefab).GetComponent<ImprisonPrep>();
+        ImprisonPrep imprison2 = Instantiate(_imprisonPrepPrefab).GetComponent<ImprisonPrep>();
         // TODO: 위치 설정
 
         Vector2Int selected1 = GetRandomPosition(false);
@@ -160,6 +162,13 @@ public class SlimeActionManager : MonoBehaviour
     private void Translocate7()
     {
         Translocate7 translocate = Instantiate(_translocate7Prefab).GetComponent<Translocate7>();
+    }
+    // 이동 방향 강제 (4 스테이지)
+    
+    private void ForcedMove()
+    {
+        ForcedMove forcedmove = Instantiate(_forcedMovePrefab).GetComponent<ForcedMove>();
+        forcedmove.Init();
     }
 
 

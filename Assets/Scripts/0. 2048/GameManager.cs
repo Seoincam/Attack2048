@@ -22,6 +22,7 @@ using UnityEngine;
         e.g. 0이 되면 실행시킴             
         
 */
+public enum ForcedMovedir { None ,Up, Down, Left, Right } // 강제 이동 방향 
 
 public class GameManager : MonoBehaviour, INewTurnListener
 {
@@ -37,7 +38,7 @@ public class GameManager : MonoBehaviour, INewTurnListener
     public Obstacle[,] ObstacleArray = new Obstacle[5, 5]; // 장애물 배열 (삭제, 벽, 석화, 감금, 이동)
 
     private bool _canGetInput; // 입력을 받나? (설정, 도감, 상점, 후처리 등 실행중엔 안 받음)
-    public bool CanGetInput { get => _canGetInput;  set => _canGetInput = value; }
+    public bool CanGetInput { get => _canGetInput; set => _canGetInput = value; }
 
     private int _curTurns;
     private int CurTurns
@@ -72,6 +73,8 @@ public class GameManager : MonoBehaviour, INewTurnListener
     private int x, y, i, j;
     private bool wait, move;
     private Vector3 firstPos, secondPos, gap;
+    [HideInInspector]
+    public ForcedMovedir forcedDirection = ForcedMovedir.None;
 
     private HashSet<Tile> _movingTiles; // 매턴마다 이동하는 타일 저장
     public bool _isChecking;
@@ -143,6 +146,67 @@ public class GameManager : MonoBehaviour, INewTurnListener
 
         CanGetInput = true;
     }
+    // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    // 해당 방향으로 이동이 가능한지 체크 
+    public bool CheckCanMove(Vector3 dir)
+    {
+        if (dir.y > 0 && Mathf.Abs(dir.x) < 0.5f) // 위
+        {
+            for (x = 0; x < 5; x++)
+                for (y = 0; y < 4; y++)
+                    for (i = 4; i > y; i--)
+                        if(CheckMoveOrCombine(x, i - 1, x, i)) return true;
+        }
+        else if (dir.y < 0 && Mathf.Abs(dir.x) < 0.5f) // 아래
+        {
+            for (x = 0; x < 5; x++)
+                for (y = 4; y > 0; y--)
+                    for (i = 0; i < y; i++)
+                        if(CheckMoveOrCombine(x, i + 1, x, i)) return true;
+        }
+        else if (dir.x > 0 && Mathf.Abs(dir.y) < 0.5f) // 오른쪽
+        {
+            for (y = 0; y < 5; y++)
+                for (x = 0; x < 4; x++)
+                    for (i = 4; i > x; i--)
+                        if(CheckMoveOrCombine(i - 1, y, i, y)) return true;
+        }
+        else if (dir.x < 0 && Mathf.Abs(dir.y) < 0.5f) // 왼쪽
+        {
+            for (y = 0; y < 5; y++)
+                for (x = 4; x > 0; x--)
+                    for (i = 0; i < x; i++)
+                        if(CheckMoveOrCombine(i + 1, y, i, y)) return true;
+        }
+        return false;
+    }
+    bool CheckMoveOrCombine(int x1, int y1, int x2, int y2)
+    {
+        bool canMove = false;
+        // 이동 가능한지 확인
+        if (!ObstacleArray[x2, y2].CanMove(x1, y1)) return canMove; // 추후 막히는 애니메이션 추가
+        // 해당 칸이 감금되어있는지 확인
+        if (ObstacleArray[x1, y1].HasImprison()) return canMove;
+
+        // 이동
+        if (TileArray[x2, y2] == null && TileArray[x1, y1] != null)
+        {
+            canMove = true;
+        }
+        // 병합
+        if (
+            TileArray[x1, y1] != null &&
+            TileArray[x2, y2] != null &&
+            TileArray[x1, y1].name == TileArray[x2, y2].name &&
+            TileArray[x1, y1].tag != "Combine" &&
+            TileArray[x2, y2].tag != "Combine"
+        )
+        {
+            canMove = true;
+        }
+        return canMove;
+    }
+   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
     private void GetMouseOrTouch()
     {
@@ -153,7 +217,7 @@ public class GameManager : MonoBehaviour, INewTurnListener
         }
 
         if (Input.GetMouseButton(0) || (Input.touchCount == 1 && Input.GetTouch(0).phase == TouchPhase.Moved))
-        {            
+        {
             secondPos = Input.GetMouseButton(0) ? Input.mousePosition : (Vector3)Input.GetTouch(0).position;
             gap = secondPos - firstPos;
 
@@ -171,6 +235,32 @@ public class GameManager : MonoBehaviour, INewTurnListener
 
             _movingTiles = new HashSet<Tile>();
             CanGetInput = false;
+            // 강제 이동이 설정된 경우 그 방향 외에는 입력을 받지 않음
+            if(forcedDirection != ForcedMovedir.None)
+            {
+                bool isValid = false;
+                switch(forcedDirection)
+                {
+                    case ForcedMovedir.Up:
+                        isValid = gap.y > 0 && Mathf.Abs(gap.x) < 0.5f;
+                        break;
+                    case ForcedMovedir.Down:
+                        isValid = gap.y < 0 && Mathf.Abs(gap.x) < 0.5f;
+                        break;
+                    case ForcedMovedir.Left:
+                        isValid = gap.x > 0 && Mathf.Abs(gap.y) < 0.5f;
+                        break;
+                    case ForcedMovedir.Right:
+                        isValid = gap.x < 0 && Mathf.Abs(gap.y) < 0.5f;
+                        break;
+                }
+                if(!isValid)
+                {
+                    Debug.Log("이동 불가! 화살표 방향으로 이동하세요");
+                    CanGetInput = true;
+                    return;
+                }
+            }
 
             // 방향 판별 후 MoveOrCombine 호출
             if (gap.y > 0 && Mathf.Abs(gap.x) < 0.5f) // 위
@@ -243,6 +333,8 @@ public class GameManager : MonoBehaviour, INewTurnListener
 
 
 
+
+
     // - - - - - - - - - - - - - - - - - - - - -
     // 2048 로직
     // - - - - - - - - - - - - - - - - - - - - -
@@ -251,7 +343,7 @@ public class GameManager : MonoBehaviour, INewTurnListener
         // 이동 가능한지 확인
         if (!ObstacleArray[x2, y2].CanMove(x1, y1)) return; // 추후 막히는 애니메이션 추가
         // 해당 칸이 감금되어있는지 확인
-        if(ObstacleArray[x1, y1].HasImprison()) return;
+        if (ObstacleArray[x1, y1].HasImprison()) return;
 
         // 이동
         if (TileArray[x2, y2] == null && TileArray[x1, y1] != null)

@@ -7,7 +7,7 @@ public class Obstacle
     private bool IsObstacled { get => isWall[direction] || isPetrify || isImprison; }
 
     // 장애물을 설치할 때, 설치 가능한가?
-    public bool CanObstacle { get => !isDelete && !isPetrifyPrep && !isPetrify && !isImprison && !isChange && !isTranslocate; }
+    public bool CanObstacle { get => !isDelete && !isImprisonPrep && !isPetrify && !isImprison && !isPetrifyPrep && !isChange && !isTranslocate; }
 
     // 타일이 스폰 가능한가?
     public bool CanSpawn { get => !isPetrify && !isImprison; }
@@ -16,7 +16,8 @@ public class Obstacle
     private bool[] isWall = new bool[4]; // 방향 : 0 = 하, 1 = 상, 2 = 좌, 3 = 우
     private bool isPetrifyPrep; // 석화 대기
     private bool isPetrify; // 실제 석화
-    private bool isImprison;
+    private bool isImprisonPrep; // 감금 대기
+    private bool isImprison; // 실제 감금
     private bool isChange;
     private bool isTranslocate;
 
@@ -44,6 +45,9 @@ public class Obstacle
 
     public void PlacePetrify() => isPetrify = true;
     public void RemovePetrify() => isPetrify = false;
+
+    public void PlaceImprisonPrep() => isImprisonPrep = true;
+    public void RemoveImprisonPrep() => isImprisonPrep = false;
 
     public void PlaceImprison() => isImprison = true;
     public bool HasImprison() => isImprison; // 해당 칸의 감금 여부

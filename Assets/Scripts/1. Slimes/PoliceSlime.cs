@@ -8,6 +8,8 @@ public class PoliceSlime : SlimeBase
     [Header("[ Police Slime Logic ]")]
     [SerializeField, Tooltip("감금 생성 간격")] private int ImprisionInterval;
     [SerializeField, Tooltip("감금 생성 남은 턴 수")] private int _imprisionCounter;
+    [SerializeField, Tooltip("강제 이동 생성 간격")] private int ForcedMoveInterval;
+    [SerializeField, Tooltip("강제 이동 남은 턴 수")] private int _forcedMoveCounter;
 
 
 
@@ -19,6 +21,7 @@ public class PoliceSlime : SlimeBase
         base.Start();
 
         _imprisionCounter = ImprisionInterval;
+        _forcedMoveCounter = ForcedMoveInterval;
     }
 
 
@@ -29,6 +32,7 @@ public class PoliceSlime : SlimeBase
     public override void OnEnter_NewTurn()
     {
         CalculateImprision();
+        CalculateForcedMove();
     }
 
 
@@ -44,6 +48,17 @@ public class PoliceSlime : SlimeBase
         {
             _imprisionCounter = ImprisionInterval;
             EventManager.Publish(GameEvent.Imprison);
+        }
+    }
+     // 강제 이동
+    private void CalculateForcedMove()
+    {
+        _forcedMoveCounter--;
+
+        if (_forcedMoveCounter == 0)
+        {
+            _forcedMoveCounter = ForcedMoveInterval;
+            EventManager.Publish(GameEvent.ForcedMove);
         }
     }
 }

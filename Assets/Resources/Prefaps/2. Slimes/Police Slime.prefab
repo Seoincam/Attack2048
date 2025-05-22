@@ -387,7 +387,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 1
   m_Sprite: {fileID: -2413806693520163455, guid: ebe73ca9363db456bacf42c025bb4847, type: 3}
-  m_Color: {r: 0.2264151, g: 0.2264151, b: 0.2264151, a: 1}
+  m_Color: {r: 0, g: 0.07011509, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -416,6 +416,8 @@ MonoBehaviour:
   maxHealth: 100
   ImprisionInterval: 3
   _imprisionCounter: 0
+  ForcedMoveInterval: 7
+  _forcedMoveCounter: 0
 --- !u!1 &3861831803925755323
 GameObject:
   m_ObjectHideFlags: 0
