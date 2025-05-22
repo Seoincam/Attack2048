@@ -25,16 +25,15 @@ public class Petrify : SlimeActionBase
         G.ObstacleArray[x, y].PlacePetrify();
     }
 
-    public override void OnTurnChanged()
+    public override void OnEnter_CountDownPhase()
     {
-        base.OnTurnChanged();
+        base.OnEnter_CountDownPhase();
         lifeText.text = _lifeCounter.ToString();        
     }
 
     protected override void Execute()
     {
         GameManager.Instance.ObstacleArray[_x, _y].RemovePetrify();
-        EventManager.Unsubscribe(GameEvent.NewTurn, OnTurnChanged);
-        Destroy(gameObject);
+        base.Execute();
     }
 }

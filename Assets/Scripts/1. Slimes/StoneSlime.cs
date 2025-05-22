@@ -35,7 +35,7 @@ public class StoneSlime : SlimeBase
     // - - - - - - - - -
     // ITurnListener
     // - - - - - - - - -
-    public override void OnTurnChanged()
+    public override void OnEnter_NewTurn()
     {
         CalculatePetrify();
         CalCulateWall();

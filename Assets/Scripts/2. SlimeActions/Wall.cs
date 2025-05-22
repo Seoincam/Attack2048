@@ -2,11 +2,14 @@
 // Wall.cs
 //  - 벽 클래스.
 // - - - - - - - - - - - - - - - - - -
+using UnityEditor.Search;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Wall : SlimeActionBase
 {
     private int x1, y1, x2, y2;
+    [SerializeField] private Text lifeText;
 
     // Wall의 실제 위치를 지정하고 gamemanager에 알림
     public void Init(int x1, int y1, int x2, int y2)
@@ -21,7 +24,10 @@ public class Wall : SlimeActionBase
 
         // 벽의 위치에 따라 회전 e.g. 위, 아래에 생성될 경우 90도 회전
         if (x1 == x2)
+        {
             transform.rotation = Quaternion.Euler(0, 0, 90);
+            lifeText.rectTransform.rotation = Quaternion.Euler(0, 0, 0);
+        }
         else
             transform.rotation = Quaternion.identity;
 
@@ -30,12 +36,17 @@ public class Wall : SlimeActionBase
 
     }
 
+    public override void OnEnter_CountDownPhase()
+    {
+        base.OnEnter_CountDownPhase();
+        lifeText.text = _lifeCounter.ToString();
+    }
+
     protected override void Execute()
     {
         // GameManager에 벽 삭제 알리기
         RemoveWallBetween(x1, y1, x2, y2);
-        EventManager.Unsubscribe(GameEvent.NewTurn, OnTurnChanged);
-        Destroy(gameObject);
+        base.Execute();
     }
     
 
@@ -45,19 +56,19 @@ public class Wall : SlimeActionBase
     public void PlaceWallBetween(int x1, int y1, int x2, int y2)
     {
         if (Mathf.Abs(x1 - x2) + Mathf.Abs(y1 - y2) != 1) return; // Wall이 한칸 사이에 존재하는지 확인
-        GameManager g = GameManager.Instance;
+        GameManager G = GameManager.Instance;
 
         if (x1 == x2)
         {
             if (y1 < y2)
             {
-                g.ObstacleArray[x1, y1].PlaceWall(1);
-                g.ObstacleArray[x2, y2].PlaceWall(0);
+                G.ObstacleArray[x1, y1].PlaceWall(1);
+                G.ObstacleArray[x2, y2].PlaceWall(0);
             }
             else
             {
-                g.ObstacleArray[x1, y1].PlaceWall(0);
-                g.ObstacleArray[x2, y2].PlaceWall(1);
+                G.ObstacleArray[x1, y1].PlaceWall(0);
+                G.ObstacleArray[x2, y2].PlaceWall(1);
             }
         }
         
@@ -65,34 +76,33 @@ public class Wall : SlimeActionBase
         {
             if (x1 < x2)
             {
-                g.ObstacleArray[x1, y1].PlaceWall(3);
-                g.ObstacleArray[x2, y2].PlaceWall(2);
+                G.ObstacleArray[x1, y1].PlaceWall(3);
+                G.ObstacleArray[x2, y2].PlaceWall(2);
             }
             else
             {
-                g.ObstacleArray[x1, y1].PlaceWall(2);
-                g.ObstacleArray[x2, y2].PlaceWall(3);
+                G.ObstacleArray[x1, y1].PlaceWall(2);
+                G.ObstacleArray[x2, y2].PlaceWall(3);
             }
         }
     }
 
-    //Wall이 사라질때 논리배열에서 false로 바꿈
     public void RemoveWallBetween(int x1, int y1, int x2, int y2)
     {
         if (Mathf.Abs(x1 - x2) + Mathf.Abs(y1 - y2) != 1) return; // Wall이 한칸 사이에 존재하는지 확인
-        GameManager g = GameManager.Instance;
+        GameManager G = GameManager.Instance;
 
         if (x1 == x2)
         {
             if (y1 < y2)
             {
-                g.ObstacleArray[x1, y1].RemoveWall(1);
-                g.ObstacleArray[x2, y2].RemoveWall(0);
+                G.ObstacleArray[x1, y1].RemoveWall(1);
+                G.ObstacleArray[x2, y2].RemoveWall(0);
             }
             else
             {
-                g.ObstacleArray[x1, y1].RemoveWall(0);
-                g.ObstacleArray[x2, y2].RemoveWall(1);
+                G.ObstacleArray[x1, y1].RemoveWall(0);
+                G.ObstacleArray[x2, y2].RemoveWall(1);
             }
         }
 
@@ -100,13 +110,13 @@ public class Wall : SlimeActionBase
         {
             if (x1 < x2)
             {
-                g.ObstacleArray[x1, y1].RemoveWall(3);
-                g.ObstacleArray[x2, y2].RemoveWall(2);
+                G.ObstacleArray[x1, y1].RemoveWall(3);
+                G.ObstacleArray[x2, y2].RemoveWall(2);
             }
             else
             {
-                g.ObstacleArray[x1, y1].RemoveWall(2);
-                g.ObstacleArray[x2, y2].RemoveWall(3);
+                G.ObstacleArray[x1, y1].RemoveWall(2);
+                G.ObstacleArray[x2, y2].RemoveWall(3);
             }
         }
     }

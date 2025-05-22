@@ -9,7 +9,6 @@ public class Imprison : SlimeActionBase
     {
         // TODO: GameManager에 감금 삭제 알리기
         // TODO: 다시 숫자 타일 복구
-        EventManager.Unsubscribe(GameEvent.NewTurn, OnTurnChanged);
-        Destroy(gameObject);
+        base.Execute();
     }
 }

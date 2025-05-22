@@ -46,9 +46,9 @@ public class Translocate3 : SlimeActionBase
         }
     }
 
-    public override void OnTurnChanged()
+    public override void OnEnter_CountDownPhase()
     {
-        base.OnTurnChanged();
+        base.OnEnter_CountDownPhase();
         foreach (Text lifeText in lifeTexts)
         {
             lifeText.text = _lifeCounter.ToString();
@@ -75,7 +75,6 @@ public class Translocate3 : SlimeActionBase
         G.ObstacleArray[4, 4].RemoveTranslocate();
         G.ObstacleArray[4, 0].RemoveTranslocate();
 
-        EventManager.Unsubscribe(GameEvent.NewTurn, OnTurnChanged);
-        Destroy(gameObject);
+        base.Execute();
     }
 }

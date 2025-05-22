@@ -26,7 +26,7 @@ public class ArcherSlime : SlimeBase
     // - - - - - - - - -
     // ITurnListener
     // - - - - - - - - -
-    public override void OnTurnChanged()
+    public override void OnEnter_NewTurn()
     {
         CalculateDelete();
         CalculateDelete6();

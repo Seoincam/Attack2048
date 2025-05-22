@@ -5,6 +5,7 @@
 //  - 로직은 각 action class 내에서 수행
 // - - - - - - - - - - - - - - - - - -
 
+using Unity.Collections;
 using UnityEngine;
 
 public class SlimeActionManager : MonoBehaviour
@@ -60,7 +61,33 @@ public class SlimeActionManager : MonoBehaviour
     // 삭제 (6스테이지 한줄 삭제)
     private void Delete6()
     {
+        // ToDo : 기존에 delete 없나 체크
         int randomLineX = Random.Range(0, 5);
+
+        int count = 0;
+        while (true)
+        {
+            // 버그 방지
+            count++;
+            if (count > 500)
+            {
+                Debug.LogError("Delete6 오류!");
+                break;
+            }
+
+            bool canPlace = true;
+            for (int y = 0; y < 5; y++)
+            {
+                if (!GameManager.Instance.ObstacleArray[randomLineX, y].CanObstacle)
+                {
+                    canPlace = false;
+                }
+            }
+
+            if (canPlace) break;
+            else randomLineX = Random.Range(0, 5);
+        }
+
 
         for (int y = 0; y < 5; y++)
         {
@@ -109,9 +136,7 @@ public class SlimeActionManager : MonoBehaviour
 
         // 변경할 타일 위치 설정
         Vector2Int selected = GetRandomPosition(false);
-        Debug.Log("이전");
         change.Init(selected.x, selected.y);
-        Debug.Log("이후");
     }
 
     // 이동 (3 스테이지)
@@ -124,15 +149,15 @@ public class SlimeActionManager : MonoBehaviour
     private void Translocate7()
     {
         Translocate7 translocate = Instantiate(_translocate7Prefab).GetComponent<Translocate7>();
-        // TODO: 위치 설정
-        // TODO: GameManager에 알려야함.
     }
-    
+
 
 
     // - - - - - - - - - - - - - - - - - - - - -
     // 랜덤 위치 설정
     // - - - - - - - - - - - - - - - - - - - - -
+
+    //ToDo: 위치 고정형 패턴에서, 그 자리에 이미 다른 장애물이 있을경우 처리
 
     // 5*5 보드 중 하나 랜덤 선택
     // [bool onlyTile] true: 이미 타일 있는 칸만, false: 그냥 아무 칸이나

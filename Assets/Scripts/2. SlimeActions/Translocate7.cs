@@ -22,7 +22,6 @@ public class Translocate7 : SlimeActionBase
     {
         // TODO: GameManager에 이동 실행 알리기 & 타일 이동 시키기
         // GameManager.Instance.
-        EventManager.Unsubscribe(GameEvent.NewTurn, OnTurnChanged);
-        Destroy(gameObject);
+        base.Execute();
     }
 }

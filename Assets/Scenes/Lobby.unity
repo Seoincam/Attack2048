@@ -1406,7 +1406,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8db9d1384899144b4aaecea3f56b50a5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _settingPanel: {fileID: 0}
   _bgmSlider: {fileID: 794876521}
   _sfxSlider: {fileID: 204593394}
 --- !u!1 &858409292
@@ -3804,6 +3803,6 @@ CanvasRenderer:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
-  - {fileID: 1703712057}
   - {fileID: 30292499}
   - {fileID: 1660736888}
+  - {fileID: 1703712057}

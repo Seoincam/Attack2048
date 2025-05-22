@@ -50,7 +50,7 @@ public class ShieldSlime : SlimeBase
     // - - - - - - - - -
     // ITurnListener
     // - - - - - - - - -
-    public override void OnTurnChanged()
+    public override void OnEnter_NewTurn()
     {
         CalculateShield();
         CalculateWall();

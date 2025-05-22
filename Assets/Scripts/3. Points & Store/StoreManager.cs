@@ -22,7 +22,7 @@ public class StoreManager : MonoBehaviour
             darkBackground.SetActive(value);
 
             // 터치 오류 방지
-            if(value) { GameManager.Instance.IsPaused = true; }
+            if(value) { GameManager.Instance.CanGetInput = false; }
             else { StartCoroutine(FinishPause()); }
         }
     }
@@ -35,7 +35,7 @@ public class StoreManager : MonoBehaviour
             darkBackground.SetActive(value);
 
             // 터치 오류 방지
-            if(value) { GameManager.Instance.IsPaused = true; }
+            if(value) { GameManager.Instance.CanGetInput = false; }
             else { StartCoroutine(FinishPause()); }
         }
     }
@@ -69,7 +69,6 @@ public class StoreManager : MonoBehaviour
             RaycastHit2D hit = Physics2D.Raycast(touchPos, Vector2.zero);
 
             if(hit.collider != null) { 
-                Debug.Log(hit.collider.name);
                 if(_isPreventing) PreventDestroy(hit.collider);
                 else if(_isDestroying) DestroyTile(hit.collider);
             }
@@ -106,7 +105,7 @@ public class StoreManager : MonoBehaviour
     // - - - - - - - - - -
     private IEnumerator FinishPause() {
         yield return new WaitForSeconds(0.3f);
-        GameManager.Instance.IsPaused = false;
+        GameManager.Instance.CanGetInput = true;
     }
 
     private void PreventDestroy(Collider2D selectedTile) {}

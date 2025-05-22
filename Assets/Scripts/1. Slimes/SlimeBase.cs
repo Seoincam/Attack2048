@@ -2,7 +2,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public abstract class SlimeBase : MonoBehaviour, ITurnListener
+public abstract class SlimeBase : MonoBehaviour, INewTurnListener
 {
     // - - - - - - - - - 
     // 필드
@@ -68,11 +68,11 @@ public abstract class SlimeBase : MonoBehaviour, ITurnListener
 
 
     // - - - - - - - - - - - 
-    // ITurnListener
+    // INewTurnListener
     // - - - - - - - - - - -
     public void Subscribe_NewTurn() {
-        EventManager.Subscribe(GameEvent.NewTurn, OnTurnChanged);
+        EventManager.Subscribe(GameEvent.NewTurn, OnEnter_NewTurn);
     }
 
-    public virtual void OnTurnChanged(){} // 각 자식 슬라임 클래스에서 해당 메서드 안에 매턴 마다 발생하는 항목 작성
+    public virtual void OnEnter_NewTurn(){} // 각 자식 슬라임 클래스에서 해당 메서드 안에 매턴 마다 발생하는 항목 작성
 }

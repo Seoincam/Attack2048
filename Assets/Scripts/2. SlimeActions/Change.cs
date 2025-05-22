@@ -1,3 +1,4 @@
+using Unity.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -23,6 +24,7 @@ public class Change : SlimeActionBase
     {
         _x = x; _y = y;
         transform.position = GameManager.Instance.LocateTile(_x, _y);
+        GameManager.Instance.ObstacleArray[x, y].PlaceChange();
         lifeText.text = _lifeCounter.ToString();
     }
 
@@ -33,13 +35,14 @@ public class Change : SlimeActionBase
 
         GameManager G = GameManager.Instance;
         if (G.DestroyTile(_x, _y)) G.Spawn(random, _x, _y);
+        G.ObstacleArray[_x, _y].RemoveChange();
 
-        Destroy(gameObject);
+        base.Execute();
     }
 
-    public override void OnTurnChanged()
+    public override void OnEnter_CountDownPhase()
     {
-        base.OnTurnChanged();
+        base.OnEnter_CountDownPhase();
         lifeText.text = _lifeCounter.ToString();
     }
 }

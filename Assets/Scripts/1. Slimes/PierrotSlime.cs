@@ -26,7 +26,7 @@ public class PierrotSlime : SlimeBase
     // - - - - - - - - -
     // ITurnListener
     // - - - - - - - - -
-    public override void OnTurnChanged()
+    public override void OnEnter_NewTurn()
     {
         CalculateChange();
         CalCulateTranslocate();

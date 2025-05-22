@@ -1,9 +1,30 @@
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
+using System.Threading;
 using TMPro;
 using UnityEngine;
 
-public class GameManager : MonoBehaviour
+/*
+    흐름 :
+
+    0. 새 턴
+        (OnEnter_NewTurn)
+    1. 입력 감지                 
+        (GetMouseOrTouch)
+    2. 입력 처리               
+        (ExecuteInput -> MoveOrCombine)
+    3. 이동이 발생했다면, 모든 타일 이동 끝날 때까지 대기 
+        (CheckIsMoveEnd)
+
+    4. 카운트 다운 페이즈
+        (EndPhase)
+        e.g. 경고 이펙트 숫자 감소 등  
+
+    5. 트리거 페이즈
+        e.g. 0이 되면 실행시킴             
+        
+*/
+
+public class GameManager : MonoBehaviour, INewTurnListener
 {
     // - - - - - - - - - - - - - - - - - - - - -
     // 필드
@@ -11,12 +32,13 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance;
     public DamageInvoker _damageInvoker;
     private PointManager _pointManager;
+    private CountDownManager _countManager;
 
     public GameObject[,] TileArray = new GameObject[5, 5]; // 타일 배열
     public Obstacle[,] ObstacleArray = new Obstacle[5, 5]; // 장애물 배열 (삭제, 벽, 석화, 감금, 이동)
 
-    private bool _isPaused; // 게임이 멈췄나? (설정, 도감, 상점 등)
-    public bool IsPaused { set => _isPaused = value; }
+    private bool _canGetInput; // 입력을 받나? (설정, 도감, 상점, 후처리 등 실행중엔 안 받음)
+    public bool CanGetInput { get => _canGetInput;  set => _canGetInput = value; }
 
     private int _curTurns;
     private int CurTurns
@@ -33,7 +55,7 @@ public class GameManager : MonoBehaviour
     private const float xStart = -2.12f; //[0,0]의 x좌표와 y좌표, 그후 증가할때마다의 좌표 차이
     private const float yStart = -3.71f;
     private const float xOffset = 1.06f;
-    private const float yOffset = 1.05f; 
+    private const float yOffset = 1.05f;
 
 
     [Header("Setting")]
@@ -41,7 +63,7 @@ public class GameManager : MonoBehaviour
     [SerializeField, Tooltip("스폰에서 4가 나올 확률")] private int probablity_4 = 15;
 
     [Space, Header("Object")]
-    [SerializeField] private GameObject[]   TilePrefabs;      // 2, 4, 8... 타일 프리팹 배열 (index = log2 - 1)
+    [SerializeField] private GameObject[] TilePrefabs;      // 2, 4, 8... 타일 프리팹 배열 (index = log2 - 1)
     [SerializeField] private Transform TileGroup;
 
     [Space, Header("UI")]
@@ -49,11 +71,10 @@ public class GameManager : MonoBehaviour
 
 
     private int x, y, i, j;
-    private bool wait;
-    private bool move;
-    private Vector3 firstPos, gap;
+    private bool wait, move;
+    private Vector3 firstPos, secondPos, gap;
 
-    private HashSet<Tile> _movingTiles;
+    private HashSet<Tile> _movingTiles; // 매턴마다 이동하는 타일 저장
     public bool _isChecking;
 
 
@@ -68,12 +89,15 @@ public class GameManager : MonoBehaviour
 
         // Obstacle Array 초기화
         for (int x = 0; x < 5; x++) for (int y = 0; y < 5; y++)
-        {
-            ObstacleArray[x, y] = new Obstacle(x,y);
-        }
+            {
+                ObstacleArray[x, y] = new Obstacle(x, y);
+            }
 
         _damageInvoker = new DamageInvoker();
         _pointManager = GetComponent<PointManager>();
+        _countManager = GetComponent<CountDownManager>();
+        Subscribe_NewTurn();
+
     }
 
     void Start()
@@ -83,20 +107,44 @@ public class GameManager : MonoBehaviour
 
         Spawn();
         Spawn();
+        CanGetInput = true;
     }
 
-    void Update()
+    void FixedUpdate()
     {
         if (_isChecking) CheckIsMoveEnd();
 
-        if (!_isChecking && !_isPaused) GetMouseOrTouch();
+        if (!_isChecking && CanGetInput) GetMouseOrTouch();
     }
 
 
+    public void Subscribe_NewTurn()
+    {
+        EventManager.Subscribe(GameEvent.NewTurn, OnEnter_NewTurn);
+    }
 
     // - - - - - - - - - - - - - - - - - - - - -
-    // 입력 받기
+    // 로직
     // - - - - - - - - - - - - - - - - - - - - -
+    public void OnEnter_NewTurn()
+    {
+        CurTurns--;
+        if (CurTurns <= 0)
+        {
+            Debug.Log("이동 횟수 소진! 게임 종료!");
+            ResetGame();
+        }
+
+        Spawn();
+
+        for (x = 0; x < 5; x++)
+            for (y = 0; y < 5; y++)
+                if (TileArray[x, y] != null)
+                    TileArray[x, y].tag = "Untagged";
+
+        CanGetInput = true;
+    }
+
     private void GetMouseOrTouch()
     {
         if (Input.GetMouseButtonDown(0) || (Input.touchCount == 1 && Input.GetTouch(0).phase == TouchPhase.Began))
@@ -106,35 +154,24 @@ public class GameManager : MonoBehaviour
         }
 
         if (Input.GetMouseButton(0) || (Input.touchCount == 1 && Input.GetTouch(0).phase == TouchPhase.Moved))
-        {
-            gap = (Input.GetMouseButton(0) ? Input.mousePosition : (Vector3)Input.GetTouch(0).position) - firstPos;
+        {            
+            secondPos = Input.GetMouseButton(0) ? Input.mousePosition : (Vector3)Input.GetTouch(0).position;
+            gap = secondPos - firstPos;
 
             if (gap.magnitude < 100) return;
             gap.Normalize();
-            ExecuteTurn();
+            ExecuteInput();
         }
     }
 
-
-/*
-    흐름 :
-    1. 입력 감지                 
-        (GetMouseOrTouch)
-    2. 턴 실행                  
-        (ExecuteTurn -> MoveOrCombine)
-    3. 이동이 발생했다면, 모든 타일 이동 끝날 때까지 대기 
-        (CheckIsMoveEnd)
-    4. 후처리                   
-        (NextPahse)
-*/
-
-
-    private void ExecuteTurn()
+    private void ExecuteInput()
     {
         if (wait)
         {
             wait = false;
+
             _movingTiles = new HashSet<Tile>();
+            CanGetInput = false;
 
             // 방향 판별 후 MoveOrCombine 호출
             if (gap.y > 0 && Mathf.Abs(gap.x) < 0.5f) // 위
@@ -165,19 +202,23 @@ public class GameManager : MonoBehaviour
                         for (i = 0; i < x; i++)
                             MoveOrCombine(i + 1, y, i, y);
             }
+        }
 
-            // 이동이 발생했으면 처리
-            if (move)
-            {
-                move = false;
-                _isChecking = true;
-            }
+        // 이동이 발생했으면 처리
+        if (move)
+        {
+            move = false;
+            _isChecking = true;
+        }
+        else
+        {
+            CanGetInput = true;
+            gap = firstPos;
         }
     }
 
     private void CheckIsMoveEnd()
     {
-        // Debug.Log(_movingTiles.Count);
         if (_movingTiles.Count != 0)
         {
             foreach (Tile tile in _movingTiles)
@@ -190,29 +231,16 @@ public class GameManager : MonoBehaviour
         // 모든 타일의 움직임이 끝났다면
         _isChecking = false;
         _movingTiles.Clear();
-        NextPhase();
+        CountDownPhase();
     }
 
-    private void NextPhase()
+    private void CountDownPhase()
     {
         _damageInvoker.InvokeDamage(); // 데미지 합산 전부 끝내고 데미지 부과
-        EventManager.Publish(GameEvent.NewTurn); // 새로운 턴임을 Event Manager에 알리기.
-
-        CurTurns--;
-
-        Spawn();
-
-        for (x = 0; x < 5; x++)
-            for (y = 0; y < 5; y++)
-                if (TileArray[x, y] != null)
-                    TileArray[x, y].tag = "Untagged";
-
-        if (CurTurns <= 0)
-        {
-            Debug.Log("이동 횟수 소진! 게임 종료!");
-            ResetGame();
-        }
+        _countManager.CountDown();
     }
+
+
 
 
 
@@ -321,7 +349,7 @@ public class GameManager : MonoBehaviour
         TileArray[x, y] = Instantiate(TilePrefabs[index], LocateTile(x, y), Quaternion.identity, TileGroup);
 
         Tile tile = TileArray[x, y].GetComponent<Tile>();
-        tile.value = value; 
+        tile.value = value;
         tile.Init(x, y);
     }
 
@@ -356,35 +384,33 @@ public class GameManager : MonoBehaviour
 
 
     // - - - - - - - - - - - - - - - - - - - - -
-    // 타일 위치 설정
+    // 외부 접근용 메서드
     // - - - - - - - - - - - - - - - - - - - - -
+
+    // 타일 위치 설정
     // 파라메터 x, y: Square 배열 상의 좌표
     public Vector3 LocateTile(int x, int y)
     {
         return new Vector3(xStart + xOffset * x, yStart + yOffset * y, 0);
     }
 
-
-
-    // - - - - - - - - - - - - - - - - - - - - -
     // 타일 있나 체크
-    // - - - - - - - - - - - - - - - - - - - - -
-    public bool IsTiled(int x, int y) {
-        if(TileArray[x,y] != null) return true;
+    public bool IsTiled(int x, int y)
+    {
+        if (TileArray[x, y] != null) return true;
         return false;
     }
 
-
-    // - - - - - - - - - - - - - - - - - - - - -
     // 타일 삭제
-    // - - - - - - - - - - - - - - - - - - - - -
-    public bool DestroyTile(int x, int y) {
-        if(TileArray[x,y] != null) {
-            Destroy(TileArray[x,y]);
-            TileArray[x,y] = null;
+    public bool DestroyTile(int x, int y)
+    {
+        if (TileArray[x, y] != null)
+        {
+            Destroy(TileArray[x, y]);
+            TileArray[x, y] = null;
             return true;
         }
 
-        return false; 
+        return false;
     }
 }
