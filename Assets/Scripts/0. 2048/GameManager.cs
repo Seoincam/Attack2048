@@ -251,6 +251,8 @@ public class GameManager : MonoBehaviour, INewTurnListener
     {
         // 이동 가능한지 확인
         if (!ObstacleArray[x2, y2].CanMove(x1, y1)) return; // 추후 막히는 애니메이션 추가
+        // 해당 칸이 감금되어있는지 확인
+        if(ObstacleArray[x1, y1].HasImprison()) return;
 
         // 이동
         if (TileArray[x2, y2] == null && TileArray[x1, y1] != null)
