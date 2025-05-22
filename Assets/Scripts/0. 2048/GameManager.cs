@@ -86,9 +86,6 @@ public class GameManager : MonoBehaviour, INewTurnListener
         if (Instance == null) Instance = this;
         else Destroy(gameObject);
 
-        // 임시
-        Application.targetFrameRate = 60;
-
         // Obstacle Array 초기화
         for (int x = 0; x < 5; x++) for (int y = 0; y < 5; y++)
             {
@@ -253,6 +250,8 @@ public class GameManager : MonoBehaviour, INewTurnListener
     {
         // 이동 가능한지 확인
         if (!ObstacleArray[x2, y2].CanMove(x1, y1)) return; // 추후 막히는 애니메이션 추가
+        // 해당 칸이 감금되어있는지 확인
+        if(ObstacleArray[x1, y1].HasImprison()) return;
 
         // 이동
         if (TileArray[x2, y2] == null && TileArray[x1, y1] != null)

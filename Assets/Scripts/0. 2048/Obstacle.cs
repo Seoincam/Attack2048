@@ -46,6 +46,7 @@ public class Obstacle
     public void RemovePetrify() => isPetrify = false;
 
     public void PlaceImprison() => isImprison = true;
+    public bool HasImprison() => isImprison; // 해당 칸의 감금 여부
     public void RemoveImprison() => isImprison = false;
 
     public void PlaceChange() => isChange = true;

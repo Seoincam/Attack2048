@@ -124,10 +124,21 @@ public class SlimeActionManager : MonoBehaviour
     // 감금
     private void Imprison()
     {
-        Debug.Log("[Slime Action Manager] 감금");
-        Imprison imprision = Instantiate(_imprisonPrefab).GetComponent<Imprison>();
+        Imprison imprison1 = Instantiate(_imprisonPrefab).GetComponent<Imprison>();
+        Imprison imprison2 = Instantiate(_imprisonPrefab).GetComponent<Imprison>();
         // TODO: 위치 설정
+
+        Vector2Int selected1 = GetRandomPosition(false);
+        Vector2Int selected2 = GetRandomPosition(false);
+        //감금이 겹치치 않도록
+        do
+        {
+            selected2 = GetRandomPosition(false);
+        }
+        while(selected1 == selected2); 
         // TODO: GameManager에 알려야함.
+        imprison1.Init(selected1.x, selected1.y);
+        imprison2.Init(selected2.x, selected2.y);
     }
 
     private void Change()
