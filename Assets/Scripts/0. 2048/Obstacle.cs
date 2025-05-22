@@ -7,14 +7,15 @@ public class Obstacle
     private bool IsObstacled { get => isWall[direction] || isPetrify || isImprison; }
 
     // 장애물을 설치할 때, 설치 가능한가?
-    public bool CanObstacle { get => !isDelete && !isPetrify && !isImprison && !isChange && !isTranslocate; }
+    public bool CanObstacle { get => !isDelete && !isPetrifyPrep && !isPetrify && !isImprison && !isChange && !isTranslocate; }
 
     // 타일이 스폰 가능한가?
     public bool CanSpawn { get => !isPetrify && !isImprison; }
 
     private bool isDelete;
     private bool[] isWall = new bool[4]; // 방향 : 0 = 하, 1 = 상, 2 = 좌, 3 = 우
-    private bool isPetrify;
+    private bool isPetrifyPrep; // 석화 대기
+    private bool isPetrify; // 실제 석화
     private bool isImprison;
     private bool isChange;
     private bool isTranslocate;
@@ -37,6 +38,9 @@ public class Obstacle
     {
         isWall[direction] = false;
     }
+
+    public void PlacePetrifyPrep() => isPetrifyPrep = true;
+    public void RemovePetrifyPrep() => isPetrifyPrep = false;
 
     public void PlacePetrify() => isPetrify = true;
     public void RemovePetrify() => isPetrify = false;

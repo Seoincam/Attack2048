@@ -17,7 +17,7 @@ public class SlimeActionManager : MonoBehaviour
     // 각각 프리팹으로 저장해놓고 호출될 때 생성
     [SerializeField] private GameObject _deletePrefab; // 삭제
     [SerializeField] private GameObject _wallPrefab; // 벽
-    [SerializeField] private GameObject _petrifyPrefab; // 석화
+    [SerializeField] private GameObject _petrifyPrepPrefab; // 석화 대기
     [SerializeField] private GameObject _imprisonPrefab; // 감금
     [SerializeField] private GameObject _changePrefab; // 숫자 랜덤 변경
     [SerializeField] private GameObject _translocate3Prefab; // 이동 (3 스테이지)
@@ -111,14 +111,14 @@ public class SlimeActionManager : MonoBehaviour
         wall.Init(x1, y1, x2, y2);
     }
 
-    // 석화
+    // 석화 대기
     private void Petrify()
     {
-        Petrify petrify = Instantiate(_petrifyPrefab).GetComponent<Petrify>();
+        PetrifyPrep petrifyPrep = Instantiate(_petrifyPrepPrefab).GetComponent<PetrifyPrep>();
 
         // 위치 설정
         Vector2Int selected = GetRandomPosition(false);
-        petrify.Init(selected.x, selected.y);
+        petrifyPrep.Init(selected.x, selected.y);
     }
 
     // 감금
