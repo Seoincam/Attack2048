@@ -1,7 +1,8 @@
 // - - - - - - - - - - - - - - - - - -
 // SlimeActionManager.cs
 //  - 슬라임의 액션을 여기서 실행.
-//  - 명령은 슬라임 클래스에서 하고, 여기선 단순히 '실제 생성'만.
+//  - 여기선 단순히 '실제 생성'만.
+//  - 로직은 각 action class 내에서 수행
 // - - - - - - - - - - - - - - - - - -
 
 using UnityEngine;
@@ -13,10 +14,11 @@ public class SlimeActionManager : MonoBehaviour
     // - - - - - - - - - - - - - - - - - - - - -
 
     // 각각 프리팹으로 저장해놓고 호출될 때 생성
-    [SerializeField] private GameObject _destroyPrefab; // 삭제
+    [SerializeField] private GameObject _deletePrefab; // 삭제
     [SerializeField] private GameObject _wallPrefab; // 벽
     [SerializeField] private GameObject _petrifyPrefab; // 석화
     [SerializeField] private GameObject _imprisonPrefab; // 감금
+    [SerializeField] private GameObject _changePrefab; // 숫자 랜덤 변경
     [SerializeField] private GameObject _translocate3Prefab; // 이동 (3 스테이지)
     [SerializeField] private GameObject _translocate7Prefab; // 이동 (7 스테이지)
 
@@ -30,9 +32,11 @@ public class SlimeActionManager : MonoBehaviour
     void Awake()
     {
         EventManager.Subscribe(GameEvent.Delete, Delete);
+        EventManager.Subscribe(GameEvent.Delete6, Delete6);
         EventManager.Subscribe(GameEvent.Wall, Wall);
         EventManager.Subscribe(GameEvent.Petrify, Petrify);
         EventManager.Subscribe(GameEvent.Imprison, Imprison);
+        EventManager.Subscribe(GameEvent.Change, Change);
         EventManager.Subscribe(GameEvent.Translocate3, Translocate3);
         EventManager.Subscribe(GameEvent.Translocate7, Translocate7);
     }
@@ -46,17 +50,30 @@ public class SlimeActionManager : MonoBehaviour
     // 삭제
     private void Delete()
     {
-        Delete destroy = Instantiate(_destroyPrefab).GetComponent<Delete>();
+        Delete delete = Instantiate(_deletePrefab).GetComponent<Delete>();
 
-        // 삭제할 타일 위치 설정
+        // 위치 설정
         Vector2Int selected = GetRandomPosition(false);
-        destroy.Init(selected.x, selected.y);
+        delete.Init(selected.x, selected.y, false);
+    }
+
+    // 삭제 (6스테이지 한줄 삭제)
+    private void Delete6()
+    {
+        int randomLineX = Random.Range(0, 5);
+
+        for (int y = 0; y < 5; y++)
+        {
+            Delete delete = Instantiate(_deletePrefab).GetComponent<Delete>();
+            delete.Init(randomLineX, y, true);
+        }
     }
 
     // 벽
     private void Wall()
     {
         Wall wall = Instantiate(_wallPrefab).GetComponent<Wall>();
+
         // 위치 정하여 Wall.cs에서 위치 설정
         int x1 = Random.Range(1, 4);
         int y1 = Random.Range(1, 4);
@@ -64,17 +81,17 @@ public class SlimeActionManager : MonoBehaviour
         int x2 = x1 + dir.x;
         int y2 = y1 + dir.y;
 
-        // GameManager에 알려야함. -> Wall.cs에서 알림
         wall.Init(x1, y1, x2, y2);
     }
 
     // 석화
     private void Petrify()
     {
-        Debug.Log("[Slime Action Manager] 석화");
         Petrify petrify = Instantiate(_petrifyPrefab).GetComponent<Petrify>();
-        // TODO: 위치 설정
-        // TODO: GameManager에 알려야함.
+
+        // 위치 설정
+        Vector2Int selected = GetRandomPosition(false);
+        petrify.Init(selected.x, selected.y);
     }
 
     // 감금
@@ -86,12 +103,21 @@ public class SlimeActionManager : MonoBehaviour
         // TODO: GameManager에 알려야함.
     }
 
+    private void Change()
+    {
+        Change change = Instantiate(_changePrefab).GetComponent<Change>();
+
+        // 변경할 타일 위치 설정
+        Vector2Int selected = GetRandomPosition(false);
+        Debug.Log("이전");
+        change.Init(selected.x, selected.y);
+        Debug.Log("이후");
+    }
+
     // 이동 (3 스테이지)
     private void Translocate3()
     {
         Translocate3 translocate = Instantiate(_translocate3Prefab).GetComponent<Translocate3>();
-        // TODO: 위치 설정
-        // TODO: GameManager에 알려야함.
     }
     
     // 이동 (7 스테이지)
@@ -109,18 +135,50 @@ public class SlimeActionManager : MonoBehaviour
     // - - - - - - - - - - - - - - - - - - - - -
 
     // 5*5 보드 중 하나 랜덤 선택
-    // true: 이미 타일 있는 칸만, false: 그냥 아무 칸이나
+    // [bool onlyTile] true: 이미 타일 있는 칸만, false: 그냥 아무 칸이나
     private Vector2Int GetRandomPosition(bool onlyTile)
     {
+        GameManager G = GameManager.Instance;
+
         Vector2Int selected = new Vector2Int(Random.Range(0, 5), Random.Range(0, 5));
 
         if (onlyTile)
         {
-            while (GameManager.Instance.CheckTile(selected.x, selected.y))
+            int count = 0;
+            while (true)
             {
+                // 버그 방지
+                count++;
+                if (count > 500)
+                {
+                    Debug.LogError("GetRandomPosition 오류!");
+                    break;
+                }
+
+                if (G.IsTiled(selected.x, selected.y) && G.ObstacleArray[selected.x, selected.y].CanObstacle) break;
+
                 selected = new Vector2Int(Random.Range(0, 5), Random.Range(0, 5));
             }
             return selected;
+        }
+
+        else
+        {
+            int count = 0;
+            while (true)
+            {
+                // 버그 방지
+                count++;
+                if (count > 500)
+                {
+                    Debug.LogError("GetRandomPosition 오류!");
+                    break;
+                }
+
+                if (G.ObstacleArray[selected.x, selected.y].CanObstacle) break;
+
+                selected = new Vector2Int(Random.Range(0, 5), Random.Range(0, 5));
+            }
         }
 
         return selected;

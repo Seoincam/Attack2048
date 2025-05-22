@@ -11,8 +11,11 @@ public class Delete : SlimeActionBase
 {
     
     private int _x, _y; // Square 배열 상의 현재 위치
-    [SerializeField] SpriteRenderer _renderer;
-    [SerializeField] Text lifeText;
+    [SerializeField] private SpriteRenderer _renderer;
+    [SerializeField] private Text lifeText;
+
+    [Space, SerializeField, Header("스테이지6 한 줄 삭제 수명")]
+    private int LifeForStage6;
 
 
 
@@ -23,11 +26,20 @@ public class Delete : SlimeActionBase
     }
 
 
-
-    public void Init(int x, int y) {
+    public void Init(int x, int y, bool isStage6)
+    {
         _x = x; _y = y;
-        transform.position = GameManager.Instance.LocateTile(_x,_y);
+        transform.position = GameManager.Instance.LocateTile(_x, _y);
+
+        if (isStage6)
+        {
+            Life = LifeForStage6;
+            _lifeCounter = Life;
+        }
+        
         lifeText.text = _lifeCounter.ToString();
+
+        GameManager.Instance.ObstacleArray[_x, _y].PlaceDelete();
     }
 
 
@@ -40,6 +52,7 @@ public class Delete : SlimeActionBase
     {
         yield return new WaitForSeconds(0.3f);
         GameManager.Instance.DestroyTile(_x,_y);
+        GameManager.Instance.ObstacleArray[_x, _y].RemoveDelete();
         Destroy(gameObject);
     }
 

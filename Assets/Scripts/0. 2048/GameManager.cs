@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using TMPro;
 using UnityEngine;
 
@@ -10,8 +12,7 @@ public class GameManager : MonoBehaviour
     public DamageInvoker _damageInvoker;
     private PointManager _pointManager;
 
-
-    private GameObject[,] TileArray = new GameObject[5, 5]; // 타일 배열
+    public GameObject[,] TileArray = new GameObject[5, 5]; // 타일 배열
     public Obstacle[,] ObstacleArray = new Obstacle[5, 5]; // 장애물 배열 (삭제, 벽, 석화, 감금, 이동)
 
     private bool _isPaused; // 게임이 멈췄나? (설정, 도감, 상점 등)
@@ -52,6 +53,8 @@ public class GameManager : MonoBehaviour
     private bool move;
     private Vector3 firstPos, gap;
 
+    private HashSet<Tile> _movingTiles;
+    public bool _isChecking;
 
 
     // - - - - - - - - - - - - - - - - - - - - -
@@ -66,8 +69,7 @@ public class GameManager : MonoBehaviour
         // Obstacle Array 초기화
         for (int x = 0; x < 5; x++) for (int y = 0; y < 5; y++)
         {
-            ObstacleArray[x, y] = new Obstacle();
-            ObstacleArray[x, y].Init(x, y);
+            ObstacleArray[x, y] = new Obstacle(x,y);
         }
 
         _damageInvoker = new DamageInvoker();
@@ -85,9 +87,9 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
-        if (_isPaused) return;
+        if (_isChecking) CheckIsMoveEnd();
 
-        GetMouseOrTouch();
+        if (!_isChecking && !_isPaused) GetMouseOrTouch();
     }
 
 
@@ -113,12 +115,26 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    // 메서드 이름
+
+/*
+    흐름 :
+    1. 입력 감지                 
+        (GetMouseOrTouch)
+    2. 턴 실행                  
+        (ExecuteTurn -> MoveOrCombine)
+    3. 이동이 발생했다면, 모든 타일 이동 끝날 때까지 대기 
+        (CheckIsMoveEnd)
+    4. 후처리                   
+        (NextPahse)
+*/
+
+
     private void ExecuteTurn()
     {
         if (wait)
         {
             wait = false;
+            _movingTiles = new HashSet<Tile>();
 
             // 방향 판별 후 MoveOrCombine 호출
             if (gap.y > 0 && Mathf.Abs(gap.x) < 0.5f) // 위
@@ -153,26 +169,48 @@ public class GameManager : MonoBehaviour
             // 이동이 발생했으면 처리
             if (move)
             {
-                Debug.Log("이동");
-                _damageInvoker.InvokeDamage(); // 데미지 합산 전부 끝내고 데미지 부과
-                EventManager.Publish(GameEvent.NewTurn); // 새로운 턴임을 Event Manager에 알리기.
-
                 move = false;
-                CurTurns--;
-
-                Spawn();
-
-                for (x = 0; x < 5; x++)
-                    for (y = 0; y < 5; y++)
-                        if (TileArray[x, y] != null)
-                            TileArray[x, y].tag = "Untagged";
-
-                if (CurTurns <= 0)
-                {
-                    Debug.Log("이동 횟수 소진! 게임 종료!");
-                    ResetGame();
-                }
+                _isChecking = true;
             }
+        }
+    }
+
+    private void CheckIsMoveEnd()
+    {
+        // Debug.Log(_movingTiles.Count);
+        if (_movingTiles.Count != 0)
+        {
+            foreach (Tile tile in _movingTiles)
+            {
+                if (tile == null) continue;
+                if (tile.IsMoving) return;
+            }
+        }
+
+        // 모든 타일의 움직임이 끝났다면
+        _isChecking = false;
+        _movingTiles.Clear();
+        NextPhase();
+    }
+
+    private void NextPhase()
+    {
+        _damageInvoker.InvokeDamage(); // 데미지 합산 전부 끝내고 데미지 부과
+        EventManager.Publish(GameEvent.NewTurn); // 새로운 턴임을 Event Manager에 알리기.
+
+        CurTurns--;
+
+        Spawn();
+
+        for (x = 0; x < 5; x++)
+            for (y = 0; y < 5; y++)
+                if (TileArray[x, y] != null)
+                    TileArray[x, y].tag = "Untagged";
+
+        if (CurTurns <= 0)
+        {
+            Debug.Log("이동 횟수 소진! 게임 종료!");
+            ResetGame();
         }
     }
 
@@ -183,14 +221,16 @@ public class GameManager : MonoBehaviour
     // - - - - - - - - - - - - - - - - - - - - -
     void MoveOrCombine(int x1, int y1, int x2, int y2)
     {
-        // 이동 전 벽 존재 여부 확인
-        // if (IsBlocked(x1, y1, x2, y2)) return; // 추후 막히는 애니메이션 추가
-        if (!ObstacleArray[x2, y2].CanMove(x1, y1)) return;
+        // 이동 가능한지 확인
+        if (!ObstacleArray[x2, y2].CanMove(x1, y1)) return; // 추후 막히는 애니메이션 추가
 
         // 이동
         if (TileArray[x2, y2] == null && TileArray[x1, y1] != null)
         {
             move = true;
+
+            _movingTiles.Add(TileArray[x1, y1].GetComponent<Tile>());
+
             TileArray[x1, y1].GetComponent<Tile>().Move(x2, y2, false);
             TileArray[x2, y2] = TileArray[x1, y1];
             TileArray[x1, y1] = null;
@@ -218,7 +258,7 @@ public class GameManager : MonoBehaviour
             TileArray[x1, y1].GetComponent<Tile>().Move(x2, y2, true);
             Destroy(TileArray[x2, y2]);
             TileArray[x1, y1] = null;
-            TileArray[x2, y2] = Instantiate(TilePrefabs[j + 1], LocateTile(x2, y2), Quaternion.identity);
+            TileArray[x2, y2] = Instantiate(TilePrefabs[j + 1], LocateTile(x2, y2), Quaternion.identity, TileGroup);
             TileArray[x2, y2].GetComponent<Tile>().value = value * 2;
             //결합시에도 위치 전달
             TileArray[x2, y2].GetComponent<Tile>().x = x2;
@@ -230,34 +270,59 @@ public class GameManager : MonoBehaviour
         }
     }
 
+
+    // 랜덤 스폰 (2, 4)
     void Spawn()
     {
+        int count = 0;
         while (true)
         {
+            // 버그 방지
+            count++;
+            if (count > 500)
+            {
+                Debug.LogError("Spawn 오류!");
+                break;
+            }
+
+            // 타일 랜덤 선택
             x = Random.Range(0, 5);
             y = Random.Range(0, 5);
-            if (TileArray[x, y] == null)
-            {
-                if (Random.Range(1, 100) > probablity_4)
-                {
-                    TileArray[x, y] = Instantiate(TilePrefabs[0], LocateTile(x,y), Quaternion.identity, TileGroup);
-                    TileArray[x, y].GetComponent<Tile>().value = 2;
-                    //보드 생성 시 Board에 위치 전달
-                    TileArray[x, y].GetComponent<Tile>().x = x;
-                    TileArray[x, y].GetComponent<Tile>().y = y;
-                    break;
-                }
-                else
-                {
-                    TileArray[x, y] = Instantiate(TilePrefabs[1], LocateTile(x,y), Quaternion.identity, TileGroup);
-                    TileArray[x, y].GetComponent<Tile>().value = 4;
-                    //보드 생성 시 Board에 위치 전달
-                    TileArray[x, y].GetComponent<Tile>().x = x;
-                    TileArray[x, y].GetComponent<Tile>().y = y;
-                    break;
-                }
-            }
+
+            if (TileArray[x, y] == null && ObstacleArray[x, y].CanSpawn) break;
         }
+
+        if (Random.Range(1, 100) > probablity_4)
+        {
+            TileArray[x, y] = Instantiate(TilePrefabs[0], LocateTile(x, y), Quaternion.identity, TileGroup);
+            TileArray[x, y].GetComponent<Tile>().value = 2;
+        }
+        else
+        {
+            TileArray[x, y] = Instantiate(TilePrefabs[1], LocateTile(x, y), Quaternion.identity, TileGroup);
+            TileArray[x, y].GetComponent<Tile>().value = 4;
+        }
+
+        //보드 생성 시 Board에 위치 전달
+        TileArray[x, y].GetComponent<Tile>().Init(x, y);
+    }
+
+    // 숫자 및 위치 지정 스폰
+    // value는 실제 숫자(2,4,8 ...)
+    public void Spawn(int value, int x, int y)
+    {
+        if (TileArray[x, y] != null)
+        {
+            Debug.LogError("이미 타일이 있는 곳에 설치를 시도했습니다!");
+            return;
+        }
+
+        int index = (int)Mathf.Log(value, 2) - 1;
+        TileArray[x, y] = Instantiate(TilePrefabs[index], LocateTile(x, y), Quaternion.identity, TileGroup);
+
+        Tile tile = TileArray[x, y].GetComponent<Tile>();
+        tile.value = value; 
+        tile.Init(x, y);
     }
 
 
@@ -304,7 +369,7 @@ public class GameManager : MonoBehaviour
     // - - - - - - - - - - - - - - - - - - - - -
     // 타일 있나 체크
     // - - - - - - - - - - - - - - - - - - - - -
-    public bool CheckTile(int x, int y) {
+    public bool IsTiled(int x, int y) {
         if(TileArray[x,y] != null) return true;
         return false;
     }

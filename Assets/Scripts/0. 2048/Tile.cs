@@ -1,3 +1,4 @@
+using Unity.Collections;
 using UnityEngine;
 
 public class Tile : MonoBehaviour
@@ -7,6 +8,9 @@ public class Tile : MonoBehaviour
     bool move, _combine;
     int _x2, _y2;
 
+    // 이동이 끝났나 체크
+    public bool IsMoving { get => move; }
+
 
     void Update()
     {
@@ -14,6 +18,12 @@ public class Tile : MonoBehaviour
         {
             Move(_x2, _y2, _combine);
         }
+    }
+
+    public void Init(int x, int y)
+    {
+        this.x = x;
+        this.y = y;
     }
 
     public void Move(int x2, int y2, bool combine)

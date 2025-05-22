@@ -14,9 +14,11 @@ public enum GameEvent
 
     // [보스 패턴 이벤트]
     Delete, // 삭제
+    Delete6, // 삭제 (6스테이지 한 줄 삭제)
     Wall, // 벽
     Petrify, // 석화
     Imprison, // 감금
+    Change, // 숫자 랜덤 변경
     Translocate3, // 이동 (3스테이지)
     Translocate7 // 이동 (7스테이지)
 } 

@@ -43,7 +43,7 @@ public class ShieldSlime : SlimeBase
         _wallCounter = WallInterval;
         IsWeakened = false;
         HasShield = false;
-    } 
+    }
 
 
 
@@ -52,20 +52,33 @@ public class ShieldSlime : SlimeBase
     // - - - - - - - - -
     public override void OnTurnChanged()
     {
-        CalShield();
-        CalWall();
+        CalculateShield();
+        CalculateWall();
+
+        // FIXME :  데미지 처리 후 이 부분이 처리되게 수정해야함
+        if (HasShield)
+        {
+            HasShield = false;
+            IsWeakened = true;
+
+            return;
+        }
+        else if (IsWeakened)
+        {
+            IsWeakened = false;
+        }
     }
 
 
     // - - - - - - - - -
     // 방패
     // - - - - - - - - -
-    private void CalShield() {
-        if(HasShield) { return; } // 방패가 있다면 _shieldCounter 유지
-    
-        _shieldCounter --;
+    private void CalculateShield()
+    {
+        _shieldCounter--;
 
-        if(_shieldCounter == 0) {
+        if (_shieldCounter == 0)
+        {
             _shieldCounter = ShieldInterval;
             HasShield = true;
         }
@@ -75,10 +88,11 @@ public class ShieldSlime : SlimeBase
     // - - - - - - - - -
     // 벽
     // - - - - - - - - -
-    private void CalWall() {
+    private void CalculateWall() {
         _wallCounter --;
 
-        if(_wallCounter == 0) {
+        if (_wallCounter == 0)
+        {
             EventManager.Publish(GameEvent.Wall);
             _wallCounter = WallInterval;
         }
@@ -94,19 +108,16 @@ public class ShieldSlime : SlimeBase
         // 방패 있을 때 데미지 발생하면
         //  - 데미지 안 받기
         //  - 다음 턴 약화
-        if(HasShield) { 
-            HasShield = false; 
-            IsWeakened = true; 
-
-            return; 
-        }
 
         // 약화일 때 데미지 발생하면
-        else if(IsWeakened) { 
+        if (HasShield)
+        {
+            damage = 0;
+        }
+        else if (IsWeakened)
+        {
             Debug.Log($"[약화] >> 데미지 : {damage} * 1.5배 = {damage * 1.5f}");
-            
-            damage = damage * 1.5f; 
-            IsWeakened = false;
+            damage = damage * 1.5f;
         }
 
         base.GetDamge(damage);

@@ -17,7 +17,7 @@ public abstract class SlimeBase : MonoBehaviour, ITurnListener
     [SerializeField] private TextMeshProUGUI healthText;
 
     [SerializeField] protected float maxHealth;
-    [SerializeField] protected float curHealth;
+    protected float curHealth;
 
 
 
@@ -49,7 +49,9 @@ public abstract class SlimeBase : MonoBehaviour, ITurnListener
         if( curHealth == 0 ) { Die(); }
     }
 
-    private void MakeDamageText( float damage ) {
+    // ToDo: 오브젝트 풀링
+    private void MakeDamageText(float damage)
+    {
         TextMeshProUGUI _damageText = Instantiate(damageText, slimeCanvas);
         _damageText.text = "-" + damage.ToString();
     }

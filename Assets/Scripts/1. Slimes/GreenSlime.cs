@@ -1,5 +1,3 @@
-using UnityEngine;
-
 public class GreenSlime : SlimeBase
 {
     protected override void Start()
