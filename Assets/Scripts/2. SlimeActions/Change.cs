@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 public class Change : SlimeActionBase
 {
-    private int _x, _y; // Square 배열 상의 현재 위치
+    protected int _x, _y; // Square 배열 상의 현재 위치
     [SerializeField] private Text lifeText;
 
     private int[] randomNum = new int[]
@@ -19,11 +19,13 @@ public class Change : SlimeActionBase
     }
 
 
-    public void Init(int x, int y)
+    public override void Init(int x, int y, ObjectPoolManager pooler)
     {
+        base.Init(x, y, pooler);
+        
         _x = x; _y = y;
-        transform.position = GameManager.Instance.LocateTile(_x, _y);
         GameManager.Instance.ObstacleArray[x, y].PlaceChange();
+
         lifeText.text = _lifeCounter.ToString();
     }
 

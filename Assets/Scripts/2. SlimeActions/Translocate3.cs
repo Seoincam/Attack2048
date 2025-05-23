@@ -21,15 +21,21 @@ public class Translocate3 : SlimeActionBase
         t_4_4.transform.position = G.LocateTile(4, 4);
         t_4_0.transform.position = G.LocateTile(4, 0);
 
-        G.ObstacleArray[0, 0].PlaceTranslocate();
-        G.ObstacleArray[0, 4].PlaceTranslocate();
-        G.ObstacleArray[4, 4].PlaceTranslocate();
-        G.ObstacleArray[4, 0].PlaceTranslocate();
-
         tList = new SpriteRenderer[]
         {
             t_0_0, t_0_4, t_4_4, t_4_0
         };
+    }
+
+    public void Init()
+    {
+        base.Init(-1, 0, null);
+        GameManager G = GameManager.Instance;
+
+        G.ObstacleArray[0, 0].PlaceTranslocate();
+        G.ObstacleArray[0, 4].PlaceTranslocate();
+        G.ObstacleArray[4, 4].PlaceTranslocate();
+        G.ObstacleArray[4, 0].PlaceTranslocate();
 
         foreach (Text lifeText in lifeTexts)
         {

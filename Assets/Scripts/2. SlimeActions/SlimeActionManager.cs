@@ -12,19 +12,10 @@ public class SlimeActionManager : MonoBehaviour
     // - - - - - - - - - - - - - - - - - - - - -
     // 필드
     // - - - - - - - - - - - - - - - - - - - - -
+    private ObjectPoolManager _pooler;
 
     [SerializeField] private Transform _slimeActionGroup;
     [SerializeField] private Transform _particleGroup;
-
-    // 각각 프리팹으로 저장해놓고 호출될 때 생성
-    [SerializeField] private GameObject _deletePrefab; // 삭제
-    [SerializeField] private GameObject _wallPrefab; // 벽
-    [SerializeField] private GameObject _petrifyPrepPrefab; // 석화 대기
-    [SerializeField] private GameObject _imprisonPrepPrefab; // 감금 대기
-    [SerializeField] private GameObject _changePrefab; // 숫자 랜덤 변경
-    [SerializeField] private GameObject _translocate3Prefab; // 이동 (3 스테이지)
-    [SerializeField] private GameObject _translocate7Prefab; // 이동 (7 스테이지)
-    [SerializeField] private GameObject _forcedMovePrefab; // 이동방향강제 (4 스테이지)
 
 
 
@@ -35,6 +26,8 @@ public class SlimeActionManager : MonoBehaviour
     // 이벤트 매니저에 각 메서드를 구독.
     void Awake()
     {
+        _pooler = GetComponent<ObjectPoolManager>();
+
         EventManager.Subscribe(GameEvent.Delete, Delete);
         EventManager.Subscribe(GameEvent.Delete6, Delete6);
         EventManager.Subscribe(GameEvent.Wall, Wall);
@@ -55,12 +48,13 @@ public class SlimeActionManager : MonoBehaviour
     // 삭제
     private void Delete()
     {
-        Delete delete = Instantiate(_deletePrefab, _slimeActionGroup).GetComponent<Delete>();
+        GameObject obj = _pooler.GetObject(18, _slimeActionGroup);
+        Delete delete = obj.GetComponent<Delete>();
         delete._particleGroup = _particleGroup;
 
         // 위치 설정
         Vector2Int selected = GetRandomPosition(false);
-        delete.Init(selected.x, selected.y, false);
+        delete.Init(selected.x, selected.y, false, _pooler);
     }
 
     // 삭제 (6스테이지 한줄 삭제)
@@ -96,8 +90,9 @@ public class SlimeActionManager : MonoBehaviour
 
         for (int y = 0; y < 5; y++)
         {
-            Delete delete = Instantiate(_deletePrefab, _slimeActionGroup).GetComponent<Delete>();
-            delete.Init(randomLineX, y, true);
+            GameObject obj = _pooler.GetObject(18, _slimeActionGroup);
+            Delete delete = obj.GetComponent<Delete>();
+            delete.Init(randomLineX, y, true, _pooler);
             delete._particleGroup = _particleGroup;
         }
     }
@@ -105,7 +100,9 @@ public class SlimeActionManager : MonoBehaviour
     // 벽
     private void Wall()
     {
-        Wall wall = Instantiate(_wallPrefab, _slimeActionGroup).GetComponent<Wall>();
+        GameObject obj = _pooler.GetObject(25, _slimeActionGroup);
+        Wall wall = obj.GetComponent<Wall>();
+        wall._particleGroup = _particleGroup;
 
         // 위치 정하여 Wall.cs에서 위치 설정
         int x1 = Random.Range(1, 4);
@@ -120,20 +117,27 @@ public class SlimeActionManager : MonoBehaviour
     // 석화 대기
     private void Petrify()
     {
-        PetrifyPrep petrifyPrep = Instantiate(_petrifyPrepPrefab, _slimeActionGroup).GetComponent<PetrifyPrep>();
+        GameObject obj = _pooler.GetObject(22, _slimeActionGroup);
+        PetrifyPrep petrifyPrep = obj.GetComponent<PetrifyPrep>();
+        petrifyPrep._particleGroup = _particleGroup;
 
         // 위치 설정
         Vector2Int selected = GetRandomPosition(false);
-        petrifyPrep.Init(selected.x, selected.y);
+        petrifyPrep.Init(selected.x, selected.y, _pooler, _slimeActionGroup);
     }
 
     // 감금 대기
     private void Imprison()
     {
-        ImprisonPrep imprison1 = Instantiate(_imprisonPrepPrefab, _slimeActionGroup).GetComponent<ImprisonPrep>();
-        ImprisonPrep imprison2 = Instantiate(_imprisonPrepPrefab, _slimeActionGroup).GetComponent<ImprisonPrep>();
-        // TODO: 위치 설정
+        GameObject obj = _pooler.GetObject(21, _slimeActionGroup);
+        ImprisonPrep imprison1 = obj.GetComponent<ImprisonPrep>();
+        imprison1._particleGroup = _particleGroup;
 
+        obj = _pooler.GetObject(21, _slimeActionGroup);
+        ImprisonPrep imprison2 = obj.GetComponent<ImprisonPrep>();
+        imprison2._particleGroup = _particleGroup;
+
+        // 위치 설정
         Vector2Int selected1 = GetRandomPosition(false);
         Vector2Int selected2 = GetRandomPosition(false);
         //감금이 겹치치 않도록
@@ -142,36 +146,41 @@ public class SlimeActionManager : MonoBehaviour
             selected2 = GetRandomPosition(false);
         }
         while(selected1 == selected2); 
-        // TODO: GameManager에 알려야함.
-        imprison1.Init(selected1.x, selected1.y);
-        imprison2.Init(selected2.x, selected2.y);
+
+        imprison1.Init(selected1.x, selected1.y, _pooler, _slimeActionGroup);
+        imprison2.Init(selected2.x, selected2.y, _pooler, _slimeActionGroup);
     }
 
     private void Change()
     {
-        Change change = Instantiate(_changePrefab, _slimeActionGroup).GetComponent<Change>();
+        GameObject obj = _pooler.GetObject(17, _slimeActionGroup);
+        Change change = obj.GetComponent<Change>();
+        change._particleGroup = _particleGroup;
 
         // 변경할 타일 위치 설정
         Vector2Int selected = GetRandomPosition(false);
-        change.Init(selected.x, selected.y);
+        change.Init(selected.x, selected.y, _pooler);
     }
 
     // 이동 (3 스테이지)
     private void Translocate3()
     {
-        Translocate3 translocate = Instantiate(_translocate3Prefab, _slimeActionGroup).GetComponent<Translocate3>();
+        GameObject obj = _pooler.GetObject(24, _slimeActionGroup);
+        Translocate3 translocate = obj.GetComponent<Translocate3>();
+        translocate.Init();
     }
     
     // 이동 (7 스테이지)
     private void Translocate7()
     {
-        Translocate7 translocate = Instantiate(_translocate7Prefab, _slimeActionGroup).GetComponent<Translocate7>();
+        // Translocate7 translocate = Instantiate(_translocate7Prefab, _slimeActionGroup).GetComponent<Translocate7>();
     }
     // 이동 방향 강제 (4 스테이지)
     
     private void ForcedMove()
     {
-        ForcedMove forcedmove = Instantiate(_forcedMovePrefab, _slimeActionGroup).GetComponent<ForcedMove>();
+        GameObject obj = _pooler.GetObject(19, _slimeActionGroup);
+        ForcedMove forcedmove = obj.GetComponent<ForcedMove>();
         forcedmove.Init();
     }
 

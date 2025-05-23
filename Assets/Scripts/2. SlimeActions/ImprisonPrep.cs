@@ -8,19 +8,21 @@ using UnityEngine.UI;
 
 public class ImprisonPrep : SlimeActionBase
 {
-    private int _x, _y; // Square 배열 상의 현재 위치
+    protected int _x, _y; // Square 배열 상의 현재 위치
     [SerializeField] private Text lifeText;
-    [SerializeField] private GameObject _imprisonPrefab; // 감금
 
-    public void Init(int x, int y)
+    protected Transform _slimeActionGroup;
+
+
+    public void Init(int x, int y, ObjectPoolManager pooler, Transform slimeActionGroup)
     {
-        GameManager G = GameManager.Instance;
+        base.Init(x, y, pooler);
 
         _x = x; _y = y;
-        transform.position = G.LocateTile(x, y);
-        lifeText.text = _lifeCounter.ToString();
+        GameManager.Instance.ObstacleArray[x, y].PlaceImprisonPrep();
 
-        G.ObstacleArray[x, y].PlaceImprisonPrep();
+        _slimeActionGroup = slimeActionGroup;
+        lifeText.text = _lifeCounter.ToString(); 
     }
     
     void Update()
@@ -38,10 +40,11 @@ public class ImprisonPrep : SlimeActionBase
     protected override void Execute()
     {
         GameManager.Instance.ObstacleArray[_x, _y].RemoveImprisonPrep();
-        Imprison imprison = Instantiate(_imprisonPrefab).GetComponent<Imprison>();
+        GameObject obj = _pooler.GetObject(20, _slimeActionGroup);
+        Imprison imprison = obj.GetComponent<Imprison>();
 
         // 위치 설정
-        imprison.Init(_x, _y);
+        imprison.Init(_x, _y, _pooler);
         base.Execute();
     }
 }

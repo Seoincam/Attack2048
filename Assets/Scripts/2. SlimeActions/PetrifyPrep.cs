@@ -8,19 +8,22 @@ using UnityEngine.UI;
 
 public class PetrifyPrep : SlimeActionBase
 {
-    private int _x, _y; // Square 배열 상의 현재 위치
+    protected int _x, _y; // Square 배열 상의 현재 위치
     [SerializeField] private Text lifeText;
-    [SerializeField] private GameObject _petrifyPrefab; // 석화
+    
+    protected Transform _slimeActionGroup;
 
-    public void Init(int x, int y)
+    public void Init(int x, int y, ObjectPoolManager pooler, Transform slimeActionGroup)
     {
-        GameManager G = GameManager.Instance;
+        base.Init(x, y, pooler);
 
         _x = x; _y = y;
-        transform.position = G.LocateTile(x, y);
-        lifeText.text = _lifeCounter.ToString();
 
-        G.ObstacleArray[x, y].PlacePetrifyPrep();
+        _pooler = pooler;
+        _slimeActionGroup = slimeActionGroup;
+
+        lifeText.text = _lifeCounter.ToString();
+        GameManager.Instance.ObstacleArray[x, y].PlacePetrifyPrep();
     }
     
     void Update()
@@ -38,10 +41,11 @@ public class PetrifyPrep : SlimeActionBase
     protected override void Execute()
     {
         GameManager.Instance.ObstacleArray[_x, _y].RemovePetrifyPrep();
-        Petrify petrify = Instantiate(_petrifyPrefab).GetComponent<Petrify>();
+        GameObject obj = _pooler.GetObject(20, _slimeActionGroup);
+        Petrify petrify = obj.GetComponent<Petrify>();
 
         // 위치 설정
-        petrify.Init(_x, _y);
+        petrify.Init(_x, _y, _pooler);
         base.Execute();
     }
 }

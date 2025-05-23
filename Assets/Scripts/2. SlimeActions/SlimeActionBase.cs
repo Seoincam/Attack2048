@@ -15,9 +15,8 @@ public abstract class SlimeActionBase : MonoBehaviour, ICountDownListener
 
     [Tooltip("수명")][SerializeField] protected int Life; // Inspector에서 설정
     [Tooltip("남은 수명")][SerializeField] protected int _lifeCounter;
+    protected ObjectPoolManager _pooler;
 
-    [SerializeField] private ParticleSystem _executeParticle;
-    ParticleSystem particle;
     public Transform _particleGroup;
     protected SpriteRenderer _renderer;
 
@@ -27,9 +26,18 @@ public abstract class SlimeActionBase : MonoBehaviour, ICountDownListener
     // - - - - - - - - - - - - - - - - - - - - -
     void Awake()
     {
+        TryGetComponent(out _renderer);
+    }
+
+    // x = -1: 좌표 설정 안 함
+    public virtual void Init(int x, int y, ObjectPoolManager pooler)
+    {
         Subscribe_CountDown();
         _lifeCounter = Life;
-        TryGetComponent(out _renderer);
+        _pooler = pooler;
+        
+        if (x != -1)
+            transform.position = GameManager.Instance.LocateTile(x, y);
     }
 
 
@@ -57,9 +65,9 @@ public abstract class SlimeActionBase : MonoBehaviour, ICountDownListener
     // 수명이 다하면 실행할 로직.
     protected virtual void Execute()
     {
-        if (_executeParticle != null)
+        if (_pooler != null)
         {
-            particle = Instantiate(_executeParticle, _particleGroup);
+            ParticleSystem particle = _pooler.GetObject(27, _particleGroup).GetComponent<ParticleSystem>();
             particle.transform.position = transform.position;
             particle.Play();
         }
@@ -72,6 +80,6 @@ public abstract class SlimeActionBase : MonoBehaviour, ICountDownListener
         yield return new WaitForSeconds(0.05f);
         EventManager.Unsubscribe(GameEvent.CountDownPhase, OnEnter_CountDownPhase);
         EventManager.Unsubscribe(GameEvent.TriggerPhase, Execute);
-        Destroy(gameObject);
+        gameObject.SetActive(false);
     }
 }

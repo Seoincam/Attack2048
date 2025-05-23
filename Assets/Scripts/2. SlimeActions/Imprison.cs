@@ -6,18 +6,18 @@ using UnityEngine;
 using UnityEngine.UI;
 public class Imprison : SlimeActionBase
 {
-    private int _x, _y;
+    protected int _x, _y;
 
     [SerializeField] private Text lifeText;
 
-    public void Init(int x, int y)
+    public override void Init(int x, int y, ObjectPoolManager pooler)
     {
-        GameManager G = GameManager.Instance;
+        base.Init(x, y, pooler);
 
         _x = x; _y = y;
-        transform.position = G.LocateTile(x, y);
+        GameManager.Instance.ObstacleArray[x, y].PlaceImprison();
+
         lifeText.text = _lifeCounter.ToString();
-        G.ObstacleArray[x, y].PlaceImprison();
     }
 
     public override void OnEnter_CountDownPhase()

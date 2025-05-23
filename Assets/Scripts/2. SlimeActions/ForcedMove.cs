@@ -1,10 +1,9 @@
 // - - - - - - - - - - - - - - - - - -
 // ForcedMove.cs
-//  - 석화 클래스.
+//  - 이동 강제 고정 클래스.
 // - - - - - - - - - - - - - - - - - -
 
 using UnityEngine;
-using System.Collections;
 using System.Collections.Generic;
 public class ForcedMove : SlimeActionBase
 {
@@ -20,6 +19,7 @@ public class ForcedMove : SlimeActionBase
 
     public void Init()
     {
+        base.Init(-1, 0, null);
         GameManager G = GameManager.Instance;
         transform.position = G.LocateTile(_x, _y);
         // 최대 10회까지 무작위 방향 시도

@@ -9,7 +9,7 @@ using UnityEngine.UI;
 public class Delete : SlimeActionBase
 {
     
-    private int _x, _y; // Square 배열 상의 현재 위치
+    protected int _x, _y; // Square 배열 상의 현재 위치
     [SerializeField] private Text lifeText;
 
     [Space, SerializeField, Header("스테이지6 한 줄 삭제 수명")]
@@ -24,20 +24,16 @@ public class Delete : SlimeActionBase
     }
 
 
-    public void Init(int x, int y, bool isStage6)
+    public void Init(int x, int y, bool isStage6, ObjectPoolManager pooler)
     {
+        if (isStage6) Life = LifeForStage6;
+
+        base.Init(x, y, pooler);
+
         _x = x; _y = y;
-        transform.position = GameManager.Instance.LocateTile(_x, _y);
-
-        if (isStage6)
-        {
-            Life = LifeForStage6;
-            _lifeCounter = Life;
-        }
-        
-        lifeText.text = _lifeCounter.ToString();
-
         GameManager.Instance.ObstacleArray[_x, _y].PlaceDelete();
+
+        lifeText.text = _lifeCounter.ToString();
     }
 
 
