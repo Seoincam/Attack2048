@@ -89,6 +89,9 @@ public class GameManager : MonoBehaviour, INewTurnListener
         if (Instance == null) Instance = this;
         else Destroy(gameObject);
 
+        // 임시
+        Application.targetFrameRate = 60;
+
         // Obstacle Array 초기화
         for (int x = 0; x < 5; x++) for (int y = 0; y < 5; y++)
             {
