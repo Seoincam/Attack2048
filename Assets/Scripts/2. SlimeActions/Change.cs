@@ -5,7 +5,6 @@ using UnityEngine.UI;
 public class Change : SlimeActionBase
 {
     private int _x, _y; // Square 배열 상의 현재 위치
-    [SerializeField] private SpriteRenderer _renderer;
     [SerializeField] private Text lifeText;
 
     private int[] randomNum = new int[]

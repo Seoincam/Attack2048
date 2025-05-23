@@ -10,7 +10,6 @@ public class Delete : SlimeActionBase
 {
     
     private int _x, _y; // Square 배열 상의 현재 위치
-    [SerializeField] private SpriteRenderer _renderer;
     [SerializeField] private Text lifeText;
 
     [Space, SerializeField, Header("스테이지6 한 줄 삭제 수명")]

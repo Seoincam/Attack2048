@@ -16,6 +16,11 @@ public abstract class SlimeActionBase : MonoBehaviour, ICountDownListener
     [Tooltip("수명")][SerializeField] protected int Life; // Inspector에서 설정
     [Tooltip("남은 수명")][SerializeField] protected int _lifeCounter;
 
+    [SerializeField] private ParticleSystem _executeParticle;
+    ParticleSystem particle;
+    public Transform _particleGroup;
+    protected SpriteRenderer _renderer;
+
 
     // - - - - - - - - - - - - - - - - - - - - -
     // Unity 콜백
@@ -24,6 +29,7 @@ public abstract class SlimeActionBase : MonoBehaviour, ICountDownListener
     {
         Subscribe_CountDown();
         _lifeCounter = Life;
+        TryGetComponent(out _renderer);
     }
 
 
@@ -44,7 +50,6 @@ public abstract class SlimeActionBase : MonoBehaviour, ICountDownListener
 
         if (_lifeCounter == 0)
         {
-            // Execute();
             EventManager.Subscribe(GameEvent.TriggerPhase, Execute);
         }
     }
@@ -52,6 +57,13 @@ public abstract class SlimeActionBase : MonoBehaviour, ICountDownListener
     // 수명이 다하면 실행할 로직.
     protected virtual void Execute()
     {
+        if (_executeParticle != null)
+        {
+            particle = Instantiate(_executeParticle, _particleGroup);
+            particle.transform.position = transform.position;
+            particle.Play();
+        }
+
         StartCoroutine(DestroySelf());
     }
 

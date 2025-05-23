@@ -9,7 +9,6 @@ using UnityEngine.UI;
 public class PetrifyPrep : SlimeActionBase
 {
     private int _x, _y; // Square 배열 상의 현재 위치
-    [SerializeField] private SpriteRenderer _renderer;
     [SerializeField] private Text lifeText;
     [SerializeField] private GameObject _petrifyPrefab; // 석화
 

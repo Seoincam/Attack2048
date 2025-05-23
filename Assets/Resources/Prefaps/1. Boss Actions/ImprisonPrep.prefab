@@ -78,7 +78,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 7
+  m_SortingOrder: 5
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
   m_Color: {r: 0.22677112, g: 0.49287036, b: 0.9811321, a: 1}
   m_FlipX: 0
@@ -126,7 +126,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Life: 2
   _lifeCounter: 0
-  _renderer: {fileID: 8545743091546213936}
+  _executeParticle: {fileID: 1698794954584321092, guid: 1ba3aec4562b840c3a8fe78014ff645e, type: 3}
+  _particleGroup: {fileID: 0}
   lifeText: {fileID: 1808637781557202835}
   _imprisonPrefab: {fileID: 3541469622638263591, guid: c6df75a33cba0434abd8129dafc72c61, type: 3}
 --- !u!1 &5895481679599282158

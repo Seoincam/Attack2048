@@ -218,6 +218,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Life: 2
   _lifeCounter: 0
+  _executeParticle: {fileID: 1698794954584321092, guid: 1ba3aec4562b840c3a8fe78014ff645e, type: 3}
+  _particleGroup: {fileID: 0}
   lifeText: {fileID: 4777787170531723279}
 --- !u!1 &4771384395675331701
 GameObject:

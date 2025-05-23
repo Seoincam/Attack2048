@@ -5,7 +5,6 @@
 //  - 로직은 각 action class 내에서 수행
 // - - - - - - - - - - - - - - - - - -
 
-using Unity.Collections;
 using UnityEngine;
 
 public class SlimeActionManager : MonoBehaviour
@@ -13,6 +12,9 @@ public class SlimeActionManager : MonoBehaviour
     // - - - - - - - - - - - - - - - - - - - - -
     // 필드
     // - - - - - - - - - - - - - - - - - - - - -
+
+    [SerializeField] private Transform _slimeActionGroup;
+    [SerializeField] private Transform _particleGroup;
 
     // 각각 프리팹으로 저장해놓고 호출될 때 생성
     [SerializeField] private GameObject _deletePrefab; // 삭제
@@ -53,7 +55,8 @@ public class SlimeActionManager : MonoBehaviour
     // 삭제
     private void Delete()
     {
-        Delete delete = Instantiate(_deletePrefab).GetComponent<Delete>();
+        Delete delete = Instantiate(_deletePrefab, _slimeActionGroup).GetComponent<Delete>();
+        delete._particleGroup = _particleGroup;
 
         // 위치 설정
         Vector2Int selected = GetRandomPosition(false);
@@ -93,15 +96,16 @@ public class SlimeActionManager : MonoBehaviour
 
         for (int y = 0; y < 5; y++)
         {
-            Delete delete = Instantiate(_deletePrefab).GetComponent<Delete>();
+            Delete delete = Instantiate(_deletePrefab, _slimeActionGroup).GetComponent<Delete>();
             delete.Init(randomLineX, y, true);
+            delete._particleGroup = _particleGroup;
         }
     }
 
     // 벽
     private void Wall()
     {
-        Wall wall = Instantiate(_wallPrefab).GetComponent<Wall>();
+        Wall wall = Instantiate(_wallPrefab, _slimeActionGroup).GetComponent<Wall>();
 
         // 위치 정하여 Wall.cs에서 위치 설정
         int x1 = Random.Range(1, 4);
@@ -116,7 +120,7 @@ public class SlimeActionManager : MonoBehaviour
     // 석화 대기
     private void Petrify()
     {
-        PetrifyPrep petrifyPrep = Instantiate(_petrifyPrepPrefab).GetComponent<PetrifyPrep>();
+        PetrifyPrep petrifyPrep = Instantiate(_petrifyPrepPrefab, _slimeActionGroup).GetComponent<PetrifyPrep>();
 
         // 위치 설정
         Vector2Int selected = GetRandomPosition(false);
@@ -126,8 +130,8 @@ public class SlimeActionManager : MonoBehaviour
     // 감금 대기
     private void Imprison()
     {
-        ImprisonPrep imprison1 = Instantiate(_imprisonPrepPrefab).GetComponent<ImprisonPrep>();
-        ImprisonPrep imprison2 = Instantiate(_imprisonPrepPrefab).GetComponent<ImprisonPrep>();
+        ImprisonPrep imprison1 = Instantiate(_imprisonPrepPrefab, _slimeActionGroup).GetComponent<ImprisonPrep>();
+        ImprisonPrep imprison2 = Instantiate(_imprisonPrepPrefab, _slimeActionGroup).GetComponent<ImprisonPrep>();
         // TODO: 위치 설정
 
         Vector2Int selected1 = GetRandomPosition(false);
@@ -145,7 +149,7 @@ public class SlimeActionManager : MonoBehaviour
 
     private void Change()
     {
-        Change change = Instantiate(_changePrefab).GetComponent<Change>();
+        Change change = Instantiate(_changePrefab, _slimeActionGroup).GetComponent<Change>();
 
         // 변경할 타일 위치 설정
         Vector2Int selected = GetRandomPosition(false);
@@ -155,19 +159,19 @@ public class SlimeActionManager : MonoBehaviour
     // 이동 (3 스테이지)
     private void Translocate3()
     {
-        Translocate3 translocate = Instantiate(_translocate3Prefab).GetComponent<Translocate3>();
+        Translocate3 translocate = Instantiate(_translocate3Prefab, _slimeActionGroup).GetComponent<Translocate3>();
     }
     
     // 이동 (7 스테이지)
     private void Translocate7()
     {
-        Translocate7 translocate = Instantiate(_translocate7Prefab).GetComponent<Translocate7>();
+        Translocate7 translocate = Instantiate(_translocate7Prefab, _slimeActionGroup).GetComponent<Translocate7>();
     }
     // 이동 방향 강제 (4 스테이지)
     
     private void ForcedMove()
     {
-        ForcedMove forcedmove = Instantiate(_forcedMovePrefab).GetComponent<ForcedMove>();
+        ForcedMove forcedmove = Instantiate(_forcedMovePrefab, _slimeActionGroup).GetComponent<ForcedMove>();
         forcedmove.Init();
     }
 
