@@ -8,6 +8,7 @@ public class SlimeManager : MonoBehaviour
     [SerializeField] private Slider hpSlider;
     [SerializeField] private TextMeshProUGUI hpText;
     [SerializeField] private TextMeshProUGUI damageText;
+    [SerializeField] private TextMeshProUGUI stageText;
 
     [SerializeField] private GameObject NextStagePanel;
     [SerializeField] private Transform SlimeActionGroup;
@@ -26,6 +27,7 @@ public class SlimeManager : MonoBehaviour
     {
         SlimeBase slime = Instantiate(_slimes[_stageIndex]).GetComponent<SlimeBase>();
         slime.Init(this, hpSlider, hpText);
+        stageText.text = $"Stage {_stageIndex + 1}";
     }
 
 
@@ -50,6 +52,7 @@ public class SlimeManager : MonoBehaviour
         {
             SlimeBase slime = Instantiate(_slimes[_stageIndex]).GetComponent<SlimeBase>();
             slime.Init(this, hpSlider, hpText);
+            stageText.text = $"Stage {_stageIndex + 1}";
             NextStagePanel.SetActive(false);
             GameManager.Instance.IsPaused = false;
 

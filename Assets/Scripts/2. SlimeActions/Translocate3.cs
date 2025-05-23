@@ -27,9 +27,9 @@ public class Translocate3 : SlimeActionBase
         };
     }
 
-    public void Init()
+    public void Init(ObjectPoolManager pooler)
     {
-        base.Init(-1, 0, null);
+        base.Init(-1, 0, pooler);
         GameManager G = GameManager.Instance;
 
         G.ObstacleArray[0, 0].PlaceTranslocate();
@@ -81,6 +81,25 @@ public class Translocate3 : SlimeActionBase
         G.ObstacleArray[4, 4].RemoveTranslocate();
         G.ObstacleArray[4, 0].RemoveTranslocate();
 
-        base.Execute();
+        if (_pooler != null)
+        {
+            ParticleSystem particle = _pooler.GetObject(27, _particleGroup).GetComponent<ParticleSystem>();
+            particle.transform.position = G.LocateTile(0, 4);
+            particle.Play();
+
+            particle = _pooler.GetObject(27, _particleGroup).GetComponent<ParticleSystem>();
+            particle.transform.position = G.LocateTile(4, 4);
+            particle.Play();
+
+            particle = _pooler.GetObject(27, _particleGroup).GetComponent<ParticleSystem>();
+            particle.transform.position = G.LocateTile(4, 0);
+            particle.Play();
+
+            particle = _pooler.GetObject(27, _particleGroup).GetComponent<ParticleSystem>();
+            particle.transform.position = G.LocateTile(0, 0);
+            particle.Play();
+        }
+
+        StartCoroutine(DestroySelf());
     }
 }

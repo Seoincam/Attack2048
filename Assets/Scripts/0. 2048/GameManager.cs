@@ -15,10 +15,11 @@ using UnityEngine;
         (CheckIsMoveEnd)
 
     4. 카운트 다운 페이즈
-        (EndPhase)
+        (CountDownManager)
         e.g. 경고 이펙트 숫자 감소 등  
 
     5. 트리거 페이즈
+        (CountDownManager)
         e.g. 0이 되면 실행시킴             
         
 */

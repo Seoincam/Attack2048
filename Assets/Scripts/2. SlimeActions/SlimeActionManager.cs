@@ -5,6 +5,7 @@
 //  - 로직은 각 action class 내에서 수행
 // - - - - - - - - - - - - - - - - - -
 
+using System.Collections.Generic;
 using UnityEngine;
 
 public class SlimeActionManager : MonoBehaviour
@@ -75,7 +76,7 @@ public class SlimeActionManager : MonoBehaviour
             }
 
             bool canPlace = true;
-            for (int y = 0; y < 5; y++)
+            for (int y = 4; y >=0; y--)
             {
                 if (!GameManager.Instance.ObstacleArray[randomLineX, y].CanObstacle)
                 {
@@ -88,7 +89,7 @@ public class SlimeActionManager : MonoBehaviour
         }
 
 
-        for (int y = 0; y < 5; y++)
+        for (int y = 4; y >= 0; y--)
         {
             GameObject obj = _pooler.GetObject(18, _slimeActionGroup);
             Delete delete = obj.GetComponent<Delete>();
@@ -151,6 +152,15 @@ public class SlimeActionManager : MonoBehaviour
         imprison2.Init(selected2.x, selected2.y, _pooler, _slimeActionGroup);
     }
 
+
+    List<Vector2Int> notSelectPos = new List<Vector2Int>
+    {
+        new Vector2Int(0,0),
+        new Vector2Int(0,4),
+        new Vector2Int(4,4),
+        new Vector2Int(4,0)
+    };
+
     private void Change()
     {
         GameObject obj = _pooler.GetObject(17, _slimeActionGroup);
@@ -159,6 +169,38 @@ public class SlimeActionManager : MonoBehaviour
 
         // 변경할 타일 위치 설정
         Vector2Int selected = GetRandomPosition(false);
+
+        // 변경할 타일이 네 모퉁이 아니게
+        int count = 0;
+        while (true)
+        {
+            // 버그 방지
+            count++;
+            if (count > 500)
+            {
+                Debug.LogError("Change 오류!");
+                break;
+            }
+
+            bool isValid = true;
+
+            foreach (Vector2Int not in notSelectPos)
+            {
+                if (selected == not)
+                {
+                    isValid = false;
+                    break;
+                }
+            }
+
+            if (!isValid)
+            {
+                selected = GetRandomPosition(false);
+                continue;
+            }
+            break;
+        }
+
         change.Init(selected.x, selected.y, _pooler);
     }
 
@@ -167,7 +209,8 @@ public class SlimeActionManager : MonoBehaviour
     {
         GameObject obj = _pooler.GetObject(24, _slimeActionGroup);
         Translocate3 translocate = obj.GetComponent<Translocate3>();
-        translocate.Init();
+        translocate._particleGroup = _particleGroup;
+        translocate.Init(_pooler);
     }
     
     // 이동 (7 스테이지)
