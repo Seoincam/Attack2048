@@ -38,8 +38,9 @@ public class GameManager : MonoBehaviour, INewTurnListener
     public GameObject[,] TileArray = new GameObject[5, 5]; // 타일 배열
     public Obstacle[,] ObstacleArray = new Obstacle[5, 5]; // 장애물 배열 (삭제, 벽, 석화, 감금, 이동)
 
-    private bool _canGetInput; // 입력을 받나? (설정, 도감, 상점, 후처리 등 실행중엔 안 받음)
-    public bool CanGetInput { get => _canGetInput; set => _canGetInput = value; }
+    private bool _canGetInput; // 입력을 받나? (GameManager 내부에서 설정)
+    public bool IsPaused { get; set; } // 멈췄나? (설정, 도감, 상점, 후처리 등 실행중인가?)
+    public bool CanMove { get => _canGetInput && !IsPaused; }
 
     private int _curTurns;
     private int CurTurns
@@ -113,14 +114,14 @@ public class GameManager : MonoBehaviour, INewTurnListener
 
         Spawn();
         Spawn();
-        CanGetInput = true;
+        _canGetInput = true;
     }
 
     void FixedUpdate()
     {
         if (_isChecking) CheckIsMoveEnd();
 
-        if (!_isChecking && CanGetInput) GetMouseOrTouch();
+        if (!_isChecking && CanMove) GetMouseOrTouch();
     }
 
 
@@ -148,7 +149,7 @@ public class GameManager : MonoBehaviour, INewTurnListener
                 if (TileArray[x, y] != null)
                     TileArray[x, y].tag = "Untagged";
 
-        CanGetInput = true;
+        _canGetInput = true;
     }
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     // 해당 방향으로 이동이 가능한지 체크 
@@ -238,7 +239,7 @@ public class GameManager : MonoBehaviour, INewTurnListener
             wait = false;
 
             _movingTiles = new HashSet<Tile>();
-            CanGetInput = false;
+            _canGetInput = false;
             // 강제 이동이 설정된 경우 그 방향 외에는 입력을 받지 않음
             if(forcedDirection != ForcedMovedir.None)
             {
@@ -261,7 +262,7 @@ public class GameManager : MonoBehaviour, INewTurnListener
                 if(!isValid)
                 {
                     Debug.Log("이동 불가! 화살표 방향으로 이동하세요");
-                    CanGetInput = true;
+                    _canGetInput = true;
                     return;
                 }
             }
@@ -305,7 +306,7 @@ public class GameManager : MonoBehaviour, INewTurnListener
         }
         else
         {
-            CanGetInput = true;
+            _canGetInput = true;
             gap = firstPos;
         }
     }
@@ -467,7 +468,19 @@ public class GameManager : MonoBehaviour, INewTurnListener
     {
         Debug.Log("게임 재시작!");
 
-        // 기존 블록 삭제
+        ResetTileArray();
+
+        CurTurns = maxTurns;
+
+        Spawn();
+        Spawn();
+
+        Debug.Log($"게임 재시작! 이동 횟수: {CurTurns}");
+    }
+
+    // 기존 타일 삭제
+    void ResetTileArray()
+    {
         for (int x = 0; x < 5; x++)
             for (int y = 0; y < 5; y++)
             {
@@ -476,13 +489,16 @@ public class GameManager : MonoBehaviour, INewTurnListener
                     DestroyTile(x, y);
                 }
             }
+    }
 
-        CurTurns = maxTurns;
-
-        Spawn();
-        Spawn();
-
-        Debug.Log($"게임 재시작! 이동 횟수: {CurTurns}");
+    // 기존 장애물 삭제
+    public void ResetObstacleArray()
+    {
+        for (int x = 0; x < 5; x++)
+            for (int y = 0; y < 5; y++)
+            {
+                ObstacleArray[x, y].ResetObstacle();
+            }
     }
 
 

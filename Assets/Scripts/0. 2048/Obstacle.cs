@@ -28,6 +28,18 @@ public class Obstacle
         _y = y;
     }
 
+    public void ResetObstacle()
+    {
+        RemoveDelete();
+        for (int i = 0; i < 4; i++) RemoveWall(i);
+        RemovePetrifyPrep();
+        RemovePetrify();
+        RemoveImprisonPrep();
+        RemoveImprison();
+        RemoveChange();
+        RemoveTranslocate();
+    }
+
     public void PlaceDelete() => isDelete = true;
     public void RemoveDelete() => isDelete = false;
 

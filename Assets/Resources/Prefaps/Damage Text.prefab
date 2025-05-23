@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 7490548689388374518}
   - component: {fileID: 8419914824832455676}
   - component: {fileID: 6095570452550840026}
+  - component: {fileID: -3702017650196072581}
   m_Layer: 0
   m_Name: Damage Text
   m_TagString: Untagged
@@ -95,8 +96,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 60
-  m_fontSizeBase: 60
+  m_fontSize: 70
+  m_fontSizeBase: 70
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -161,3 +162,15 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &-3702017650196072581
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6807943565604509695}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 001f4033fa4de4c95ad2aeb1427d55a9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

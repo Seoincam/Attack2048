@@ -18,7 +18,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &3815421732922875172
 RectTransform:
   m_ObjectHideFlags: 0
@@ -451,8 +451,8 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 9064015835079402480}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMin: {x: 0.5, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -993,12 +993,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2c05c6fba356e45d0b0554ea9ebc4a66, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  slimeCanvas: {fileID: 3815421732922875172}
-  damageText: {fileID: 8419914824832455676, guid: 45faf108bc874452f86b3575dfec848d, type: 3}
-  healthSlider: {fileID: 2283221900272801911}
-  healthText: {fileID: 5794075032739669132}
-  maxHealth: 100
-  curHealth: 0
+  maxHealth: 30
   ShieldInterval: 6
   _shieldCounter: 0
   WallInterval: 3

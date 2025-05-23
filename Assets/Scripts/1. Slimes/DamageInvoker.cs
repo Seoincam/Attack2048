@@ -22,6 +22,4 @@ public class DamageInvoker
         OnCombine?.Invoke(totalDamage); // 현재 등록돼 있는 슬라임의 GetDamage 함수 호출
         totalDamage = 0;
     }
-    
-    //FIXME: 데미지가 여러개 뜸
 }

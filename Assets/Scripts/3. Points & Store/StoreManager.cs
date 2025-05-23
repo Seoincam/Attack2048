@@ -22,7 +22,7 @@ public class StoreManager : MonoBehaviour
             darkBackground.SetActive(value);
 
             // 터치 오류 방지
-            if(value) { GameManager.Instance.CanGetInput = false; }
+            if(value) { GameManager.Instance.IsPaused = true; }
             else { StartCoroutine(FinishPause()); }
         }
     }
@@ -35,7 +35,7 @@ public class StoreManager : MonoBehaviour
             darkBackground.SetActive(value);
 
             // 터치 오류 방지
-            if(value) { GameManager.Instance.CanGetInput = false; }
+            if(value) { GameManager.Instance.IsPaused = true; }
             else { StartCoroutine(FinishPause()); }
         }
     }
@@ -105,7 +105,7 @@ public class StoreManager : MonoBehaviour
     // - - - - - - - - - -
     private IEnumerator FinishPause() {
         yield return new WaitForSeconds(0.3f);
-        GameManager.Instance.CanGetInput = true;
+        GameManager.Instance.IsPaused = false;
     }
 
     private void PreventDestroy(Collider2D selectedTile) {}

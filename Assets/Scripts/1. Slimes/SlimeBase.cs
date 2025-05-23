@@ -6,18 +6,15 @@ public abstract class SlimeBase : MonoBehaviour, INewTurnListener
 {
     // - - - - - - - - - 
     // 필드
-    // - - - - - - - - - 
-    [Header("[ Damage Animation ]")]
-    [SerializeField] private Transform slimeCanvas;
-    [SerializeField] private TextMeshProUGUI damageText;
+    // - - - - - - - - -     
 
-
-    [Header("[ Health ]")]
-    [SerializeField] private Slider healthSlider;
-    [SerializeField] private TextMeshProUGUI healthText;
+    private Slider _healthSlider;
+    private TextMeshProUGUI _healthText;
 
     [SerializeField] protected float maxHealth;
     protected float curHealth;
+
+    private SlimeManager _slimeManager;
 
 
 
@@ -30,30 +27,29 @@ public abstract class SlimeBase : MonoBehaviour, INewTurnListener
         curHealth = maxHealth;
         Subscribe_NewTurn();
 
-        healthSlider.value = curHealth / maxHealth;
-        healthText.text = $"{curHealth} / {maxHealth}";
+        _healthSlider.value = curHealth / maxHealth;
+        _healthText.text = $"{curHealth} / {maxHealth}";
     }
 
-
+    public void Init(SlimeManager slimeManager, Slider healthSlider, TextMeshProUGUI healthText)
+    {
+        _slimeManager = slimeManager;
+        _healthSlider = healthSlider;
+        _healthText = healthText;
+    }
 
     // - - - - - - - - - - 
     // 데미지 로직
     // - - - - - - - - - - 
-    protected virtual void GetDamge( float damage ) {   
-        MakeDamageText(damage);
+    protected virtual void GetDamge(float damage)
+    {
+        _slimeManager.MakeDamageText(damage);
 
         curHealth = Mathf.Max(0, curHealth - damage);
-        healthSlider.value = curHealth / maxHealth;
-        healthText.text = $"{curHealth} / {maxHealth}";
+        _healthSlider.value = curHealth / maxHealth;
+        _healthText.text = $"{curHealth} / {maxHealth}";
 
-        if( curHealth == 0 ) { Die(); }
-    }
-
-    // ToDo: 오브젝트 풀링
-    private void MakeDamageText(float damage)
-    {
-        TextMeshProUGUI _damageText = Instantiate(damageText, slimeCanvas);
-        _damageText.text = "-" + damage.ToString();
+        if (curHealth == 0) { Die(); }
     }
 
 
@@ -63,6 +59,8 @@ public abstract class SlimeBase : MonoBehaviour, INewTurnListener
     // - - - - - - - - - - 
     private void Die() {
         GameManager.Instance._damageInvoker.OnCombine -= GetDamge;
+        EventManager.Unsubscribe(GameEvent.NewTurn, OnEnter_NewTurn);
+        _slimeManager.OnSlimeDie();
         gameObject.SetActive(false);
     }
 

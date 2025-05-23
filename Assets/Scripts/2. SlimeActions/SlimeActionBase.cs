@@ -75,7 +75,7 @@ public abstract class SlimeActionBase : MonoBehaviour, ICountDownListener
         StartCoroutine(DestroySelf());
     }
 
-    private IEnumerator DestroySelf()
+    public IEnumerator DestroySelf()
     {
         yield return new WaitForSeconds(0.05f);
         EventManager.Unsubscribe(GameEvent.CountDownPhase, OnEnter_CountDownPhase);
