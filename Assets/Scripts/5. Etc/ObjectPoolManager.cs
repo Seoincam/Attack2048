@@ -25,6 +25,7 @@ public class ObjectPoolManager : MonoBehaviour
         // 비활성화된 오브젝트 있으면 return
         foreach (GameObject selected in pools[index])
         {
+            if (selected == null) continue;
             if (!selected.activeSelf)
             {
                 selected.SetActive(true);

@@ -41,11 +41,14 @@ public class PetrifyPrep : SlimeActionBase
     protected override void Execute()
     {
         GameManager.Instance.ObstacleArray[_x, _y].RemovePetrifyPrep();
-        GameObject obj = _pooler.GetObject(20, _slimeActionGroup);
+        GameObject obj = _pooler.GetObject(22, _slimeActionGroup);
         Petrify petrify = obj.GetComponent<Petrify>();
+
+        petrify._particleGroup = _particleGroup;
 
         // 위치 설정
         petrify.Init(_x, _y, _pooler);
+        _pooler = null;
         base.Execute();
     }
 }

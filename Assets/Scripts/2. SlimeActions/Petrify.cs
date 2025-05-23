@@ -22,7 +22,7 @@ public class Petrify : SlimeActionBase
 
         lifeText.text = _lifeCounter.ToString();
 
-        Destroy(G.TileArray[x, y]);
+        G.DestroyTile(x, y);
         G.TileArray[x, y] = null;
     }
 

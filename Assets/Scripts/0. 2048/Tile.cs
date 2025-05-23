@@ -5,8 +5,9 @@ public class Tile : MonoBehaviour
 {
     public int value;
     public int x, y; //현재 좌표
-    bool move, _combine;
+    public bool move, _combine;
     int _x2, _y2;
+    Vector3 targetPos;
 
     // 이동이 끝났나 체크
     public bool IsMoving { get => move; }
@@ -22,23 +23,28 @@ public class Tile : MonoBehaviour
 
     public void Init(int x, int y)
     {
+        move = false;
         this.x = x;
         this.y = y;
     }
 
-    public void Move(int x2, int y2, bool combine)
+    public void StartMove(int x2, int y2, bool combine)
     {
         move = true;
         _x2 = x2;
         _y2 = y2;
         _combine = combine;
+
         //현재 좌표를 새로운 위치로 갱신
         x = x2;
         y = y2;
 
-        Vector3 targetPos = GameManager.Instance.LocateTile(x2, y2);
+        targetPos = GameManager.Instance.LocateTile(x2, y2);
+    }
 
-        transform.position = Vector3.MoveTowards(transform.position, targetPos, 0.35f);
+    private void Move(int x2, int y2, bool combine)
+    {
+        transform.position = Vector3.MoveTowards(transform.position, targetPos, 0.4f);
 
         if (Vector3.Distance(transform.position, targetPos) < 0.01f)
         {

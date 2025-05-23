@@ -33,6 +33,7 @@ public class GameManager : MonoBehaviour, INewTurnListener
     public DamageInvoker _damageInvoker;
     private PointManager _pointManager;
     private CountDownManager _countManager;
+    private ObjectPoolManager _pooler;
 
     public GameObject[,] TileArray = new GameObject[5, 5]; // 타일 배열
     public Obstacle[,] ObstacleArray = new Obstacle[5, 5]; // 장애물 배열 (삭제, 벽, 석화, 감금, 이동)
@@ -77,7 +78,7 @@ public class GameManager : MonoBehaviour, INewTurnListener
     public ForcedMovedir forcedDirection = ForcedMovedir.None; //  강제 이동 방향
 
     private HashSet<Tile> _movingTiles; // 매턴마다 이동하는 타일 저장
-    public bool _isChecking;
+    private bool _isChecking; // 타일 이동 체크 중인가?
 
 
     // - - - - - - - - - - - - - - - - - - - - -
@@ -89,6 +90,8 @@ public class GameManager : MonoBehaviour, INewTurnListener
         if (Instance == null) Instance = this;
         else Destroy(gameObject);
 
+        Application.targetFrameRate = 60;
+
         // Obstacle Array 초기화
         for (int x = 0; x < 5; x++) for (int y = 0; y < 5; y++)
             {
@@ -98,6 +101,7 @@ public class GameManager : MonoBehaviour, INewTurnListener
         _damageInvoker = new DamageInvoker();
         _pointManager = GetComponent<PointManager>();
         _countManager = GetComponent<CountDownManager>();
+        _pooler = GetComponent<ObjectPoolManager>();
         Subscribe_NewTurn();
 
     }
@@ -313,6 +317,7 @@ public class GameManager : MonoBehaviour, INewTurnListener
             foreach (Tile tile in _movingTiles)
             {
                 if (tile == null) continue;
+                if (!tile.gameObject.activeSelf) continue;
                 if (tile.IsMoving) return;
             }
         }
@@ -352,7 +357,7 @@ public class GameManager : MonoBehaviour, INewTurnListener
 
             _movingTiles.Add(TileArray[x1, y1].GetComponent<Tile>());
 
-            TileArray[x1, y1].GetComponent<Tile>().Move(x2, y2, false);
+            TileArray[x1, y1].GetComponent<Tile>().StartMove(x2, y2, false);
             TileArray[x2, y2] = TileArray[x1, y1];
             TileArray[x1, y1] = null;
         }
@@ -376,10 +381,13 @@ public class GameManager : MonoBehaviour, INewTurnListener
                 if (TileArray[x2, y2].name == TilePrefabs[j].name + "(Clone)") break;
             }
 
-            TileArray[x1, y1].GetComponent<Tile>().Move(x2, y2, true);
-            Destroy(TileArray[x2, y2]);
+            TileArray[x1, y1].GetComponent<Tile>().StartMove(x2, y2, true);
+            DestroyTile(x2, y2);
             TileArray[x1, y1] = null;
-            TileArray[x2, y2] = Instantiate(TilePrefabs[j + 1], LocateTile(x2, y2), Quaternion.identity, TileGroup);
+
+            TileArray[x2, y2] = _pooler.GetObject(j + 1, TileGroup);
+            TileArray[x2, y2].transform.position = LocateTile(x2, y2);
+
             TileArray[x2, y2].GetComponent<Tile>().value = value * 2;
             //결합시에도 위치 전달
             TileArray[x2, y2].GetComponent<Tile>().x = x2;
@@ -415,12 +423,14 @@ public class GameManager : MonoBehaviour, INewTurnListener
 
         if (Random.Range(1, 100) > probablity_4)
         {
-            TileArray[x, y] = Instantiate(TilePrefabs[0], LocateTile(x, y), Quaternion.identity, TileGroup);
+            TileArray[x, y] = _pooler.GetObject(0, TileGroup);
+            TileArray[x, y].transform.position = LocateTile(x, y);
             TileArray[x, y].GetComponent<Tile>().value = 2;
         }
         else
         {
-            TileArray[x, y] = Instantiate(TilePrefabs[1], LocateTile(x, y), Quaternion.identity, TileGroup);
+            TileArray[x, y] = _pooler.GetObject(1, TileGroup);
+            TileArray[x, y].transform.position = LocateTile(x, y);
             TileArray[x, y].GetComponent<Tile>().value = 4;
         }
 
@@ -439,7 +449,9 @@ public class GameManager : MonoBehaviour, INewTurnListener
         }
 
         int index = (int)Mathf.Log(value, 2) - 1;
-        TileArray[x, y] = Instantiate(TilePrefabs[index], LocateTile(x, y), Quaternion.identity, TileGroup);
+
+        TileArray[x, y] = _pooler.GetObject(index, TileGroup);
+        TileArray[x, y].transform.position = LocateTile(x, y);
 
         Tile tile = TileArray[x, y].GetComponent<Tile>();
         tile.value = value;
@@ -461,8 +473,7 @@ public class GameManager : MonoBehaviour, INewTurnListener
             {
                 if (TileArray[x, y] != null)
                 {
-                    Destroy(TileArray[x, y]);
-                    TileArray[x, y] = null;
+                    DestroyTile(x, y);
                 }
             }
 
@@ -499,7 +510,8 @@ public class GameManager : MonoBehaviour, INewTurnListener
     {
         if (TileArray[x, y] != null)
         {
-            Destroy(TileArray[x, y]);
+            TileArray[x, y].SetActive(false);
+            TileArray[x, y].GetComponent<Tile>().move = false;
             TileArray[x, y] = null;
             return true;
         }

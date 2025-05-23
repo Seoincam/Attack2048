@@ -24,7 +24,6 @@ public class CountDownManager : MonoBehaviour
         {
             yield return new WaitForSeconds(0.2f);
             EventManager.Publish(GameEvent.TriggerPhase);
-            yield return new WaitForSeconds(0.2f);
         }
 
         // _mainCanvas.sortingOrder = 6;
@@ -33,8 +32,6 @@ public class CountDownManager : MonoBehaviour
         // _mainCanvas.sortingOrder = 3;
         // _darkBackground.FadeOut();
 
-        // yield return new WaitForSeconds(0.1f);
         EventManager.Publish(GameEvent.NewTurn);
     }
-
 }

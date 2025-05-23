@@ -2,7 +2,7 @@
 // Wall.cs
 //  - 벽 클래스.
 // - - - - - - - - - - - - - - - - - -
-using UnityEditor.Search;
+
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -12,8 +12,13 @@ public class Wall : SlimeActionBase
     [SerializeField] private Text lifeText;
 
     // Wall의 실제 위치를 지정하고 gamemanager에 알림
-    public void Init(int x1, int y1, int x2, int y2)
+    public void Init(int x1, int y1, int x2, int y2, ObjectPoolManager pooler)
     {
+        Subscribe_CountDown();
+        _lifeCounter = Life;
+        _pooler = pooler;
+        lifeText.text = _lifeCounter.ToString();
+
         this.x1 = x1;
         this.y1 = y1;
         this.x2 = x2;
@@ -33,7 +38,6 @@ public class Wall : SlimeActionBase
 
         // Gamemanager의 Wall논리배열에 생성됨을 알림
         PlaceWallBetween(x1, y1, x2, y2);
-
     }
 
     public override void OnEnter_CountDownPhase()

@@ -111,13 +111,13 @@ public class SlimeActionManager : MonoBehaviour
         int x2 = x1 + dir.x;
         int y2 = y1 + dir.y;
 
-        wall.Init(x1, y1, x2, y2);
+        wall.Init(x1, y1, x2, y2, _pooler);
     }
 
     // 석화 대기
     private void Petrify()
     {
-        GameObject obj = _pooler.GetObject(22, _slimeActionGroup);
+        GameObject obj = _pooler.GetObject(23, _slimeActionGroup);
         PetrifyPrep petrifyPrep = obj.GetComponent<PetrifyPrep>();
         petrifyPrep._particleGroup = _particleGroup;
 

@@ -42,9 +42,11 @@ public class ImprisonPrep : SlimeActionBase
         GameManager.Instance.ObstacleArray[_x, _y].RemoveImprisonPrep();
         GameObject obj = _pooler.GetObject(20, _slimeActionGroup);
         Imprison imprison = obj.GetComponent<Imprison>();
+        imprison._particleGroup = _particleGroup;
 
         // 위치 설정
         imprison.Init(_x, _y, _pooler);
+        _pooler = null;
         base.Execute();
     }
 }
