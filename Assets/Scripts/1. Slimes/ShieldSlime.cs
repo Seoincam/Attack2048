@@ -52,21 +52,17 @@ public class ShieldSlime : SlimeBase
     // - - - - - - - - -
     public override void OnEnter_NewTurn()
     {
-        CalculateShield();
-        CalculateWall();
-
-        // FIXME :  데미지 처리 후 이 부분이 처리되게 수정해야함
         if (HasShield)
         {
             HasShield = false;
             IsWeakened = true;
-
-            return;
         }
         else if (IsWeakened)
         {
             IsWeakened = false;
         }
+        CalculateShield();
+        CalculateWall();
     }
 
 
@@ -105,14 +101,11 @@ public class ShieldSlime : SlimeBase
     // - - - - - - - - -
     protected override void GetDamge(float damage)
     {
-        // 방패 있을 때 데미지 발생하면
-        //  - 데미지 안 받기
-        //  - 다음 턴 약화
-
-        // 약화일 때 데미지 발생하면
         if (HasShield)
         {
+            Debug.Log("방패! 데미지 0");
             damage = 0;
+            return;
         }
         else if (IsWeakened)
         {
