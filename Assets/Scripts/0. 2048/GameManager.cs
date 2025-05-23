@@ -74,7 +74,7 @@ public class GameManager : MonoBehaviour, INewTurnListener
     private bool wait, move;
     private Vector3 firstPos, secondPos, gap;
     [HideInInspector]
-    public ForcedMovedir forcedDirection = ForcedMovedir.None;
+    public ForcedMovedir forcedDirection = ForcedMovedir.None; //  강제 이동 방향
 
     private HashSet<Tile> _movingTiles; // 매턴마다 이동하는 타일 저장
     public bool _isChecking;
@@ -88,9 +88,6 @@ public class GameManager : MonoBehaviour, INewTurnListener
         // 싱글턴
         if (Instance == null) Instance = this;
         else Destroy(gameObject);
-
-        // 임시
-        Application.targetFrameRate = 60;
 
         // Obstacle Array 초기화
         for (int x = 0; x < 5; x++) for (int y = 0; y < 5; y++)
@@ -251,10 +248,10 @@ public class GameManager : MonoBehaviour, INewTurnListener
                         isValid = gap.y < 0 && Mathf.Abs(gap.x) < 0.5f;
                         break;
                     case ForcedMovedir.Left:
-                        isValid = gap.x > 0 && Mathf.Abs(gap.y) < 0.5f;
+                        isValid = gap.x < 0 && Mathf.Abs(gap.y) < 0.5f;
                         break;
                     case ForcedMovedir.Right:
-                        isValid = gap.x < 0 && Mathf.Abs(gap.y) < 0.5f;
+                        isValid = gap.x > 0 && Mathf.Abs(gap.y) < 0.5f;
                         break;
                 }
                 if(!isValid)
