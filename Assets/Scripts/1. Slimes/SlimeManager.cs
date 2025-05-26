@@ -64,6 +64,8 @@ public class SlimeManager : MonoBehaviour
                 slimeAction.StartCoroutine(slimeAction.DestroySelf());
             }
 
+            // 타일 초기화
+            GameManager.Instance.ResetGame();
             // 장애물 배열에서 제거
             GameManager.Instance.ResetObstacleArray();
         }
