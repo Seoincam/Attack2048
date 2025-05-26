@@ -465,7 +465,7 @@ public class GameManager : MonoBehaviour, INewTurnListener
     // - - - - - - - - - - - - - - - - - - - - -
     // 재시작
     // - - - - - - - - - - - - - - - - - - - - -
-    void ResetGame()
+    public void ResetGame()
     {
         Debug.Log("게임 재시작!");
 
