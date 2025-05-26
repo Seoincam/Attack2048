@@ -100,7 +100,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fae8ebdd1b69b4b4187cde3814296921, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 100
+  maxHealth: 101
   DeleteInterval: 3
   _deleteCounter: 0
   Delete6Interval: 7
