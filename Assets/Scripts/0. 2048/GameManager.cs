@@ -66,6 +66,7 @@ public class GameManager : MonoBehaviour, INewTurnListener
     [Header("Setting")]
     [SerializeField, Tooltip("최대 턴")] private int maxTurns;
     [SerializeField, Tooltip("스폰에서 4가 나올 확률")] private int probablity_4 = 15;
+    [SerializeField, Tooltip("클리어 조건")] private int clearValue = 128;
 
     [Space, Header("Object")]
     [SerializeField] private GameObject[] TilePrefabs;      // 2, 4, 8... 타일 프리팹 배열 (index = log2 - 1)
@@ -123,7 +124,7 @@ public class GameManager : MonoBehaviour, INewTurnListener
     {
         if (_isChecking) CheckIsMoveEnd();
 
-        if (!_isChecking && CanMove) GetMouseOrTouch();
+        if (!_isChecking && CanMove) GetInput();
     }
 
 
@@ -217,7 +218,7 @@ public class GameManager : MonoBehaviour, INewTurnListener
     }
    // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-    private void GetMouseOrTouch()
+    private void GetInput()
     {
         if (Input.GetMouseButtonDown(0) || (Input.touchCount == 1 && Input.GetTouch(0).phase == TouchPhase.Began))
         {
@@ -401,7 +402,7 @@ public class GameManager : MonoBehaviour, INewTurnListener
             if (TileArray[x2, y2].GetComponent<Tile>().value >= 8) { _pointManager.GetPoint(TileArray[x2, y2].GetComponent<Tile>().value); }
             
             // 128 이상 타일 만들면 클리어
-            if (TileArray[x2, y2].GetComponent<Tile>().value >= 128) { GetComponent<SlimeManager>().OnGameClear(); }
+            if (TileArray[x2, y2].GetComponent<Tile>().value >= clearValue) { GetComponent<SlimeManager>().OnGameClear(); }
         }
     }
 
@@ -469,7 +470,7 @@ public class GameManager : MonoBehaviour, INewTurnListener
     // - - - - - - - - - - - - - - - - - - - - -
     // 재시작
     // - - - - - - - - - - - - - - - - - - - - -
-    // 기존 타일 삭제
+    // 기존 타일 삭제, 두 개 스폰
     public void ResetTileArray()
     {
         for (int x = 0; x < 5; x++)
@@ -495,7 +496,7 @@ public class GameManager : MonoBehaviour, INewTurnListener
 
 
     // - - - - - - - - - - - - - - - - - - - - -
-    // 외부 접근용 메서드
+    // 외부에서 접근용 메서드
     // - - - - - - - - - - - - - - - - - - - - -
 
     // 타일 위치 설정

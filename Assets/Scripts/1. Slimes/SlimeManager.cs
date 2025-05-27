@@ -41,11 +41,11 @@ public class SlimeManager : MonoBehaviour
 
         if (_stageIndex < _slimes.Length)
         {
-            SlimeBase slime = Instantiate(_slimes[_stageIndex]).GetComponent<SlimeBase>();
-            slime.Init(this);
+            _currentSlime = Instantiate(_slimes[_stageIndex]).GetComponent<SlimeBase>();
+            _currentSlime.Init(this);
+            
             stageText.text = $"Stage {_stageIndex + 1}";
             NextStagePanel.SetActive(false);
-            GameManager.Instance.IsPaused = false;
 
             // 슬라임 액션 비활성화
             foreach (Transform action in SlimeActionGroup)
@@ -59,6 +59,8 @@ public class SlimeManager : MonoBehaviour
             GameManager.Instance.ResetTileArray();
             // 장애물 배열에서 제거
             GameManager.Instance.ResetObstacleArray();
+
+            GameManager.Instance.IsPaused = false;
         }
 
         else
