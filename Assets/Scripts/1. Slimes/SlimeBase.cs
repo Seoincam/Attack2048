@@ -5,9 +5,6 @@ public abstract class SlimeBase : MonoBehaviour, INewTurnListener
     // - - - - - - - - - 
     // 필드
     // - - - - - - - - -     
-    [SerializeField] protected float maxHealth;
-    protected float curHealth;
-
     private SlimeManager _slimeManager;
 
 

@@ -8,7 +8,7 @@ public class PoliceSlime : SlimeBase
     [Header("[ Police Slime Logic ]")]
     [SerializeField, Tooltip("감금 생성 간격")] private int ImprisionInterval;
     [SerializeField, Tooltip("감금 생성 남은 턴 수")] private int _imprisionCounter;
-    [SerializeField, Tooltip("강제 이동 생성 간격")] private int ForcedMoveInterval;
+    [Space, SerializeField, Tooltip("강제 이동 생성 간격")] private int ForcedMoveInterval;
     [SerializeField, Tooltip("강제 이동 남은 턴 수")] private int _forcedMoveCounter;
 
 

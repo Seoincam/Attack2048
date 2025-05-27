@@ -1376,6 +1376,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxTurns: 300
   probablity_4: 15
+  clearValue: 128
   TilePrefabs:
   - {fileID: 4217666222071071648, guid: f56ed41e5fd5a4ae68b595a55093bae5, type: 3}
   - {fileID: 7246910368932569499, guid: e56e7b03930d3498aa769aadb72f3105, type: 3}
