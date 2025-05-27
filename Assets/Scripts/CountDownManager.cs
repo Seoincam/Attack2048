@@ -27,7 +27,7 @@ public class CountDownManager : MonoBehaviour
             List<UnityAction> actionList = EventManager.GetEvent(GameEvent.TriggerPhase).ToList();
 
             float waitTime = 0.3f;
-            if (actionList.Count > 4) waitTime = 0.1f;
+            if (actionList.Count >= 3) waitTime = 0.1f;
 
 
                 for (int i = 0; i < actionList.Count; i++)

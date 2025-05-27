@@ -1,13 +1,10 @@
-using TMPro;
+ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class SlimeManager : MonoBehaviour
 {
     [SerializeField] private Transform slimeCanvas;
-    [SerializeField] private Slider hpSlider;
-    [SerializeField] private TextMeshProUGUI hpText;
-    [SerializeField] private TextMeshProUGUI damageText;
     [SerializeField] private TextMeshProUGUI stageText;
 
     [SerializeField] private GameObject NextStagePanel;
@@ -17,6 +14,7 @@ public class SlimeManager : MonoBehaviour
     [SerializeField] private int _stageIndex = 0;
 
     private ObjectPoolManager _pooler;
+    private SlimeBase _currentSlime;
 
 
     void Awake()
@@ -25,20 +23,12 @@ public class SlimeManager : MonoBehaviour
     }
     void Start()
     {
-        SlimeBase slime = Instantiate(_slimes[_stageIndex]).GetComponent<SlimeBase>();
-        slime.Init(this, hpSlider, hpText);
+        _currentSlime = Instantiate(_slimes[_stageIndex]).GetComponent<SlimeBase>();
+        _currentSlime.Init(this);
         stageText.text = $"Stage {_stageIndex + 1}";
     }
 
-
-
-    public void MakeDamageText(float damage)
-    {
-        TextMeshProUGUI _damageText = _pooler.GetObject(28, slimeCanvas).GetComponent<TextMeshProUGUI>();
-        _damageText.text = "-" + damage.ToString();
-    }
-
-    public void OnSlimeDie()
+    public void OnGameClear()
     {
         NextStagePanel.SetActive(true);
         GameManager.Instance.IsPaused = true;
@@ -46,12 +36,13 @@ public class SlimeManager : MonoBehaviour
 
     public void NextStageButton()
     {
+        _currentSlime.Die();
         _stageIndex++;
 
         if (_stageIndex < _slimes.Length)
         {
             SlimeBase slime = Instantiate(_slimes[_stageIndex]).GetComponent<SlimeBase>();
-            slime.Init(this, hpSlider, hpText);
+            slime.Init(this);
             stageText.text = $"Stage {_stageIndex + 1}";
             NextStagePanel.SetActive(false);
             GameManager.Instance.IsPaused = false;
@@ -65,7 +56,7 @@ public class SlimeManager : MonoBehaviour
             }
 
             // 타일 초기화
-            GameManager.Instance.ResetGame();
+            GameManager.Instance.ResetTileArray();
             // 장애물 배열에서 제거
             GameManager.Instance.ResetObstacleArray();
         }

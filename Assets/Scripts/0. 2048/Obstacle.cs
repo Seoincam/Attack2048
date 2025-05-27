@@ -43,6 +43,7 @@ public class Obstacle
     public void PlaceDelete() => isDelete = true;
     public void RemoveDelete() => isDelete = false;
 
+    public bool CheckWall(int direction) => isWall[direction];
     public void PlaceWall(int direction)
     {
         isWall[direction] = true;

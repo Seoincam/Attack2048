@@ -3,11 +3,10 @@
 //  - 포인트 관리 클래스.
 // - - - - - - - - - - - - - - - - - -
 
-using System;
 using TMPro;
 using UnityEngine;
 
-[Serializable]
+[System.Serializable]
 public struct PointRule {
     [Tooltip("타일 숫자")] public int tileValue;
     [Tooltip("획득 포인트")] public int point;

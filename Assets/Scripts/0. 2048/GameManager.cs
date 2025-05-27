@@ -7,10 +7,13 @@ using UnityEngine;
 
     0. 새 턴
         (OnEnter_NewTurn)
+
     1. 입력 감지                 
         (GetMouseOrTouch)
+
     2. 입력 처리               
         (ExecuteInput -> MoveOrCombine)
+
     3. 이동이 발생했다면, 모든 타일 이동 끝날 때까지 대기 
         (CheckIsMoveEnd)
 
@@ -18,12 +21,12 @@ using UnityEngine;
         (CountDownManager)
         e.g. 경고 이펙트 숫자 감소 등  
 
-    5. 트리거 페이즈
+    5. 실행 페이즈
         (CountDownManager)
         e.g. 0이 되면 실행시킴             
-        
 */
-public enum ForcedMovedir { None ,Up, Down, Left, Right } // 강제 이동 방향 
+
+public enum ForcedMovedir { None, Up, Down, Left, Right } // 강제 이동 방향 
 
 public class GameManager : MonoBehaviour, INewTurnListener
 {
@@ -31,7 +34,6 @@ public class GameManager : MonoBehaviour, INewTurnListener
     // 필드
     // - - - - - - - - - - - - - - - - - - - - -
     public static GameManager Instance;
-    public DamageInvoker _damageInvoker;
     private PointManager _pointManager;
     private CountDownManager _countManager;
     private ObjectPoolManager _pooler;
@@ -100,7 +102,6 @@ public class GameManager : MonoBehaviour, INewTurnListener
                 ObstacleArray[x, y] = new Obstacle(x, y);
             }
 
-        _damageInvoker = new DamageInvoker();
         _pointManager = GetComponent<PointManager>();
         _countManager = GetComponent<CountDownManager>();
         _pooler = GetComponent<ObjectPoolManager>();
@@ -140,7 +141,9 @@ public class GameManager : MonoBehaviour, INewTurnListener
         if (CurTurns <= 0)
         {
             Debug.Log("이동 횟수 소진! 게임 종료!");
-            ResetGame();
+            ResetTileArray();
+            CurTurns = maxTurns;
+            Debug.Log($"게임 재시작! 이동 횟수: {CurTurns}");
         }
 
         Spawn();
@@ -332,7 +335,6 @@ public class GameManager : MonoBehaviour, INewTurnListener
 
     private void CountDownPhase()
     {
-        _damageInvoker.InvokeDamage(); // 데미지 합산 전부 끝내고 데미지 부과
         _countManager.CountDown();
     }
 
@@ -376,7 +378,6 @@ public class GameManager : MonoBehaviour, INewTurnListener
 
             // 데미지 계산
             int value = TileArray[x2, y2].GetComponent<Tile>().value;
-            _damageInvoker.SumDamage(value);
 
             for (j = 0; j < TilePrefabs.Length; j++)
             {
@@ -396,8 +397,11 @@ public class GameManager : MonoBehaviour, INewTurnListener
             TileArray[x2, y2].GetComponent<Tile>().y = y2;
             TileArray[x2, y2].tag = "Combine";
 
-            // 32 이상의 타일을 만들면 포인트 획득
-            if (TileArray[x2, y2].GetComponent<Tile>().value >= 32) { _pointManager.GetPoint(TileArray[x2, y2].GetComponent<Tile>().value); }
+            // 8 이상 타일 만들면 포인트 획득
+            if (TileArray[x2, y2].GetComponent<Tile>().value >= 8) { _pointManager.GetPoint(TileArray[x2, y2].GetComponent<Tile>().value); }
+            
+            // 128 이상 타일 만들면 클리어
+            if (TileArray[x2, y2].GetComponent<Tile>().value >= 128) { GetComponent<SlimeManager>().OnGameClear(); }
         }
     }
 
@@ -465,31 +469,17 @@ public class GameManager : MonoBehaviour, INewTurnListener
     // - - - - - - - - - - - - - - - - - - - - -
     // 재시작
     // - - - - - - - - - - - - - - - - - - - - -
-    public void ResetGame()
-    {
-        Debug.Log("게임 재시작!");
-
-        ResetTileArray();
-
-        CurTurns = maxTurns;
-
-        Spawn();
-        Spawn();
-
-        Debug.Log($"게임 재시작! 이동 횟수: {CurTurns}");
-    }
-
     // 기존 타일 삭제
-    void ResetTileArray()
+    public void ResetTileArray()
     {
         for (int x = 0; x < 5; x++)
             for (int y = 0; y < 5; y++)
             {
-                if (TileArray[x, y] != null)
-                {
-                    DestroyTile(x, y);
-                }
+                DestroyTile(x, y);
             }
+
+        Spawn();
+        Spawn();
     }
 
     // 기존 장애물 삭제

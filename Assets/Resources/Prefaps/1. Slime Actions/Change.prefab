@@ -185,6 +185,17 @@ MonoBehaviour:
   _lifeCounter: 0
   _particleGroup: {fileID: 0}
   lifeText: {fileID: 7088696296037284959}
+  ChangeRules:
+  - tileValue: 2
+    probabilty: 40
+  - tileValue: 4
+    probabilty: 25
+  - tileValue: 8
+    probabilty: 20
+  - tileValue: 16
+    probabilty: 10
+  - tileValue: 32
+    probabilty: 5
 --- !u!95 &6231147644103730618
 Animator:
   serializedVersion: 7

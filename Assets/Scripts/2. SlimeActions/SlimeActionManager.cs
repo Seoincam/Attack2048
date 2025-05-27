@@ -6,6 +6,8 @@
 // - - - - - - - - - - - - - - - - - -
 
 using System.Collections.Generic;
+using System.Linq;
+using Unity.VisualScripting.Antlr3.Runtime.Tree;
 using UnityEngine;
 
 public class SlimeActionManager : MonoBehaviour
@@ -106,9 +108,26 @@ public class SlimeActionManager : MonoBehaviour
         wall._particleGroup = _particleGroup;
 
         // 위치 정하여 Wall.cs에서 위치 설정
-        int x1 = Random.Range(1, 4);
-        int y1 = Random.Range(1, 4);
-        Vector2Int dir = GetRandomDirection();
+        int x1 = 0, y1 = 0, direction;
+        Vector2Int dir = Vector2Int.zero;
+
+        // 오류 방지
+        int count = 0;
+        do
+        {
+            count++;
+            if (count > 500)
+            {
+                Debug.LogError("Change 오류!");
+                break;
+            }
+
+            x1 = Random.Range(1, 4);
+            y1 = Random.Range(1, 4);
+            dir = GetRandomDirection(out direction);
+        }
+        while (GameManager.Instance.ObstacleArray[x1, y1].CheckWall(direction));
+        
         int x2 = x1 + dir.x;
         int y2 = y1 + dir.y;
 
@@ -286,16 +305,19 @@ public class SlimeActionManager : MonoBehaviour
     }
 
     // 설치할 방향 랜덤 설정 
-    private Vector2Int GetRandomDirection()
+    private Vector2Int GetRandomDirection(out int direction)
     {
-        Vector2Int[] directions = new Vector2Int[]
+        var directions = new Dictionary<Vector2Int, int>
         {
-            new Vector2Int(0,1), // 위
-            new Vector2Int(0,-1), // 아래
-            new Vector2Int(1,0), // 오른쪽
-            new Vector2Int(-1, 0) // 왼쪽
+            {Vector2Int.up, 1},
+            {Vector2Int.down, 0},
+            {Vector2Int.right, 3},
+            {Vector2Int.left, 2}
         };
 
-        return directions[Random.Range(0, directions.Length)];
+        int random = Random.Range(0, directions.Count);
+
+        direction = directions.ElementAt(random).Value;
+        return directions.ElementAt(random).Key;
     }
 }

@@ -994,12 +994,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHealth: 30
-  ShieldInterval: 6
-  _shieldCounter: 0
   WallInterval: 3
   _wallCounter: 0
-  hasShieldText: {fileID: 500828450520473442}
-  isWeakendText: {fileID: 480193332066684212}
+  DeleteInterval: 3
+  _deleteCounter: 0
 --- !u!1 &8816063658961769277
 GameObject:
   m_ObjectHideFlags: 0

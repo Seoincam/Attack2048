@@ -1,16 +1,10 @@
-using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 public abstract class SlimeBase : MonoBehaviour, INewTurnListener
 {
     // - - - - - - - - - 
     // 필드
     // - - - - - - - - -     
-
-    private Slider _healthSlider;
-    private TextMeshProUGUI _healthText;
-
     [SerializeField] protected float maxHealth;
     protected float curHealth;
 
@@ -23,33 +17,13 @@ public abstract class SlimeBase : MonoBehaviour, INewTurnListener
     // - - - - - - - - 
     protected virtual void Start()
     {
-        GameManager.Instance._damageInvoker.OnCombine += GetDamge;
-        curHealth = maxHealth;
         Subscribe_NewTurn();
 
-        _healthSlider.value = curHealth / maxHealth;
-        _healthText.text = $"{curHealth} / {maxHealth}";
     }
 
-    public void Init(SlimeManager slimeManager, Slider healthSlider, TextMeshProUGUI healthText)
+    public void Init(SlimeManager slimeManager)
     {
         _slimeManager = slimeManager;
-        _healthSlider = healthSlider;
-        _healthText = healthText;
-    }
-
-    // - - - - - - - - - - 
-    // 데미지 로직
-    // - - - - - - - - - - 
-    protected virtual void GetDamge(float damage)
-    {
-        _slimeManager.MakeDamageText(damage);
-
-        curHealth = Mathf.Max(0, curHealth - damage);
-        _healthSlider.value = curHealth / maxHealth;
-        _healthText.text = $"{curHealth} / {maxHealth}";
-
-        if (curHealth == 0) { Die(); }
     }
 
 
@@ -57,10 +31,9 @@ public abstract class SlimeBase : MonoBehaviour, INewTurnListener
     // - - - - - - - - - - 
     // 사망 로직
     // - - - - - - - - - - 
-    private void Die() {
-        GameManager.Instance._damageInvoker.OnCombine -= GetDamge;
+    public void Die() {
         EventManager.Unsubscribe(GameEvent.NewTurn, OnEnter_NewTurn);
-        _slimeManager.OnSlimeDie();
+        _slimeManager.OnGameClear();
         gameObject.SetActive(false);
     }
 

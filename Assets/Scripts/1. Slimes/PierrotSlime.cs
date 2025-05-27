@@ -31,7 +31,7 @@ public class PierrotSlime : SlimeBase
         CalculateChange();
         CalCulateTranslocate();
     }
-    
+
 
     // - - - - - - - - -
     // 랜덤 변경
@@ -51,8 +51,9 @@ public class PierrotSlime : SlimeBase
     // - - - - - - - - -
     // 이동
     // - - - - - - - - -
-    private void CalCulateTranslocate() {
-        _translocateCounter --;
+    private void CalCulateTranslocate()
+    {
+        _translocateCounter--;
 
         if (_translocateCounter == 0)
         {

@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 545312199103417814}
   - component: {fileID: 5609954157557672538}
   - component: {fileID: 5970473605106865196}
+  - component: {fileID: 6079552766085019121}
   m_Layer: 0
   m_Name: Wall
   m_TagString: Untagged
@@ -105,6 +106,28 @@ MonoBehaviour:
   _lifeCounter: 0
   _particleGroup: {fileID: 0}
   lifeText: {fileID: 3247443772080887729}
+--- !u!95 &6079552766085019121
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 828993043930697507}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 19e656aa3d63c4a7c82a78d167905b37, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &2785457736466508565
 GameObject:
   m_ObjectHideFlags: 0
