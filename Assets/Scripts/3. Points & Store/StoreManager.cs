@@ -44,9 +44,10 @@ public class StoreManager : MonoBehaviour
         get => _isDestroying || _isPreventing; 
     }
 
-    [SerializeField, Tooltip( "파괴 방지 값" )] private int PreventDestroyCost;
-    [SerializeField, Tooltip( "타일 파괴 값" )] private int DestoryTileCost;
-    [SerializeField, Tooltip( "턴 추가 값" )] private int AddTurnCost;
+    [SerializeField, Tooltip( "파괴 방지 비용" )] private int PreventDestroyCost;
+    [SerializeField, Tooltip( "타일 파괴 비용" )] private int DestoryTileCost;
+    [SerializeField, Tooltip( "턴 추가 비용" )] private int AddTurnCost;
+    [SerializeField, Tooltip( "턴 추가량" )] private int AddTurnAmount;
 
 
 
@@ -81,21 +82,26 @@ public class StoreManager : MonoBehaviour
         }
     }
 
-    public void PreventDestroyBtn() {
+    public void PreventDestroyBtn()
+    {
         // 포인트 부족하면 return 
         if( !_pointManager.CheckPoint(PreventDestroyCost) ) return;
         IsPreventing = true;
     }
 
-    public void DestoryTileBtn() {
+    public void DestoryTileBtn()
+    {
         // 포인트 부족하면 return 
         if( !_pointManager.CheckPoint(DestoryTileCost) ) return;
         IsDestroying = true;
     }
 
-    public void AddTurnBtn() {
+    public void AddTurnBtn()
+    {
         // 포인트 부족하면 return 
-        if( !_pointManager.CheckPoint(AddTurnCost) ) return;
+        if (!_pointManager.CheckPoint(AddTurnCost)) return;
+        _pointManager.UsePoint(AddTurnCost);
+        GameManager.Instance.CurTurns += AddTurnAmount;
     }
 
 

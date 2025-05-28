@@ -46,7 +46,7 @@ public class GameManager : MonoBehaviour, INewTurnListener
     public bool CanMove { get => _canGetInput && !IsPaused; }
 
     private int _curTurns;
-    private int CurTurns
+    public int CurTurns
     {
         get => _curTurns;
         set
