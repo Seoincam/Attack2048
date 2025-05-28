@@ -5,16 +5,10 @@ public class WizardSlime : SlimeBase
     // - - - - - - - - - -
     // 필드
     // - - - - - - - - - -
-    [Header("[ Stone Slime Logic ]")]
-    [SerializeField, Tooltip("석화 생성 간격")] private int PetrifyInterval;
-    [SerializeField, Tooltip("석화 생성 남은 턴 수")] private int _petrifyCounter;
+    [Header("[ Wizard Slime Logic ]")]
+    [SerializeField, Tooltip("상하좌우반전 생성 간격")] private int ReverseMoveInterval;
+    [SerializeField, Tooltip("상하좌우반전 생성 남은 턴 수")] private int _reverseMoveCounter;
 
-    [Space, SerializeField, Tooltip("벽 생성 간격")] private int WallInterval;
-    [SerializeField, Tooltip("벽 생성 남은 턴 수")] private int _wallCounter;
-
-
-    [Space, SerializeField, Tooltip("제거 생성 간격")] private int DeleteInterval;
-    [SerializeField, Tooltip("제거 생성 남은 턴 수")] private int _deleteCounter;
 
 
 
@@ -25,9 +19,7 @@ public class WizardSlime : SlimeBase
     {
         base.Start();
 
-        _petrifyCounter = PetrifyInterval;
-        _wallCounter = WallInterval;
-        _deleteCounter = DeleteInterval;
+        _reverseMoveCounter = ReverseMoveInterval;
     }
 
 
@@ -37,48 +29,23 @@ public class WizardSlime : SlimeBase
     // - - - - - - - - -
     public override void OnEnter_NewTurn()
     {
-        CalculatePetrify();
-        CalCulateWall();
-        CalculateDelete();
+        CalculateReverse();
     }
 
 
     // - - - - - - - - -
     // 로직
     // - - - - - - - - -
-    // 석화
-    private void CalculatePetrify()
+    // 상하좌우반전
+    private void CalculateReverse()
     {
-        _petrifyCounter--;
+        _reverseMoveCounter--;
 
-        if (_petrifyCounter == 0)
+        if (_reverseMoveCounter == 0)
         {
-            _petrifyCounter = PetrifyInterval;
-            EventManager.Publish(GameEvent.Petrify);
+            _reverseMoveCounter = ReverseMoveInterval;
+            EventManager.Publish(GameEvent.ReverseMove);
         }
     }
 
-    // 이동
-    private void CalCulateWall()
-    {
-        _wallCounter--;
-
-        if (_wallCounter == 0)
-        {
-            _wallCounter = WallInterval;
-            EventManager.Publish(GameEvent.Wall);
-        }
-    }
-    
-    // 삭제
-    private void CalculateDelete()
-    {
-        _deleteCounter--;
-
-        if (_deleteCounter == 0)
-        {
-            _deleteCounter = DeleteInterval;
-            EventManager.Publish(GameEvent.Delete);
-        }
-    }
 }

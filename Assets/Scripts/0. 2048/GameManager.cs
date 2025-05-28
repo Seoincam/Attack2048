@@ -44,6 +44,7 @@ public class GameManager : MonoBehaviour, INewTurnListener
     private bool _canGetInput; // 입력을 받나? (GameManager 내부에서 설정)
     public bool IsPaused { get; set; } // 멈췄나? (설정, 도감, 상점, 후처리 등 실행중인가?)
     public bool CanMove { get => _canGetInput && !IsPaused; }
+    public bool IsReversed = false; // 상하좌우 반전중인가?
 
     private int _curTurns;
     public int CurTurns
@@ -165,28 +166,28 @@ public class GameManager : MonoBehaviour, INewTurnListener
             for (x = 0; x < 5; x++)
                 for (y = 0; y < 4; y++)
                     for (i = 4; i > y; i--)
-                        if(CheckMoveOrCombine(x, i - 1, x, i)) return true;
+                        if (CheckMoveOrCombine(x, i - 1, x, i)) return true;
         }
         else if (dir.y < 0 && Mathf.Abs(dir.x) < 0.5f) // 아래
         {
             for (x = 0; x < 5; x++)
                 for (y = 4; y > 0; y--)
                     for (i = 0; i < y; i++)
-                        if(CheckMoveOrCombine(x, i + 1, x, i)) return true;
+                        if (CheckMoveOrCombine(x, i + 1, x, i)) return true;
         }
         else if (dir.x > 0 && Mathf.Abs(dir.y) < 0.5f) // 오른쪽
         {
             for (y = 0; y < 5; y++)
                 for (x = 0; x < 4; x++)
                     for (i = 4; i > x; i--)
-                        if(CheckMoveOrCombine(i - 1, y, i, y)) return true;
+                        if (CheckMoveOrCombine(i - 1, y, i, y)) return true;
         }
         else if (dir.x < 0 && Mathf.Abs(dir.y) < 0.5f) // 왼쪽
         {
             for (y = 0; y < 5; y++)
                 for (x = 4; x > 0; x--)
                     for (i = 0; i < x; i++)
-                        if(CheckMoveOrCombine(i + 1, y, i, y)) return true;
+                        if (CheckMoveOrCombine(i + 1, y, i, y)) return true;
         }
         return false;
     }
@@ -216,7 +217,7 @@ public class GameManager : MonoBehaviour, INewTurnListener
         }
         return canMove;
     }
-   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
     private void GetInput()
     {
@@ -246,10 +247,10 @@ public class GameManager : MonoBehaviour, INewTurnListener
             _movingTiles = new HashSet<Tile>();
             _canGetInput = false;
             // 강제 이동이 설정된 경우 그 방향 외에는 입력을 받지 않음
-            if(forcedDirection != ForcedMovedir.None)
+            if (forcedDirection != ForcedMovedir.None)
             {
                 bool isValid = false;
-                switch(forcedDirection)
+                switch (forcedDirection)
                 {
                     case ForcedMovedir.Up:
                         isValid = gap.y > 0 && Mathf.Abs(gap.x) < 0.5f;
@@ -264,7 +265,7 @@ public class GameManager : MonoBehaviour, INewTurnListener
                         isValid = gap.x > 0 && Mathf.Abs(gap.y) < 0.5f;
                         break;
                 }
-                if(!isValid)
+                if (!isValid)
                 {
                     Debug.Log("이동 불가! 화살표 방향으로 이동하세요");
                     _canGetInput = true;
@@ -272,34 +273,69 @@ public class GameManager : MonoBehaviour, INewTurnListener
                 }
             }
 
-            // 방향 판별 후 MoveOrCombine 호출
-            if (gap.y > 0 && Mathf.Abs(gap.x) < 0.5f) // 위
+            // 방향 판별 후 MoveOrCombine 호출 , 반전 아닐 때
+            if (!IsReversed)
             {
-                for (x = 0; x < 5; x++)
-                    for (y = 0; y < 4; y++)
-                        for (i = 4; i > y; i--)
-                            MoveOrCombine(x, i - 1, x, i);
+                if (gap.y > 0 && Mathf.Abs(gap.x) < 0.5f) // 위
+                {
+                    for (x = 0; x < 5; x++)
+                        for (y = 0; y < 4; y++)
+                            for (i = 4; i > y; i--)
+                                MoveOrCombine(x, i - 1, x, i);
+                }
+                else if (gap.y < 0 && Mathf.Abs(gap.x) < 0.5f) // 아래
+                {
+                    for (x = 0; x < 5; x++)
+                        for (y = 4; y > 0; y--)
+                            for (i = 0; i < y; i++)
+                                MoveOrCombine(x, i + 1, x, i);
+                }
+                else if (gap.x > 0 && Mathf.Abs(gap.y) < 0.5f) // 오른쪽
+                {
+                    for (y = 0; y < 5; y++)
+                        for (x = 0; x < 4; x++)
+                            for (i = 4; i > x; i--)
+                                MoveOrCombine(i - 1, y, i, y);
+                }
+                else if (gap.x < 0 && Mathf.Abs(gap.y) < 0.5f) // 왼쪽
+                {
+                    for (y = 0; y < 5; y++)
+                        for (x = 4; x > 0; x--)
+                            for (i = 0; i < x; i++)
+                                MoveOrCombine(i + 1, y, i, y);
+                }
             }
-            else if (gap.y < 0 && Mathf.Abs(gap.x) < 0.5f) // 아래
+            //반전일 때 
+            else if(IsReversed)
             {
-                for (x = 0; x < 5; x++)
-                    for (y = 4; y > 0; y--)
-                        for (i = 0; i < y; i++)
-                            MoveOrCombine(x, i + 1, x, i);
-            }
-            else if (gap.x > 0 && Mathf.Abs(gap.y) < 0.5f) // 오른쪽
-            {
-                for (y = 0; y < 5; y++)
-                    for (x = 0; x < 4; x++)
-                        for (i = 4; i > x; i--)
-                            MoveOrCombine(i - 1, y, i, y);
-            }
-            else if (gap.x < 0 && Mathf.Abs(gap.y) < 0.5f) // 왼쪽
-            {
-                for (y = 0; y < 5; y++)
-                    for (x = 4; x > 0; x--)
-                        for (i = 0; i < x; i++)
-                            MoveOrCombine(i + 1, y, i, y);
+                if (gap.y > 0 && Mathf.Abs(gap.x) < 0.5f) // 위 -> 아래로 반전됨
+                {
+                    for (x = 0; x < 5; x++)
+                        for (y = 4; y > 0; y--)
+                            for (i = 0; i < y; i++)
+                                MoveOrCombine(x, i + 1, x, i);
+                }
+                else if (gap.y < 0 && Mathf.Abs(gap.x) < 0.5f) // 아래 -> 위로 반전됨
+                {
+                    for (x = 0; x < 5; x++)
+                        for (y = 0; y < 4; y++)
+                            for (i = 4; i > y; i--)
+                                MoveOrCombine(x, i - 1, x, i);
+                }
+                else if (gap.x > 0 && Mathf.Abs(gap.y) < 0.5f) // 오른쪽 -> 왼쪽으로 반전됨
+                {
+                    for (y = 0; y < 5; y++)
+                        for (x = 4; x > 0; x--)
+                            for (i = 0; i < x; i++)
+                                MoveOrCombine(i + 1, y, i, y);
+                }
+                else if (gap.x < 0 && Mathf.Abs(gap.y) < 0.5f) // 왼쪽 -> 오른쪽으로 반전됨
+                {
+                    for (y = 0; y < 5; y++)
+                        for (x = 0; x < 4; x++)
+                            for (i = 4; i > x; i--)
+                                MoveOrCombine(i - 1, y, i, y);
+                }
             }
         }
 
@@ -400,7 +436,7 @@ public class GameManager : MonoBehaviour, INewTurnListener
 
             // 8 이상 타일 만들면 포인트 획득
             if (TileArray[x2, y2].GetComponent<Tile>().value >= 8) { _pointManager.GetPoint(TileArray[x2, y2].GetComponent<Tile>().value); }
-            
+
             // 128 이상 타일 만들면 클리어
             if (TileArray[x2, y2].GetComponent<Tile>().value >= clearValue) { GetComponent<SlimeManager>().OnGameClear(); }
         }

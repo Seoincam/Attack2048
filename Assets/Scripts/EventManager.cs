@@ -23,6 +23,7 @@ public enum GameEvent
     Translocate3, // 이동 (3스테이지)
     Translocate7, // 이동 (7스테이지)
     ForcedMove, // 강제 이동(4스테이지)
+    ReverseMove, // 상하좌우 반전(7스테이지)
 }
 
 public class EventManager

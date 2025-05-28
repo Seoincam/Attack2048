@@ -40,6 +40,7 @@ public class SlimeActionManager : MonoBehaviour
         EventManager.Subscribe(GameEvent.Translocate3, Translocate3);
         EventManager.Subscribe(GameEvent.Translocate7, Translocate7);
         EventManager.Subscribe(GameEvent.ForcedMove, ForcedMove);
+        EventManager.Subscribe(GameEvent.ReverseMove, ReverseMove);
     }
 
 
@@ -236,6 +237,13 @@ public class SlimeActionManager : MonoBehaviour
     private void Translocate7()
     {
         // Translocate7 translocate = Instantiate(_translocate7Prefab, _slimeActionGroup).GetComponent<Translocate7>();
+    }
+
+    private void ReverseMove()
+    {
+        GameObject obj = _pooler.GetObject(29, _slimeActionGroup);
+        ReverseMove reversemove = obj.GetComponent<ReverseMove>();
+        reversemove.Init();
     }
     // 이동 방향 강제 (4 스테이지)
     
