@@ -57,8 +57,10 @@ public class SlimeManager : MonoBehaviour
 
             // 타일 초기화
             GameManager.Instance.ResetTileArray();
-            // 장애물 배열에서 제거
+            // 장애물 배열 초기화
             GameManager.Instance.ResetObstacleArray();
+            // 턴 초기화
+            GameManager.Instance.ResetTurn();
 
             GameManager.Instance.IsPaused = false;
         }

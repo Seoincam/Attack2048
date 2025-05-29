@@ -529,6 +529,12 @@ public class GameManager : MonoBehaviour, INewTurnListener
             }
     }
 
+    public void ResetTurn()
+    {
+        //임시
+        CurTurns = 300;
+    }
+
 
 
     // - - - - - - - - - - - - - - - - - - - - -
