@@ -102,3 +102,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ReverseMoveInterval: 5
   _reverseMoveCounter: 0
+  TranslocateInterval: 10
+  _translocateCounter: 0
+  BlindInterval: 3
+  _blindCounter: 0

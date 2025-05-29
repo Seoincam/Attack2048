@@ -1,6 +1,6 @@
 // - - - - - - - - - - - - - - - - - -
 // ICountDownListener.cs
-//  - 플레이어 액션 후 숫자가 줄어드는 클래스가 구현해야함
+//  - 턴 종료 후 반응하는 클래스가 구현해야함
 // - - - - - - - - - - - - - - - - - -
 
 public interface ICountDownListener

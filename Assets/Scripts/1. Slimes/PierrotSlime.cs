@@ -34,8 +34,9 @@ public class PierrotSlime : SlimeBase
 
 
     // - - - - - - - - -
-    // 랜덤 변경
+    // 로직
     // - - - - - - - - -
+    // 랜덤 변경
     private void CalculateChange()
     {
         _changeCounter--;
@@ -47,10 +48,7 @@ public class PierrotSlime : SlimeBase
         }
     }
 
-
-    // - - - - - - - - -
     // 이동
-    // - - - - - - - - -
     private void CalCulateTranslocate()
     {
         _translocateCounter--;

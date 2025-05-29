@@ -41,6 +41,7 @@ public class SlimeActionManager : MonoBehaviour
         EventManager.Subscribe(GameEvent.Translocate7, Translocate7);
         EventManager.Subscribe(GameEvent.ForcedMove, ForcedMove);
         EventManager.Subscribe(GameEvent.ReverseMove, ReverseMove);
+        EventManager.Subscribe(GameEvent.Blind, Blind);
     }
 
 
@@ -236,7 +237,10 @@ public class SlimeActionManager : MonoBehaviour
     // 이동 (7 스테이지)
     private void Translocate7()
     {
-        // Translocate7 translocate = Instantiate(_translocate7Prefab, _slimeActionGroup).GetComponent<Translocate7>();
+        GameObject obj = _pooler.GetObject(30, _slimeActionGroup);
+        Translocate7 translocate = obj.GetComponent<Translocate7>();
+        translocate._particleGroup = _particleGroup;
+        translocate.Init(_pooler);
     }
 
     private void ReverseMove()
@@ -245,8 +249,8 @@ public class SlimeActionManager : MonoBehaviour
         ReverseMove reversemove = obj.GetComponent<ReverseMove>();
         reversemove.Init();
     }
-    // 이동 방향 강제 (4 스테이지)
     
+    // 이동 방향 강제 (4 스테이지)
     private void ForcedMove()
     {
         GameObject obj = _pooler.GetObject(19, _slimeActionGroup);
@@ -254,13 +258,23 @@ public class SlimeActionManager : MonoBehaviour
         forcedmove.Init();
     }
 
+    private void Blind()
+    {
+        GameObject obj = _pooler.GetObject(31, _slimeActionGroup);
+        Blind blind = obj.GetComponent<Blind>();
+        blind._particleGroup = _particleGroup;
+
+        // 위치 설정
+            // 이미 타일이 있는 곳에 설치
+        Vector2Int selected = GetRandomPosition(true);
+        blind.Init(selected.x, selected.y, _pooler);
+    }
+
 
 
     // - - - - - - - - - - - - - - - - - - - - -
     // 랜덤 위치 설정
     // - - - - - - - - - - - - - - - - - - - - -
-
-    //ToDo: 위치 고정형 패턴에서, 그 자리에 이미 다른 장애물이 있을경우 처리
 
     // 5*5 보드 중 하나 랜덤 선택
     // [bool onlyTile] true: 이미 타일 있는 칸만, false: 그냥 아무 칸이나

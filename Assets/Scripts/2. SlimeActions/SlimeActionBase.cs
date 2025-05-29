@@ -17,7 +17,7 @@ public abstract class SlimeActionBase : MonoBehaviour, ICountDownListener
     [Tooltip("남은 수명")][SerializeField] protected int _lifeCounter;
     protected ObjectPoolManager _pooler;
 
-    public Transform _particleGroup;
+    [HideInInspector] public Transform _particleGroup;
     protected SpriteRenderer _renderer;
 
 
