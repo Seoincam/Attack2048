@@ -15,15 +15,10 @@ public class Petrify : SlimeActionBase
     {
         base.Init(x, y, pooler);
 
-        GameManager G = GameManager.Instance;
-
         _x = x; _y = y;
-        G.ObstacleArray[x, y].PlacePetrify();
+        GameManager.Instance.ObstacleArray[x, y].PlacePetrify();
 
         lifeText.text = _lifeCounter.ToString();
-
-        G.DestroyTile(x, y);
-        G.TileArray[x, y] = null;
     }
 
     public override void OnEnter_CountDownPhase()

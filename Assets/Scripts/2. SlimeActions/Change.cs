@@ -36,7 +36,7 @@ public class Change : SlimeActionBase
     protected override void Execute()
     {        
         GameManager G = GameManager.Instance;
-        if (G.DestroyTile(_x, _y))
+        if (G.DeleteTile(_x, _y))
         {
             int random = Random.Range(1, 101);
             int tileValue = 2;

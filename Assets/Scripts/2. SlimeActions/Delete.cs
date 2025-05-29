@@ -3,6 +3,7 @@
 //  - 삭제 클래스.
 // - - - - - - - - - - - - - - - - - -
 
+using Unity.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -39,8 +40,10 @@ public class Delete : SlimeActionBase
 
     protected override void Execute()
     {
-        GameManager.Instance.DestroyTile(_x,_y);
-        GameManager.Instance.ObstacleArray[_x, _y].RemoveDelete();
+        GameManager G = GameManager.Instance;
+        if (G.TileArray[_x,_y] != null && !G.TileArray[_x, _y].GetComponent<Tile>().IsProtected)
+            GameManager.Instance.DeleteTile(_x,_y);
+        G.ObstacleArray[_x, _y].RemoveDelete();
         base.Execute();
     }
 

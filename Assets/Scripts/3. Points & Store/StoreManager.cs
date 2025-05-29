@@ -114,14 +114,32 @@ public class StoreManager : MonoBehaviour
         GameManager.Instance.IsPaused = false;
     }
 
-    private void PreventDestroy(Collider2D selectedTile) {}
+    private void PreventDestroy(Collider2D selectedTile)
+    {
+        int x = selectedTile.GetComponent<Tile>().x;
+        int y = selectedTile.GetComponent<Tile>().y;
+
+        if (GameManager.Instance.TileArray[x, y].GetComponent<Tile>().IsProtected)
+            Debug.Log("이미 보호됨");
+
+        else
+        {
+            _pointManager.UsePoint(DestoryTileCost);
+            IsPreventing = false;
+            GameManager.Instance.TileArray[x, y].GetComponent<Tile>().StartProtect();
+        }
+    }
 
     private void DestroyTile(Collider2D selectedTile) {
         int x= selectedTile.GetComponent<Tile>().x;
         int y= selectedTile.GetComponent<Tile>().y;
+
+        if (GameManager.Instance.ObstacleArray[x, y].HasImprison())
+            Debug.Log("감금 중엔 삭제 불가");
         
         // 오류 방지
-        if(GameManager.Instance.DestroyTile(x,y)) {
+        else if (GameManager.Instance.DeleteTile(x, y))
+        {
             _pointManager.UsePoint(DestoryTileCost);
             IsDestroying = false;
         }

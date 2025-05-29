@@ -3,6 +3,7 @@
 //  - 석화 대기 클래스.
 // - - - - - - - - - - - - - - - - - -
 
+using Unity.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -40,14 +41,22 @@ public class PetrifyPrep : SlimeActionBase
 
     protected override void Execute()
     {
-        GameManager.Instance.ObstacleArray[_x, _y].RemovePetrifyPrep();
-        GameObject obj = _pooler.GetObject(22, _slimeActionGroup);
-        Petrify petrify = obj.GetComponent<Petrify>();
+        GameManager G = GameManager.Instance;
 
-        petrify._particleGroup = _particleGroup;
+        G.ObstacleArray[_x, _y].RemovePetrifyPrep();
+        
+        // null이면 실행
+        // null 아니고 보호 아니면 실행
+        // null 아니고 보호면 실행x
+        if (G.TileArray[_x, _y] == null || (G.TileArray[_x, _y] != null && !G.TileArray[_x, _y].GetComponent<Tile>().IsProtected))
+        {
+            G.DeleteTile(_x, _y);
+            GameObject obj = _pooler.GetObject(22, _slimeActionGroup);
+            Petrify petrify = obj.GetComponent<Petrify>();
+            petrify._particleGroup = _particleGroup;
+            petrify.Init(_x, _y, _pooler);
+        }
 
-        // 위치 설정
-        petrify.Init(_x, _y, _pooler);
         _pooler = null;
         base.Execute();
     }

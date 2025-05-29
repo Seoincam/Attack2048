@@ -422,7 +422,7 @@ public class GameManager : MonoBehaviour, INewTurnListener
             }
 
             TileArray[x1, y1].GetComponent<Tile>().StartMove(x2, y2, true);
-            DestroyTile(x2, y2);
+            DeleteTile(x2, y2);
             TileArray[x1, y1] = null;
 
             TileArray[x2, y2] = _pooler.GetObject(j + 1, TileGroup);
@@ -512,7 +512,7 @@ public class GameManager : MonoBehaviour, INewTurnListener
         for (int x = 0; x < 5; x++)
             for (int y = 0; y < 5; y++)
             {
-                DestroyTile(x, y);
+                DeleteTile(x, y);
             }
 
         Spawn();
@@ -550,7 +550,7 @@ public class GameManager : MonoBehaviour, INewTurnListener
     }
 
     // 타일 삭제
-    public bool DestroyTile(int x, int y)
+    public bool DeleteTile(int x, int y)
     {
         if (TileArray[x, y] != null)
         {

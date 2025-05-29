@@ -1,4 +1,4 @@
-using Unity.Collections;
+using System.Collections;
 using UnityEngine;
 
 public class Tile : MonoBehaviour
@@ -12,6 +12,29 @@ public class Tile : MonoBehaviour
     // 이동이 끝났나 체크
     public bool IsMoving { get => move; }
 
+    // 보호되나?
+    public bool IsProtected { get; private set; }
+    [SerializeField] GameObject protectText;
+
+    public void StartProtect()
+    {
+        EventManager.Subscribe(GameEvent.NewTurn, FinishProtect);
+        protectText.SetActive(true);
+        IsProtected = true;
+    }
+
+    private void FinishProtect()
+    {
+        protectText.SetActive(false);
+        IsProtected = false;
+        StartCoroutine(Unsubscribe());
+    }
+
+    private IEnumerator Unsubscribe()
+    {
+        yield return new WaitForSeconds(0.05f);
+        EventManager.Unsubscribe(GameEvent.NewTurn, FinishProtect);
+    }
 
     void Update()
     {

@@ -107,6 +107,7 @@ MonoBehaviour:
   y: 0
   move: 0
   _combine: 0
+  isProtected: 0
 --- !u!95 &-2542587961678463546
 Animator:
   serializedVersion: 7
