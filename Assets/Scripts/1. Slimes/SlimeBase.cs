@@ -5,7 +5,8 @@ public abstract class SlimeBase : MonoBehaviour, INewTurnListener
     // - - - - - - - - - 
     // 필드
     // - - - - - - - - -     
-    private SlimeManager _slimeManager;
+    private StageManager _slimeManager;
+    public int DefaltTurns;
 
 
 
@@ -18,7 +19,7 @@ public abstract class SlimeBase : MonoBehaviour, INewTurnListener
 
     }
 
-    public void Init(SlimeManager slimeManager)
+    public void Init(StageManager slimeManager)
     {
         _slimeManager = slimeManager;
     }

@@ -1,30 +1,30 @@
  using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
-public class SlimeManager : MonoBehaviour
+public class StageManager : MonoBehaviour
 {
+    [Header("UI")]
     [SerializeField] private Transform slimeCanvas;
     [SerializeField] private TextMeshProUGUI stageText;
 
     [SerializeField] private GameObject NextStagePanel;
     [SerializeField] private Transform SlimeActionGroup;
 
-    [SerializeField] private GameObject[] _slimes;
-    [SerializeField] private int _stageIndex = 0;
-
-    private ObjectPoolManager _pooler;
+    
     private SlimeBase _currentSlime;
 
+    [Space, Header("Setting")]
+    [SerializeField, Tooltip("슬라임들의 순서를 결정")]
+    private GameObject[] _slimes;
 
-    void Awake()
-    {
-        _pooler = GetComponent<ObjectPoolManager>();
-    }
+    [SerializeField, Tooltip("(테스트용) 시작 스테이지 / 실제 스테이지 숫자 - 1로 기입")]
+    private int _stageIndex = 0;
+
     void Start()
     {
         _currentSlime = Instantiate(_slimes[_stageIndex]).GetComponent<SlimeBase>();
         _currentSlime.Init(this);
+        GameManager.Instance.CurTurns = _currentSlime.DefaltTurns;
         stageText.text = $"Stage {_stageIndex + 1}";
     }
 
@@ -43,7 +43,8 @@ public class SlimeManager : MonoBehaviour
         {
             _currentSlime = Instantiate(_slimes[_stageIndex]).GetComponent<SlimeBase>();
             _currentSlime.Init(this);
-            
+            GameManager.Instance.CurTurns = _currentSlime.DefaltTurns;
+
             stageText.text = $"Stage {_stageIndex + 1}";
             NextStagePanel.SetActive(false);
 

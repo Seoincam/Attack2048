@@ -237,10 +237,41 @@ public class SlimeActionManager : MonoBehaviour
     // 이동 (7 스테이지)
     private void Translocate7()
     {
-        GameObject obj = _pooler.GetObject(30, _slimeActionGroup);
-        Translocate7 translocate = obj.GetComponent<Translocate7>();
-        translocate._particleGroup = _particleGroup;
-        translocate.Init(_pooler);
+        // Vertical or Horizontal
+        int random = Random.Range(0,2);
+
+        // a, b
+        int[] ab = new int[2];
+        ab[0] = Random.Range(0, 5);
+        while (true)
+        {
+            int value = Random.Range(0, 5);
+            if (value != ab[0])
+            {
+                ab[1] = value;
+                break;
+            }
+        }
+
+        if (random == 0)
+        {
+            // Vertical
+            GameObject obj = _pooler.GetObject(30, _slimeActionGroup);
+            Translocate7Vertical translocate = obj.GetComponent<Translocate7Vertical>();
+            translocate._particleGroup = _particleGroup;
+            translocate.Init(ab.Min(), ab.Max(), _pooler);
+        }
+        else
+        {
+            // Horizontal
+            GameObject obj = _pooler.GetObject(32, _slimeActionGroup);
+            Translocate7Horizontal translocate = obj.GetComponent<Translocate7Horizontal>();
+            translocate._particleGroup = _particleGroup;
+            translocate.Init(ab.Min(), ab.Max(), _pooler);
+        }
+
+
+
     }
 
     private void ReverseMove()

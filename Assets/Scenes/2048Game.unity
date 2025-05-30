@@ -1163,7 +1163,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   IsReversed: 0
-  maxTurns: 300
   probablity_4: 15
   clearValue: 128
   TilePrefabs:
@@ -1319,6 +1318,7 @@ MonoBehaviour:
   - {fileID: 2215066831472989985, guid: e7b9b352690e44e3293fe0511191f0b7, type: 3}
   - {fileID: 617496380150377004, guid: 43938d92f73704ad8895ad801fe2523a, type: 3}
   - {fileID: 1811434947358909584, guid: aa2a6893ea7f545caa122dd812b54b1b, type: 3}
+  - {fileID: 617496380150377004, guid: 9037c0fb38f13454f9984123d820720f, type: 3}
 --- !u!114 &1024858054
 MonoBehaviour:
   m_ObjectHideFlags: 0

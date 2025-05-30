@@ -100,7 +100,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: db7e931d5ff13477ba11e1936b6ab3b0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 100
+  DefaltTurns: 300
   PetrifyInterval: 3
   _petrifyCounter: 0
   WallInterval: 4

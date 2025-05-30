@@ -100,7 +100,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9b4fd83987e5a43a3b8116aad1204d64, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 100
+  DefaltTurns: 300
   ImprisionInterval: 3
   _imprisionCounter: 0
   ForcedMoveInterval: 7

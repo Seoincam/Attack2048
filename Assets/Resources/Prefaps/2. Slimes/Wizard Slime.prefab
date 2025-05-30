@@ -100,6 +100,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6c324a74a7a954fcca5536f6cdffa4b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  DefaltTurns: 300
   ReverseMoveInterval: 5
   _reverseMoveCounter: 0
   TranslocateInterval: 10

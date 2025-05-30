@@ -993,7 +993,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2c05c6fba356e45d0b0554ea9ebc4a66, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 30
+  DefaltTurns: 300
   WallInterval: 3
   _wallCounter: 0
   DeleteInterval: 3

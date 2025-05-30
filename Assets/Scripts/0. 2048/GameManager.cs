@@ -44,7 +44,7 @@ public class GameManager : MonoBehaviour, INewTurnListener
     private bool _canGetInput; // 입력을 받나? (GameManager 내부에서 설정)
     public bool IsPaused { get; set; } // 멈췄나? (설정, 도감, 상점, 후처리 등 실행중인가?)
     public bool CanMove { get => _canGetInput && !IsPaused; }
-    public bool IsReversed = false; // 상하좌우 반전중인가?
+    [HideInInspector] public bool IsReversed = false; // 상하좌우 반전중인가?
 
     private int _curTurns;
     public int CurTurns
@@ -65,7 +65,6 @@ public class GameManager : MonoBehaviour, INewTurnListener
 
 
     [Header("Setting")]
-    [SerializeField, Tooltip("최대 턴")] private int maxTurns;
     [SerializeField, Tooltip("스폰에서 4가 나올 확률")] private int probablity_4 = 15;
     [SerializeField, Tooltip("클리어 조건")] private int clearValue = 128;
 
@@ -113,7 +112,6 @@ public class GameManager : MonoBehaviour, INewTurnListener
 
     void Start()
     {
-        CurTurns = maxTurns;
         Debug.Log("게임 시작!");
 
         Spawn();
@@ -142,10 +140,10 @@ public class GameManager : MonoBehaviour, INewTurnListener
         CurTurns--;
         if (CurTurns <= 0)
         {
-            Debug.Log("이동 횟수 소진! 게임 종료!");
-            ResetTileArray();
-            CurTurns = maxTurns;
-            Debug.Log($"게임 재시작! 이동 횟수: {CurTurns}");
+            // Debug.Log("이동 횟수 소진! 게임 종료!");
+            // ResetTileArray();
+            // CurTurns = maxTurns;
+            // Debug.Log($"게임 재시작! 이동 횟수: {CurTurns}");
         }
 
         Spawn();
@@ -438,7 +436,7 @@ public class GameManager : MonoBehaviour, INewTurnListener
             if (TileArray[x2, y2].GetComponent<Tile>().value >= 8) { _pointManager.GetPoint(TileArray[x2, y2].GetComponent<Tile>().value); }
 
             // 128 이상 타일 만들면 클리어
-            if (TileArray[x2, y2].GetComponent<Tile>().value >= clearValue) { GetComponent<SlimeManager>().OnGameClear(); }
+            if (TileArray[x2, y2].GetComponent<Tile>().value >= clearValue) { GetComponent<StageManager>().OnGameClear(); }
         }
     }
 
