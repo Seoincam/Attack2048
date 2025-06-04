@@ -5,6 +5,7 @@
 
 using System.Collections;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class StoreManager : MonoBehaviour
 {    
@@ -84,20 +85,26 @@ public class StoreManager : MonoBehaviour
 
     public void PreventDestroyBtn()
     {
+        if (GameManager.Instance.IsPaused) return;
+
         // 포인트 부족하면 return 
-        if( !_pointManager.CheckPoint(PreventDestroyCost) ) return;
+        if (!_pointManager.CheckPoint(PreventDestroyCost)) return;
         IsPreventing = true;
     }
 
     public void DestoryTileBtn()
     {
+        if (GameManager.Instance.IsPaused) return;
+
         // 포인트 부족하면 return 
-        if( !_pointManager.CheckPoint(DestoryTileCost) ) return;
+        if (!_pointManager.CheckPoint(DestoryTileCost)) return;
         IsDestroying = true;
     }
 
     public void AddTurnBtn()
     {
+        if (GameManager.Instance.IsPaused) return;
+
         // 포인트 부족하면 return 
         if (!_pointManager.CheckPoint(AddTurnCost)) return;
         _pointManager.UsePoint(AddTurnCost);
