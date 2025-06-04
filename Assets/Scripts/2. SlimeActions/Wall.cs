@@ -12,11 +12,10 @@ public class Wall : SlimeActionBase
     [SerializeField] private Text lifeText;
 
     // Wall의 실제 위치를 지정하고 gamemanager에 알림
-    public void Init(int x1, int y1, int x2, int y2, ObjectPoolManager pooler)
+    public void Init(int x1, int y1, int x2, int y2)
     {
         Subscribe_CountDown();
         _lifeCounter = Life;
-        _pooler = pooler;
         lifeText.text = _lifeCounter.ToString();
 
         this.x1 = x1;

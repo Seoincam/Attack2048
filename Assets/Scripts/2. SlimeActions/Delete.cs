@@ -25,11 +25,11 @@ public class Delete : SlimeActionBase
     }
 
 
-    public void Init(int x, int y, bool isStage6, ObjectPoolManager pooler)
+    public void Init(int x, int y, bool isStage6)
     {
         if (isStage6) Life = LifeForStage6;
 
-        base.Init(x, y, pooler);
+        base.Init(x, y);
 
         _x = x; _y = y;
         GameManager.Instance.ObstacleArray[_x, _y].PlaceDelete();

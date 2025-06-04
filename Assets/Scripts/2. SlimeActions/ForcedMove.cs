@@ -17,9 +17,14 @@ public class ForcedMove : SlimeActionBase
         {ForcedMovedir.Right, Vector3.right}
     };
 
+    void Start()
+    {
+        _hasEffect = false;
+    }
+
     public void Init()
     {
-        base.Init(-1, 0, null);
+        base.Init(-1, 0);
         GameManager G = GameManager.Instance;
         transform.position = G.LocateTile(_x, _y);
         // 최대 10회까지 무작위 방향 시도

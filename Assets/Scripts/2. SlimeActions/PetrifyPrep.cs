@@ -11,17 +11,17 @@ public class PetrifyPrep : SlimeActionBase
 {
     protected int _x, _y; // Square 배열 상의 현재 위치
     [SerializeField] private Text lifeText;
-    
-    protected Transform _slimeActionGroup;
 
-    public void Init(int x, int y, ObjectPoolManager pooler, Transform slimeActionGroup)
+    void Start()
     {
-        base.Init(x, y, pooler);
+        _hasEffect = false;
+    }
+
+    public override void Init(int x, int y)
+    {
+        base.Init(x, y);
 
         _x = x; _y = y;
-
-        _pooler = pooler;
-        _slimeActionGroup = slimeActionGroup;
 
         lifeText.text = _lifeCounter.ToString();
         GameManager.Instance.ObstacleArray[x, y].PlacePetrifyPrep();
@@ -45,19 +45,17 @@ public class PetrifyPrep : SlimeActionBase
 
         G.ObstacleArray[_x, _y].RemovePetrifyPrep();
         
-        // null이면 실행
-        // null 아니고 보호 아니면 실행
-        // null 아니고 보호면 실행x
+        // Tile이 null이면 실행
+        // Tile이 null 아니고 보호 아니면 실행
+        // Tile이 null 아니고 보호면 실행x
         if (G.TileArray[_x, _y] == null || (G.TileArray[_x, _y] != null && !G.TileArray[_x, _y].GetComponent<Tile>().IsProtected))
         {
             G.DeleteTile(_x, _y);
-            GameObject obj = _pooler.GetObject(22, _slimeActionGroup);
+            GameObject obj = ObjectPoolManager.instance.GetObject(22, Group.SlimeAction);
             Petrify petrify = obj.GetComponent<Petrify>();
-            petrify._particleGroup = _particleGroup;
-            petrify.Init(_x, _y, _pooler);
+            petrify.Init(_x, _y);
         }
 
-        _pooler = null;
         base.Execute();
     }
 }

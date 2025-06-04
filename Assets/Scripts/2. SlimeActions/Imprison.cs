@@ -10,9 +10,9 @@ public class Imprison : SlimeActionBase
 
     [SerializeField] private Text lifeText;
 
-    public override void Init(int x, int y, ObjectPoolManager pooler)
+    public override void Init(int x, int y)
     {
-        base.Init(x, y, pooler);
+        base.Init(x, y);
 
         _x = x; _y = y;
         GameManager.Instance.ObstacleArray[x, y].PlaceImprison();

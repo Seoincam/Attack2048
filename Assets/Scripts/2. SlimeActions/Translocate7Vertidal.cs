@@ -15,8 +15,12 @@ public class Translocate7Vertical : SlimeActionBase
     [SerializeField] private Text[] lifeTexts;
     private SpriteRenderer[] tList;
 
+    private ObjectPoolManager _pooler;
+
     void Start()
     {
+        _pooler = ObjectPoolManager.instance;
+
         tList = new SpriteRenderer[]
         {
             t_a_4, t_a_3, t_a_2, t_a_1, t_a_0,
@@ -24,9 +28,9 @@ public class Translocate7Vertical : SlimeActionBase
         };
     }
 
-    public override void Init(int a, int b, ObjectPoolManager pooler)
+    public override void Init(int a, int b)
     {
-        base.Init(-1, 0, pooler);
+        base.Init(-1, 0);
         _a = a;
         _b = b;
 
@@ -102,18 +106,15 @@ public class Translocate7Vertical : SlimeActionBase
         // G.ObstacleArray[4, 4].RemoveTranslocate();
         // G.ObstacleArray[4, 0].RemoveTranslocate();
 
-        if (_pooler != null)
+        for (int i = 0; i < 5; i++)
         {
-            for (int i = 0; i < 5; i++)
-            {
-                ParticleSystem particle = _pooler.GetObject(27, _particleGroup).GetComponent<ParticleSystem>();
-                particle.transform.position = G.LocateTile(_a, i);
-                particle.Play();
+            ParticleSystem particle = _pooler.GetObject(27, Group.Effect).GetComponent<ParticleSystem>();
+            particle.transform.position = G.LocateTile(_a, i);
+            particle.Play();
 
-                particle = _pooler.GetObject(27, _particleGroup).GetComponent<ParticleSystem>();
-                particle.transform.position = G.LocateTile(_b, i);
-                particle.Play();
-            }
+            particle = _pooler.GetObject(27, Group.Effect).GetComponent<ParticleSystem>();
+            particle.transform.position = G.LocateTile(_b, i);
+            particle.Play();
         }
 
         StartCoroutine(DestroySelf());

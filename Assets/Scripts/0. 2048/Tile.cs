@@ -36,12 +36,21 @@ public class Tile : MonoBehaviour
         EventManager.Unsubscribe(GameEvent.NewTurn, FinishProtect);
     }
 
+    // 버그 방지
+    void OnDisable()
+    {
+        if (IsProtected)
+        {
+            protectText.SetActive(false);
+            IsProtected = false;
+        }
+    }
+
+
+
     void Update()
     {
-        if (move)
-        {
-            Move(_x2, _y2, _combine);
-        }
+        if (move) Move(_x2, _y2, _combine);
     }
 
     public void Init(int x, int y)
@@ -75,7 +84,7 @@ public class Tile : MonoBehaviour
             if (combine)
             {
                 _combine = false;
-                Destroy(gameObject);
+                gameObject.SetActive(false);
             }
         }
     }

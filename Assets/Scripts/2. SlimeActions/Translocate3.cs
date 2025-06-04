@@ -12,6 +12,8 @@ public class Translocate3 : SlimeActionBase
     [SerializeField] private Text[] lifeTexts;
     private SpriteRenderer[] tList;
 
+    private ObjectPoolManager _pooler;
+
     void Start()
     {
         GameManager G = GameManager.Instance;
@@ -25,11 +27,13 @@ public class Translocate3 : SlimeActionBase
         {
             t_0_0, t_0_4, t_4_4, t_4_0
         };
+
+        _pooler = ObjectPoolManager.instance;
     }
 
-    public void Init(ObjectPoolManager pooler)
+    public void Init()
     {
-        base.Init(-1, 0, pooler);
+        base.Init(-1, 0);
         GameManager G = GameManager.Instance;
 
         G.ObstacleArray[0, 0].PlaceTranslocate();
@@ -81,24 +85,23 @@ public class Translocate3 : SlimeActionBase
         G.ObstacleArray[4, 4].RemoveTranslocate();
         G.ObstacleArray[4, 0].RemoveTranslocate();
 
-        if (_pooler != null)
-        {
-            ParticleSystem particle = _pooler.GetObject(27, _particleGroup).GetComponent<ParticleSystem>();
-            particle.transform.position = G.LocateTile(0, 4);
-            particle.Play();
 
-            particle = _pooler.GetObject(27, _particleGroup).GetComponent<ParticleSystem>();
-            particle.transform.position = G.LocateTile(4, 4);
-            particle.Play();
+        ParticleSystem particle = _pooler.GetObject(27, Group.Effect).GetComponent<ParticleSystem>();
+        particle.transform.position = G.LocateTile(0, 4);
+        particle.Play();
 
-            particle = _pooler.GetObject(27, _particleGroup).GetComponent<ParticleSystem>();
-            particle.transform.position = G.LocateTile(4, 0);
-            particle.Play();
+        particle = _pooler.GetObject(27, Group.Effect).GetComponent<ParticleSystem>();
+        particle.transform.position = G.LocateTile(4, 4);
+        particle.Play();
 
-            particle = _pooler.GetObject(27, _particleGroup).GetComponent<ParticleSystem>();
-            particle.transform.position = G.LocateTile(0, 0);
-            particle.Play();
-        }
+        particle = _pooler.GetObject(27, Group.Effect).GetComponent<ParticleSystem>();
+        particle.transform.position = G.LocateTile(4, 0);
+        particle.Play();
+
+        particle = _pooler.GetObject(27, Group.Effect).GetComponent<ParticleSystem>();
+        particle.transform.position = G.LocateTile(0, 0);
+        particle.Play();
+        
 
         StartCoroutine(DestroySelf());
     }

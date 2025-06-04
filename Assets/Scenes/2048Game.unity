@@ -1141,7 +1141,6 @@ GameObject:
   - component: {fileID: 1024858050}
   - component: {fileID: 1024858049}
   - component: {fileID: 1024858051}
-  - component: {fileID: 1024858053}
   - component: {fileID: 1024858052}
   m_Layer: 0
   m_Name: Managers
@@ -1183,7 +1182,7 @@ MonoBehaviour:
   - {fileID: 6047435193558059963, guid: 853aa6daa65e1447f8299c5198d83afe, type: 3}
   - {fileID: 691568085597732685, guid: cc0991b7fd03045dbbed2909b0bfa763, type: 3}
   - {fileID: 2976873772146142562, guid: 6ea36061cca524241a58bc733e410901, type: 3}
-  TileGroup: {fileID: 1197994822}
+  TileGroup: {fileID: 0}
   remainingTurnsText: {fileID: 1769213545}
   forcedDirection: 0
 --- !u!4 &1024858048
@@ -1242,8 +1241,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 856d06f606ebf4b3e878541849f95668, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _slimeActionGroup: {fileID: 1323752554}
-  _particleGroup: {fileID: 1334018909}
 --- !u!114 &1024858051
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1273,52 +1270,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc0c942819fc34bac9265ff84f3c4b36, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &1024858053
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1024858046}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 171b78762011e45499c6e336999043ef, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _prefabs:
-  - {fileID: 4217666222071071648, guid: f56ed41e5fd5a4ae68b595a55093bae5, type: 3}
-  - {fileID: 7246910368932569499, guid: e56e7b03930d3498aa769aadb72f3105, type: 3}
-  - {fileID: 4249103774624802302, guid: 4e44cafc108c54228b89a626c8794afb, type: 3}
-  - {fileID: 8581058990100385254, guid: faaf8ddfffc714160a1eefb703ab1c7a, type: 3}
-  - {fileID: 1610195311363792283, guid: 5a3feaf7445374517801d4248002c0ca, type: 3}
-  - {fileID: 7473292534814936554, guid: fe97399aa7b9a4b09bd513e7344309f1, type: 3}
-  - {fileID: 591825025734421439, guid: 6688824439290428b9925ffdaa00c4f9, type: 3}
-  - {fileID: 3430775068697406638, guid: facfd1f1929924a8f8ff1279442ee55d, type: 3}
-  - {fileID: 7231738369902290108, guid: cb27b20e920a24b15a65bfff48937859, type: 3}
-  - {fileID: 3714546753573716610, guid: 04539598f758f48e7bf3b56017819214, type: 3}
-  - {fileID: 6382889855207698209, guid: 15de4fe7f1c9d4436b22b24d477924fd, type: 3}
-  - {fileID: 234409448983125792, guid: 3cb39d0ba2e914eb287488e7a86869fa, type: 3}
-  - {fileID: 744100217969976221, guid: 212dcdb280c264d9aac90d58b85e853b, type: 3}
-  - {fileID: 7565506653831169249, guid: 023db28a590074cbc95c65ca3249e2bb, type: 3}
-  - {fileID: 6047435193558059963, guid: 853aa6daa65e1447f8299c5198d83afe, type: 3}
-  - {fileID: 691568085597732685, guid: cc0991b7fd03045dbbed2909b0bfa763, type: 3}
-  - {fileID: 2976873772146142562, guid: 6ea36061cca524241a58bc733e410901, type: 3}
-  - {fileID: 839613627661157959, guid: b1b5b36f236e6406a9100e2f3ded7257, type: 3}
-  - {fileID: 1811434947358909584, guid: 20dad5c7a239a45a5a81fb7b5afc1d5d, type: 3}
-  - {fileID: 4276510053208842761, guid: 7a2649e00923d4083a33ea9301438cae, type: 3}
-  - {fileID: 3541469622638263591, guid: c6df75a33cba0434abd8129dafc72c61, type: 3}
-  - {fileID: 1780080270134695812, guid: 3f675819c2522407fba15937c3792a29, type: 3}
-  - {fileID: 1811434947358909584, guid: c78b3dbe301f14a99ba4af06d2fd2114, type: 3}
-  - {fileID: 1811434947358909584, guid: cf55f8a45c61142b085b84e322eece83, type: 3}
-  - {fileID: 617496380150377004, guid: f9e407c33659947c4a54684c1967b68c, type: 3}
-  - {fileID: 828993043930697507, guid: a4dca54e46d6448b48fc857d53f9c492, type: 3}
-  - {fileID: 6807943565604509695, guid: 45faf108bc874452f86b3575dfec848d, type: 3}
-  - {fileID: 243869827264876676, guid: 1ba3aec4562b840c3a8fe78014ff645e, type: 3}
-  - {fileID: 6807943565604509695, guid: 45faf108bc874452f86b3575dfec848d, type: 3}
-  - {fileID: 2215066831472989985, guid: e7b9b352690e44e3293fe0511191f0b7, type: 3}
-  - {fileID: 617496380150377004, guid: 43938d92f73704ad8895ad801fe2523a, type: 3}
-  - {fileID: 1811434947358909584, guid: aa2a6893ea7f545caa122dd812b54b1b, type: 3}
-  - {fileID: 617496380150377004, guid: 9037c0fb38f13454f9984123d820720f, type: 3}
 --- !u!114 &1024858054
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1334,7 +1285,7 @@ MonoBehaviour:
   slimeCanvas: {fileID: 457624604}
   stageText: {fileID: 1283577746}
   NextStagePanel: {fileID: 366811878}
-  SlimeActionGroup: {fileID: 1323752554}
+  SlimeActionGroup: {fileID: 0}
   _slimes:
   - {fileID: 4141383320853085762, guid: 5969765332a08407f99ce79af83cbe30, type: 3}
   - {fileID: 6597955752300780520, guid: ff2f334fd53c5478cbdbd71191c691c5, type: 3}
@@ -1343,7 +1294,7 @@ MonoBehaviour:
   - {fileID: 72323390830630359, guid: b30fc5131fc8a4c9e86db2a81071791b, type: 3}
   - {fileID: 4186281065060182059, guid: af4876b49f3c847f4a9edb05071db6d3, type: 3}
   - {fileID: 3445808771769029929, guid: 554366196dd324ed7b546e945c139e0f, type: 3}
-  _stageIndex: 6
+  _stageIndex: 0
 --- !u!1 &1038038202
 GameObject:
   m_ObjectHideFlags: 0
@@ -1681,37 +1632,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1155411060}
   m_CullTransparentMesh: 1
---- !u!1 &1197994821
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1197994822}
-  m_Layer: 0
-  m_Name: '[ Tile Group ]'
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1197994822
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1197994821}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1208836823
 GameObject:
   m_ObjectHideFlags: 0
@@ -2343,68 +2263,6 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: -1.59, z: 0}
   m_LocalScale: {x: 0.5, y: 0.5, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1323752553
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1323752554}
-  m_Layer: 0
-  m_Name: '[ Slime Action Group ]'
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1323752554
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1323752553}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1334018908
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1334018909}
-  m_Layer: 0
-  m_Name: '[ Effect Group ]'
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1334018909
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1334018908}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -4352,6 +4210,3 @@ SceneRoots:
   - {fileID: 457624604}
   - {fileID: 317869294}
   - {fileID: 1322250915}
-  - {fileID: 1197994822}
-  - {fileID: 1323752554}
-  - {fileID: 1334018909}

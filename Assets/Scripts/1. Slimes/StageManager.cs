@@ -8,7 +8,6 @@ public class StageManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI stageText;
 
     [SerializeField] private GameObject NextStagePanel;
-    [SerializeField] private Transform SlimeActionGroup;
 
     
     private SlimeBase _currentSlime;
@@ -49,7 +48,7 @@ public class StageManager : MonoBehaviour
             NextStagePanel.SetActive(false);
 
             // 슬라임 액션 비활성화
-            foreach (Transform action in SlimeActionGroup)
+            foreach (Transform action in ObjectPoolManager.instance.SlimeActionGroup)
             {
                 if (!action.gameObject.activeSelf) continue;
                 SlimeActionBase slimeAction = action.GetComponent<SlimeActionBase>();
@@ -60,8 +59,6 @@ public class StageManager : MonoBehaviour
             GameManager.Instance.ResetTileArray();
             // 장애물 배열 초기화
             GameManager.Instance.ResetObstacleArray();
-            // 턴 초기화
-            GameManager.Instance.ResetTurn();
 
             GameManager.Instance.IsPaused = false;
         }

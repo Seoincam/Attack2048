@@ -7,7 +7,7 @@ public class LobbyButtons : MonoBehaviour
 
     public void GameStart()
     {
-        SceneManager.LoadScene(1);
+        SceneManager.LoadScene(2);
     }
 
     public void OpenCredit()

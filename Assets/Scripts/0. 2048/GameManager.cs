@@ -105,7 +105,7 @@ public class GameManager : MonoBehaviour, INewTurnListener
 
         _pointManager = GetComponent<PointManager>();
         _countManager = GetComponent<CountDownManager>();
-        _pooler = GetComponent<ObjectPoolManager>();
+        _pooler = ObjectPoolManager.instance;
         Subscribe_NewTurn();
 
     }
@@ -423,7 +423,7 @@ public class GameManager : MonoBehaviour, INewTurnListener
             DeleteTile(x2, y2);
             TileArray[x1, y1] = null;
 
-            TileArray[x2, y2] = _pooler.GetObject(j + 1, TileGroup);
+            TileArray[x2, y2] = _pooler.GetObject(j + 1, Group.Tile);
             TileArray[x2, y2].transform.position = LocateTile(x2, y2);
 
             TileArray[x2, y2].GetComponent<Tile>().value = value * 2;
@@ -464,13 +464,13 @@ public class GameManager : MonoBehaviour, INewTurnListener
 
         if (Random.Range(1, 100) > probablity_4)
         {
-            TileArray[x, y] = _pooler.GetObject(0, TileGroup);
+            TileArray[x, y] = _pooler.GetObject(0, Group.Tile);
             TileArray[x, y].transform.position = LocateTile(x, y);
             TileArray[x, y].GetComponent<Tile>().value = 2;
         }
         else
         {
-            TileArray[x, y] = _pooler.GetObject(1, TileGroup);
+            TileArray[x, y] = _pooler.GetObject(1, Group.Tile);
             TileArray[x, y].transform.position = LocateTile(x, y);
             TileArray[x, y].GetComponent<Tile>().value = 4;
         }
@@ -491,7 +491,7 @@ public class GameManager : MonoBehaviour, INewTurnListener
 
         int index = (int)Mathf.Log(value, 2) - 1;
 
-        TileArray[x, y] = _pooler.GetObject(index, TileGroup);
+        TileArray[x, y] = _pooler.GetObject(index, Group.Tile);
         TileArray[x, y].transform.position = LocateTile(x, y);
 
         Tile tile = TileArray[x, y].GetComponent<Tile>();
@@ -526,13 +526,6 @@ public class GameManager : MonoBehaviour, INewTurnListener
                 ObstacleArray[x, y].ResetObstacle();
             }
     }
-
-    public void ResetTurn()
-    {
-        //임시
-        CurTurns = 300;
-    }
-
 
 
     // - - - - - - - - - - - - - - - - - - - - -

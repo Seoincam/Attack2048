@@ -1,0 +1,38 @@
+using System.Collections;
+using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
+
+public class LoadingSceneController : MonoBehaviour
+{
+    [SerializeField] private Slider progressBar;
+
+    void Start()
+    {
+        StartCoroutine(LoadSceneAsync("2048Game"));
+    }
+
+    private IEnumerator LoadSceneAsync(string sceneName)
+    {
+        AsyncOperation operation = SceneManager.LoadSceneAsync(sceneName);
+        operation.allowSceneActivation = false;
+        ObjectPoolManager.instance.Init();
+
+        float timer = 1.0f;
+        while (!operation.isDone)
+        {
+            float progress = Mathf.Clamp01((operation.progress / 0.9f + ObjectPoolManager.instance._initProgress) / 2);
+            // 너무 빨리 전환 방지
+            if (timer > 0) progress *= 0.2f;
+            progressBar.value = progress;
+
+            //로딩 끝나면 전환
+            if (progress >= 0.9f && ObjectPoolManager.instance.IsInitialized) operation.allowSceneActivation = true;
+
+            timer -= Time.deltaTime;
+            yield return null;
+        }
+    }
+    
+    // ToDo: 씬 전환되면서 미리 ObjectPooler에 오브젝트 할당해서 게임 중 성능 최적화
+}

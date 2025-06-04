@@ -15,9 +15,10 @@ public abstract class SlimeActionBase : MonoBehaviour, ICountDownListener
 
     [Tooltip("수명")][SerializeField] protected int Life; // Inspector에서 설정
     [Tooltip("남은 수명")][SerializeField] protected int _lifeCounter;
-    protected ObjectPoolManager _pooler;
 
-    [HideInInspector] public Transform _particleGroup;
+    // 파티클을 재생하는가?
+    protected bool _hasEffect = true;
+
     protected SpriteRenderer _renderer;
 
 
@@ -30,11 +31,10 @@ public abstract class SlimeActionBase : MonoBehaviour, ICountDownListener
     }
 
     // x = -1: 좌표 설정 안 함
-    public virtual void Init(int x, int y, ObjectPoolManager pooler)
+    public virtual void Init(int x, int y)
     {
         Subscribe_CountDown();
         _lifeCounter = Life;
-        _pooler = pooler;
         
         if (x != -1)
             transform.position = GameManager.Instance.LocateTile(x, y);
@@ -63,14 +63,13 @@ public abstract class SlimeActionBase : MonoBehaviour, ICountDownListener
     }
 
     // 수명이 다하면 실행할 로직.
+    // 파라메터 bool hasEffect: 파티클을 실행하는가?
     protected virtual void Execute()
     {
-        if (_pooler != null)
-        {
-            ParticleSystem particle = _pooler.GetObject(27, _particleGroup).GetComponent<ParticleSystem>();
-            particle.transform.position = transform.position;
-            particle.Play();
-        }
+        
+        ParticleSystem particle = ObjectPoolManager.instance.GetObject(27, Group.Effect).GetComponent<ParticleSystem>();
+        particle.transform.position = transform.position;
+        particle.Play();
 
         StartCoroutine(DestroySelf());
     }

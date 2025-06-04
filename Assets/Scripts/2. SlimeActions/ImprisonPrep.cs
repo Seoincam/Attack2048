@@ -11,18 +11,19 @@ public class ImprisonPrep : SlimeActionBase
     protected int _x, _y; // Square 배열 상의 현재 위치
     [SerializeField] private Text lifeText;
 
-    protected Transform _slimeActionGroup;
-
-
-    public void Init(int x, int y, ObjectPoolManager pooler, Transform slimeActionGroup)
+    void Start()
     {
-        base.Init(x, y, pooler);
+        _hasEffect = false;
+    }
+
+    public override void Init(int x, int y)
+    {
+        base.Init(x, y);
 
         _x = x; _y = y;
         GameManager.Instance.ObstacleArray[x, y].PlaceImprisonPrep();
 
-        _slimeActionGroup = slimeActionGroup;
-        lifeText.text = _lifeCounter.ToString(); 
+        lifeText.text = _lifeCounter.ToString();
     }
     
     void Update()
@@ -40,13 +41,11 @@ public class ImprisonPrep : SlimeActionBase
     protected override void Execute()
     {
         GameManager.Instance.ObstacleArray[_x, _y].RemoveImprisonPrep();
-        GameObject obj = _pooler.GetObject(20, _slimeActionGroup);
+        GameObject obj = ObjectPoolManager.instance.GetObject(20, Group.SlimeAction);
         Imprison imprison = obj.GetComponent<Imprison>();
-        imprison._particleGroup = _particleGroup;
 
         // 위치 설정
-        imprison.Init(_x, _y, _pooler);
-        _pooler = null;
+        imprison.Init(_x, _y);
         base.Execute();
     }
 }
