@@ -12,7 +12,7 @@ public enum Group { Tile, Effect, SlimeAction }
 public class ObjectPoolManager : MonoBehaviour
 {
     public static ObjectPoolManager instance;
-    
+
     [SerializeField] private List<GameObject> _prefabs;
     private List<List<GameObject>> pools;
     private Dictionary<Group, Transform> _groupMap = new();
@@ -50,7 +50,7 @@ public class ObjectPoolManager : MonoBehaviour
         _groupMap[Group.SlimeAction] = SlimeActionGroup;
 
         float numerator = 0;
-        float denominator = _prefabs.Count + 6 + 5 + 10; // prefabs.Count + i + j + k
+        float denominator = _prefabs.Count + 6 * 5 + 10; // prefabs.Count + i * j + k
 
         pools = new List<List<GameObject>>();
         for (int i = 0; i < _prefabs.Count; i++)
