@@ -30,8 +30,8 @@ public enum GameEvent
 public class EventManager
 {
     // Dictionary인 Events에 이벤트와 UnityAction형 리스트를 대응시켜서 저장
-    private static readonly IDictionary<GameEvent, List<UnityAction>> Events = new Dictionary<GameEvent, List<UnityAction>>();
-
+    private static IDictionary<GameEvent, List<UnityAction>> Events;
+    public static void InitEvents() => Events = new Dictionary<GameEvent, List<UnityAction>>();
 
     // 이벤트에 리스너(메서드)를 구독
     // 이벤트가 존재하지 않으면 새로 생성 후 구독

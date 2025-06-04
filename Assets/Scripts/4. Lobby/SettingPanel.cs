@@ -10,7 +10,6 @@ public class SettingPanel : MonoBehaviour
     {
         if (GameSetting.instance != null)
         {
-            Debug.Log("할당!");
             // GameSetting 싱글턴에 할당
             GameSetting.instance.SetPanel(_bgmSlider, _sfxSlider);
         }

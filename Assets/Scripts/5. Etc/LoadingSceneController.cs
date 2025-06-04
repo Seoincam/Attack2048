@@ -18,12 +18,12 @@ public class LoadingSceneController : MonoBehaviour
         operation.allowSceneActivation = false;
         ObjectPoolManager.instance.Init();
 
-        float timer = 1.0f;
+        float timer = 1.2f;
         while (!operation.isDone)
         {
-            float progress = Mathf.Clamp01((operation.progress / 0.9f + ObjectPoolManager.instance._initProgress) / 2);
+            float progress = Mathf.Clamp01(operation.progress / 0.9f * 0.2f + ObjectPoolManager.instance._initProgress * 0.8f);
             // 너무 빨리 전환 방지
-            if (timer > 0) progress *= 0.2f;
+            if (timer > 0) progress *= 0.25f;
             progressBar.value = progress;
 
             //로딩 끝나면 전환

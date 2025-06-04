@@ -6,6 +6,7 @@ public class StageManager : MonoBehaviour
     [Header("UI")]
     [SerializeField] private Transform slimeCanvas;
     [SerializeField] private TextMeshProUGUI stageText;
+    [SerializeField] private TextMeshProUGUI clearValueText;
 
     [SerializeField] private GameObject NextStagePanel;
 

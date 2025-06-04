@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 /*
     흐름 :
@@ -91,6 +92,11 @@ public class GameManager : MonoBehaviour, INewTurnListener
     // - - - - - - - - - - - - - - - - - - - - -
     void Awake()
     {
+        // 로딩 됐나 체크
+        if (ObjectPoolManager.instance == null) SceneManager.LoadScene("Lobby");
+
+        EventManager.InitEvents();
+
         // 싱글턴
         if (Instance == null) Instance = this;
         else Destroy(gameObject);
@@ -432,8 +438,8 @@ public class GameManager : MonoBehaviour, INewTurnListener
             TileArray[x2, y2].GetComponent<Tile>().y = y2;
             TileArray[x2, y2].tag = "Combine";
 
-            // 8 이상 타일 만들면 포인트 획득
-            if (TileArray[x2, y2].GetComponent<Tile>().value >= 8) { _pointManager.GetPoint(TileArray[x2, y2].GetComponent<Tile>().value); }
+            // 포인트 획득
+            if (TileArray[x2, y2].GetComponent<Tile>().value >= 4) { _pointManager.GetPoint(TileArray[x2, y2].GetComponent<Tile>().value); }
 
             // 128 이상 타일 만들면 클리어
             if (TileArray[x2, y2].GetComponent<Tile>().value >= clearValue) { GetComponent<StageManager>().OnGameClear(); }
