@@ -36,11 +36,6 @@ public class ObjectPoolManager : MonoBehaviour
 
     public void Init()
     {
-        StartCoroutine(InitAsync());
-    }
-
-    private IEnumerator InitAsync()
-    {
         DontDestroyOnLoad(TileGroup);
         DontDestroyOnLoad(EffectGroup);
         DontDestroyOnLoad(SlimeActionGroup);
@@ -49,6 +44,11 @@ public class ObjectPoolManager : MonoBehaviour
         _groupMap[Group.Effect] = EffectGroup;
         _groupMap[Group.SlimeAction] = SlimeActionGroup;
 
+        StartCoroutine(InitAsync());
+    }
+
+    private IEnumerator InitAsync()
+    {
         float numerator = 0;
         float denominator = _prefabs.Count + 6 * 5 + 10; // prefabs.Count + i * j + k
 
@@ -60,6 +60,7 @@ public class ObjectPoolManager : MonoBehaviour
         }
         yield return null;
 
+        // 타일 생성
         for (int i = 0; i < 6; i++)
             for (int j = 0; j < 5; j++)
             {
@@ -68,6 +69,7 @@ public class ObjectPoolManager : MonoBehaviour
                 yield return null;
             }
 
+        // 파티클 생성
         for (int k = 0; k < 10; k++)
         {
             InitObject(27, Group.Effect);

@@ -994,6 +994,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DefaltTurns: 300
+  ClearValue: 128
   WallInterval: 3
   _wallCounter: 0
   DeleteInterval: 3

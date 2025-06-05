@@ -22,10 +22,7 @@ public class StageManager : MonoBehaviour
 
     void Start()
     {
-        _currentSlime = Instantiate(_slimes[_stageIndex]).GetComponent<SlimeBase>();
-        _currentSlime.Init(this);
-        GameManager.Instance.CurTurns = _currentSlime.DefaltTurns;
-        stageText.text = $"Stage {_stageIndex + 1}";
+        SpawnSlime(_stageIndex);
     }
 
     public void OnGameClear()
@@ -34,18 +31,27 @@ public class StageManager : MonoBehaviour
         GameManager.Instance.IsPaused = true;
     }
 
+    private void SpawnSlime(int index)
+    {
+        if (_currentSlime != null) _currentSlime.Die();
+
+        _currentSlime = Instantiate(_slimes[index]).GetComponent<SlimeBase>();
+        _currentSlime.Init(this);
+
+        GameManager.Instance.CurTurns = _currentSlime.DefaltTurns;
+        GameManager.Instance.ClearValue = _currentSlime.ClearValue;
+        clearValueText.text = $"Clear: {_currentSlime.ClearValue}";
+
+        stageText.text = $"Stage {index + 1}";
+    }
+
     public void NextStageButton()
     {
-        _currentSlime.Die();
         _stageIndex++;
 
         if (_stageIndex < _slimes.Length)
         {
-            _currentSlime = Instantiate(_slimes[_stageIndex]).GetComponent<SlimeBase>();
-            _currentSlime.Init(this);
-            GameManager.Instance.CurTurns = _currentSlime.DefaltTurns;
-
-            stageText.text = $"Stage {_stageIndex + 1}";
+            SpawnSlime(_stageIndex);
             NextStagePanel.SetActive(false);
 
             // 슬라임 액션 비활성화

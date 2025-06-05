@@ -1795,7 +1795,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   IsReversed: 0
   probablity_4: 15
-  clearValue: 128
   TilePrefabs:
   - {fileID: 4217666222071071648, guid: f56ed41e5fd5a4ae68b595a55093bae5, type: 3}
   - {fileID: 7246910368932569499, guid: e56e7b03930d3498aa769aadb72f3105, type: 3}
@@ -1916,7 +1915,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slimeCanvas: {fileID: 457624604}
   stageText: {fileID: 1283577746}
-  clearValueText: {fileID: 0}
+  clearValueText: {fileID: 1155411062}
   NextStagePanel: {fileID: 366811878}
   _slimes:
   - {fileID: 4141383320853085762, guid: 5969765332a08407f99ce79af83cbe30, type: 3}

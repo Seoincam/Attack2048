@@ -101,6 +101,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DefaltTurns: 300
+  ClearValue: 128
   ChangeInterval: 3
   _changeCounter: 0
   TranslocateInterval: 4

@@ -101,6 +101,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DefaltTurns: 300
+  ClearValue: 128
   PetrifyInterval: 3
   _petrifyCounter: 0
   WallInterval: 4

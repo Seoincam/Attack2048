@@ -63,13 +63,14 @@ public abstract class SlimeActionBase : MonoBehaviour, ICountDownListener
     }
 
     // 수명이 다하면 실행할 로직.
-    // 파라메터 bool hasEffect: 파티클을 실행하는가?
     protected virtual void Execute()
     {
-        
-        ParticleSystem particle = ObjectPoolManager.instance.GetObject(27, Group.Effect).GetComponent<ParticleSystem>();
-        particle.transform.position = transform.position;
-        particle.Play();
+        if (_hasEffect)
+        {
+            ParticleSystem particle = ObjectPoolManager.instance.GetObject(27, Group.Effect).GetComponent<ParticleSystem>();
+            particle.transform.position = transform.position;
+            particle.Play();
+        }
 
         StartCoroutine(DestroySelf());
     }

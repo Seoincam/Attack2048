@@ -6,8 +6,10 @@ public abstract class SlimeBase : MonoBehaviour, INewTurnListener
     // 필드
     // - - - - - - - - -     
     private StageManager _slimeManager;
-    public int DefaltTurns;
 
+    [Header("Setting")]
+    public int DefaltTurns;
+    public int ClearValue = 128;
 
 
     // - - - - - - - - 

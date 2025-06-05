@@ -58,6 +58,7 @@ public class GameManager : MonoBehaviour, INewTurnListener
         }
     }
 
+    public int ClearValue { get; set; }
 
     private const float xStart = -2.12f; //[0,0]의 x좌표와 y좌표, 그후 증가할때마다의 좌표 차이
     private const float yStart = -3.71f;
@@ -67,7 +68,6 @@ public class GameManager : MonoBehaviour, INewTurnListener
 
     [Header("Setting")]
     [SerializeField, Tooltip("스폰에서 4가 나올 확률")] private int probablity_4 = 15;
-    [SerializeField, Tooltip("클리어 조건")] private int clearValue = 128;
 
     [Space, Header("Object")]
     [SerializeField] private GameObject[] TilePrefabs;      // 2, 4, 8... 타일 프리팹 배열 (index = log2 - 1)
@@ -441,8 +441,8 @@ public class GameManager : MonoBehaviour, INewTurnListener
             // 포인트 획득
             if (TileArray[x2, y2].GetComponent<Tile>().value >= 4) { _pointManager.GetPoint(TileArray[x2, y2].GetComponent<Tile>().value); }
 
-            // 128 이상 타일 만들면 클리어
-            if (TileArray[x2, y2].GetComponent<Tile>().value >= clearValue) { GetComponent<StageManager>().OnGameClear(); }
+            // 클리어
+            if (TileArray[x2, y2].GetComponent<Tile>().value >= ClearValue) { GetComponent<StageManager>().OnGameClear(); }
         }
     }
 

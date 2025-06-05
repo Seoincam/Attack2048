@@ -16,7 +16,9 @@ public class LoadingSceneController : MonoBehaviour
     {
         AsyncOperation operation = SceneManager.LoadSceneAsync(sceneName);
         operation.allowSceneActivation = false;
-        ObjectPoolManager.instance.Init();
+
+        // 씬 전환되면서 미리 ObjectPooler에 오브젝트 생성해서 게임 중 성능 최적화
+        ObjectPoolManager.instance.Init(); 
 
         float timer = 1.2f;
         while (!operation.isDone)
@@ -34,5 +36,5 @@ public class LoadingSceneController : MonoBehaviour
         }
     }
     
-    // ToDo: 씬 전환되면서 미리 ObjectPooler에 오브젝트 할당해서 게임 중 성능 최적화
+    
 }
