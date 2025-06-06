@@ -27,7 +27,9 @@ public class Tile : MonoBehaviour
     {
         protectText.SetActive(false);
         IsProtected = false;
-        StartCoroutine(Unsubscribe());
+        
+        if (gameObject.activeSelf)
+            StartCoroutine(Unsubscribe());
     }
 
     private IEnumerator Unsubscribe()
@@ -43,6 +45,7 @@ public class Tile : MonoBehaviour
         {
             protectText.SetActive(false);
             IsProtected = false;
+            EventManager.Unsubscribe(GameEvent.NewTurn, FinishProtect);
         }
     }
 
