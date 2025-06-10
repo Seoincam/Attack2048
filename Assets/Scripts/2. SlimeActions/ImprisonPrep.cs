@@ -41,8 +41,6 @@ public class ImprisonPrep : SlimeActionBase, IShowLife, IMakeWarningEffect
     }
 
 
-
-
     // 로직
     // - - - - - - - - - - 
     public override void OnEnter_CountDownPhase()

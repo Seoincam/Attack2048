@@ -71,7 +71,6 @@ public class GameManager : MonoBehaviour, INewTurnListener
 
     [Space, Header("Object")]
     [SerializeField] private GameObject[] TilePrefabs;      // 2, 4, 8... 타일 프리팹 배열 (index = log2 - 1)
-    [SerializeField] private Transform TileGroup;
 
     [Space, Header("UI")]
     [SerializeField] private TextMeshProUGUI remainingTurnsText;

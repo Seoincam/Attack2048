@@ -6,7 +6,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class PetrifyPrep : SlimeActionBase, IShowLife
+public class PetrifyPrep : SlimeActionBase, IShowLife, IMakeWarningEffect
 {
     // 필드    
     // - - - - - - - - - - 
@@ -28,7 +28,7 @@ public class PetrifyPrep : SlimeActionBase, IShowLife
 
     void Update()
     {
-        UpdateLifeText();
+        UpdateWarningEffect();
     }
 
 

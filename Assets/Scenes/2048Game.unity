@@ -1813,7 +1813,6 @@ MonoBehaviour:
   - {fileID: 6047435193558059963, guid: 853aa6daa65e1447f8299c5198d83afe, type: 3}
   - {fileID: 691568085597732685, guid: cc0991b7fd03045dbbed2909b0bfa763, type: 3}
   - {fileID: 2976873772146142562, guid: 6ea36061cca524241a58bc733e410901, type: 3}
-  TileGroup: {fileID: 0}
   remainingTurnsText: {fileID: 1769213545}
   forcedDirection: 0
 --- !u!4 &1024858048
