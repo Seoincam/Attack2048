@@ -102,11 +102,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2ee16b5c3d6284f3e91542d9521bdfb1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Life: 2
+  Life: 0
   _lifeCounter: 0
-  _particleGroup: {fileID: 0}
   lifeText: {fileID: 3525155712447215809}
-  LifeForStage6: 3
+  DefaultLife: 2
+  LineDeleteLife: 3
 --- !u!95 &7914773979405865429
 Animator:
   serializedVersion: 7

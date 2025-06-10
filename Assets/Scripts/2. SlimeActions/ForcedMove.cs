@@ -7,6 +7,8 @@ using UnityEngine;
 using System.Collections.Generic;
 public class ForcedMove : SlimeActionBase
 {
+    // 필드    
+    // - - - - - - - - - - 
     private int _x = 2, _y = 2; // Square 배열 상의 현재 위치
     private ForcedMovedir dir;
     private static readonly Dictionary<ForcedMovedir, Vector3> directionVectors = new()
@@ -17,14 +19,13 @@ public class ForcedMove : SlimeActionBase
         {ForcedMovedir.Right, Vector3.right}
     };
 
-    void Start()
-    {
-        _hasEffect = false;
-    }
 
-    public void Init()
+    // 초기화
+    // - - - - - - - - - - 
+    public override void Init()
     {
-        base.Init(-1, 0);
+        base.Init();
+
         GameManager G = GameManager.Instance;
         transform.position = G.LocateTile(_x, _y);
         // 최대 10회까지 무작위 방향 시도
@@ -57,11 +58,9 @@ public class ForcedMove : SlimeActionBase
         }
     }
 
-    public override void OnEnter_CountDownPhase()
-    {
-        base.OnEnter_CountDownPhase();
-    }
 
+    // 로직
+    // - - - - - - - - - - 
     protected override void Execute()
     {
         GameManager.Instance.forcedDirection = ForcedMovedir.None;

@@ -6,36 +6,49 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ImprisonPrep : SlimeActionBase
+public class ImprisonPrep : SlimeActionBase, IShowLife, IMakeWarningEffect
 {
-    protected int _x, _y; // Square 배열 상의 현재 위치
+    // 필드    
+    // - - - - - - - - - - 
     [SerializeField] private Text lifeText;
 
-    void Start()
+    private int _x, _y; // Square 배열 상의 현재 위치
+    private SpriteRenderer _renderer;
+
+
+    // Unity 콜백
+    // - - - - - - - - - - 
+    void Awake()
     {
-        _hasEffect = false;
+        GetRenderer();
     }
 
+    void Update()
+    {
+        UpdateWarningEffect();
+    }
+
+
+    // 초기화
+    // - - - - - - - - - - 
     public override void Init(int x, int y)
     {
         base.Init(x, y);
+        UpdateLifeText();
 
         _x = x; _y = y;
-        GameManager.Instance.ObstacleArray[x, y].PlaceImprisonPrep();
-
-        lifeText.text = _lifeCounter.ToString();
-    }
-    
-    void Update()
-    {
-        float alpha = Mathf.Min(Mathf.Abs(Mathf.Sin(Time.time)), 0.7f);
-        _renderer.color = new Color(_renderer.color.r, _renderer.color.g, _renderer.color.b, alpha);
+        GameManager.Instance.ObstacleArray[x, y].PlaceImprisonPrep();  
     }
 
+
+
+
+    // 로직
+    // - - - - - - - - - - 
     public override void OnEnter_CountDownPhase()
     {
         base.OnEnter_CountDownPhase();
-        lifeText.text = _lifeCounter.ToString();
+        UpdateLifeText();
     }
 
     protected override void Execute()
@@ -47,5 +60,24 @@ public class ImprisonPrep : SlimeActionBase
         // 위치 설정
         imprison.Init(_x, _y);
         base.Execute();
+    }
+
+
+    // Interfaces
+    // - - - - - - - - - - 
+    public void UpdateLifeText()
+    {
+        lifeText.text = _lifeCounter.ToString();
+    }
+    
+    public void GetRenderer()
+    {
+        _renderer = GetComponent<SpriteRenderer>();
+    }
+    
+    public void UpdateWarningEffect()
+    {
+        float alpha = Mathf.PingPong(Time.time * 0.45f, 0.5f);
+        _renderer.color = new Color(_renderer.color.r, _renderer.color.g, _renderer.color.b, alpha);
     }
 }

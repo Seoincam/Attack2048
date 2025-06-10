@@ -1,6 +1,6 @@
 // - - - - - - - - - - - - - - - - - -
 // SlimeActionBase.cs
-//  - 벽, 석화, 감금, 이동 클래스의 부모 클래스.
+//  - 벽, 석화, 감금, 이동 클래스 등의 부모 클래스.
 //  - 수명이 다하면 각 로직을 실행 시킴.
 // - - - - - - - - - - - - - - - - - -
 
@@ -9,41 +9,29 @@ using UnityEngine;
 
 public abstract class SlimeActionBase : MonoBehaviour, ICountDownListener
 {
-    // - - - - - - - - - - - - - - - - - - - - -
     // 필드
-    // - - - - - - - - - - - - - - - - - - - - -
-
-    [Tooltip("수명")][SerializeField] protected int Life; // Inspector에서 설정
-    [Tooltip("남은 수명")][SerializeField] protected int _lifeCounter;
-
-    // 파티클을 재생하는가?
-    protected bool _hasEffect = true;
-
-    protected SpriteRenderer _renderer;
+    // - - - - - - - - - - 
+    [Tooltip("수명"), SerializeField] protected int Life; // Inspector에서 설정
+    [Tooltip("남은 수명"), SerializeField] protected int _lifeCounter;
 
 
-    // - - - - - - - - - - - - - - - - - - - - -
-    // Unity 콜백
-    // - - - - - - - - - - - - - - - - - - - - -
-    void Awake()
-    {
-        TryGetComponent(out _renderer);
-    }
-
-    // x = -1: 좌표 설정 안 함
-    public virtual void Init(int x, int y)
+    // 초기화
+    // - - - - - - - - - - 
+    public virtual void Init()
     {
         Subscribe_CountDown();
         _lifeCounter = Life;
-        
-        if (x != -1)
-            transform.position = GameManager.Instance.LocateTile(x, y);
+    }
+
+    public virtual void Init(int x, int y)
+    {
+        Init();
+        transform.position = GameManager.Instance.LocateTile(x, y);
     }
 
 
-    // - - - - - - - - - - - - - - - - - - - - -
     // 로직
-    // - - - - - - - - - - - - - - - - - - - - -
+    // - - - - - - - - - - 
 
     // EventManager에 구독.
     public void Subscribe_CountDown()
@@ -57,21 +45,13 @@ public abstract class SlimeActionBase : MonoBehaviour, ICountDownListener
         _lifeCounter--;
 
         if (_lifeCounter == 0)
-        {
             EventManager.Subscribe(GameEvent.TriggerPhase, Execute);
-        }
     }
 
     // 수명이 다하면 실행할 로직.
     protected virtual void Execute()
     {
-        if (_hasEffect)
-        {
-            ParticleSystem particle = ObjectPoolManager.instance.GetObject(27, Group.Effect).GetComponent<ParticleSystem>();
-            particle.transform.position = transform.position;
-            particle.Play();
-        }
-
+        // 자식 클래스가 이곳에 override로 로직 추가
         StartCoroutine(DestroySelf());
     }
 

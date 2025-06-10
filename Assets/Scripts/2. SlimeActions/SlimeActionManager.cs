@@ -66,8 +66,7 @@ public class SlimeActionManager : MonoBehaviour
         while (true)
         {
             // 버그 방지
-            count++;
-            if (count > 500)
+            if (++count > 500)
             {
                 Debug.LogError("Delete6 오류!");
                 break;
@@ -77,9 +76,7 @@ public class SlimeActionManager : MonoBehaviour
             for (int y = 4; y >=0; y--)
             {
                 if (!GameManager.Instance.ObstacleArray[randomLineX, y].CanObstacle)
-                {
                     canPlace = false;
-                }
             }
 
             if (canPlace) break;
@@ -109,8 +106,7 @@ public class SlimeActionManager : MonoBehaviour
         int count = 0;
         do
         {
-            count++;
-            if (count > 500)
+            if (++count > 500)
             {
                 Debug.LogError("Change 오류!");
                 break;
@@ -161,7 +157,7 @@ public class SlimeActionManager : MonoBehaviour
         imprison2.Init(selected2.x, selected2.y);
     }
 
-
+    // Change가 네 모퉁이는 선택 안 하게 함
     List<Vector2Int> notSelectPos = new List<Vector2Int>
     {
         new Vector2Int(0,0),
@@ -183,8 +179,7 @@ public class SlimeActionManager : MonoBehaviour
         while (true)
         {
             // 버그 방지
-            count++;
-            if (count > 500)
+            if (++count > 500)
             {
                 Debug.LogError("Change 오류!");
                 break;
@@ -253,9 +248,6 @@ public class SlimeActionManager : MonoBehaviour
             Translocate7Horizontal translocate = obj.GetComponent<Translocate7Horizontal>();
             translocate.Init(ab.Min(), ab.Max());
         }
-
-
-
     }
 
     private void ReverseMove()
@@ -273,13 +265,14 @@ public class SlimeActionManager : MonoBehaviour
         forcedmove.Init();
     }
 
+    // ToDo: 현재는 타일 있는 곳에만 설치됨. 이게 맞나 확인해야함.
     private void Blind()
     {
         GameObject obj = _pooler.GetObject(31, Group.SlimeAction);
         Blind blind = obj.GetComponent<Blind>();
 
         // 위치 설정
-            // 이미 타일이 있는 곳에 설치
+        // 이미 타일이 있는 곳에 설치
         Vector2Int selected = GetRandomPosition(true);
         blind.Init(selected.x, selected.y);
     }
@@ -303,9 +296,8 @@ public class SlimeActionManager : MonoBehaviour
             int count = 0;
             while (true)
             {
-                // 버그 방지
-                count++;
-                if (count > 500)
+                // 오류 방지
+                if (++count > 500)
                 {
                     Debug.LogError("GetRandomPosition 오류!");
                     break;
@@ -323,9 +315,8 @@ public class SlimeActionManager : MonoBehaviour
             int count = 0;
             while (true)
             {
-                // 버그 방지
-                count++;
-                if (count > 500)
+                // 오류 방지
+                if (++count > 500)
                 {
                     Debug.LogError("GetRandomPosition 오류!");
                     break;

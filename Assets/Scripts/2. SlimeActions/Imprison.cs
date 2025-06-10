@@ -4,34 +4,55 @@
 // - - - - - - - - - - - - - - - - - -
 using UnityEngine;
 using UnityEngine.UI;
-public class Imprison : SlimeActionBase
+public class Imprison : SlimeActionBase, IShowLife, IMakeDeleteEffect
 {
-    protected int _x, _y;
-
+    // 필드    
+    // - - - - - - - - - - 
     [SerializeField] private Text lifeText;
 
+    private int _x, _y;
+
+
+    // 초기화 
+    // - - - - - - - - - - 
     public override void Init(int x, int y)
     {
         base.Init(x, y);
+        UpdateLifeText();
 
         _x = x; _y = y;
-        GameManager.Instance.ObstacleArray[x, y].PlaceImprison();
-
-        lifeText.text = _lifeCounter.ToString();
+        GameManager.Instance.ObstacleArray[x, y].PlaceImprison(); 
     }
 
+
+    // 로직
+    // - - - - - - - - - - 
     public override void OnEnter_CountDownPhase()
     {
         base.OnEnter_CountDownPhase();
-        lifeText.text = _lifeCounter.ToString();
+        UpdateLifeText();
     }
-
 
     protected override void Execute()
     {
-        // TODO: GameManager에 감금 삭제 알리기
         GameManager.Instance.ObstacleArray[_x, _y].RemoveImprison();
-        // TODO: 다시 숫자 타일 복구
+
+        MakeDeleteEffect();
         base.Execute();
+    }
+
+
+    // Interfaces
+    // - - - - - - - - - - 
+    public void UpdateLifeText()
+    {
+        lifeText.text = _lifeCounter.ToString();
+    }
+
+    public void MakeDeleteEffect()
+    {
+        ParticleSystem particle = ObjectPoolManager.instance.GetObject(27, Group.Effect).GetComponent<ParticleSystem>();
+        particle.transform.position = transform.position;
+        particle.Play();
     }
 }

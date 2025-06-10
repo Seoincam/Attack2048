@@ -5,34 +5,45 @@
 
 using UnityEngine;
 using UnityEngine.UI;
-public class ReverseMove : SlimeActionBase
+public class ReverseMove : SlimeActionBase, IShowLife
 {
+    // 필드
+    // - - - - - - - - - - 
     [SerializeField] private Text lifeText;
-    
-    void Start()
-    {
-        _hasEffect = false;
-    }
 
-    public void Init()
+
+    // 초기화
+    // - - - - - - - - - - 
+    public override void Init()
     {
-        base.Init(-1, 0);
+        base.Init();
+        UpdateLifeText();
+
         Vector3 position = new Vector3(2, 2, 0);
         transform.position = position;
         GameManager.Instance.IsReversed = true;
-        lifeText.text = _lifeCounter.ToString();
     }
-  
 
+
+    // 로직
+    // - - - - - - - - - - 
     public override void OnEnter_CountDownPhase()
     {
         base.OnEnter_CountDownPhase();
-        lifeText.text = _lifeCounter.ToString();
+        UpdateLifeText();
     }
 
     protected override void Execute()
     {
         GameManager.Instance.IsReversed = false;
         base.Execute();
+    }
+
+
+    // Interfaces
+    // - - - - - - - - - - 
+    public void UpdateLifeText()
+    {
+        lifeText.text = _lifeCounter.ToString();
     }
 }
