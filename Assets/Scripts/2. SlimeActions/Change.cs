@@ -1,18 +1,17 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-[System.Serializable]
-class ChangeRule
-{
-    public int tileValue;
-    public int probabilty;
-}
-
 public class Change : SlimeActionBase, IShowLife, IMakeWarningEffect, IMakeDeleteEffect
 {
     // - - - - - - - - - - 
     // 필드
     [SerializeField] private Text lifeText;
+
+    [System.Serializable] struct ChangeRule
+    {
+        public int tileValue;
+        public int probabilty;
+    }
     [SerializeField] private ChangeRule[] ChangeRules;
 
     private int _x, _y; // Square 배열 상의 현재 위치

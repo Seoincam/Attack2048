@@ -576,7 +576,7 @@ GameObject:
   - component: {fileID: 517161616}
   - component: {fileID: 517161617}
   m_Layer: 5
-  m_Name: Progress Bar
+  m_Name: Loading Progress Bar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -840,6 +840,7 @@ MonoBehaviour:
   TileGroup: {fileID: 2097360736}
   EffectGroup: {fileID: 1647613193}
   SlimeActionGroup: {fileID: 13232674}
+  _initProgress: 0
 --- !u!1 &1647613192
 GameObject:
   m_ObjectHideFlags: 0

@@ -40,10 +40,7 @@ public class Delete : SlimeActionBase, IShowLife, IMakeWarningEffect, IMakeDelet
     // - - - - - - - - - - 
     public void Init(int x, int y, bool isLineDelete)
     {
-        if (isLineDelete)
-            Life = LineDeleteLife;
-        else
-            Life = DefaultLife;
+        Life = isLineDelete ? LineDeleteLife : DefaultLife;
 
         base.Init(x, y);
         UpdateLifeText();

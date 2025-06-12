@@ -8,10 +8,10 @@ public class SettingPanel : MonoBehaviour
 
     void Start()
     {
-        if (GameSetting.instance != null)
+        if (SoundManager.instance != null)
         {
             // GameSetting 싱글턴에 할당
-            GameSetting.instance.SetPanel(_bgmSlider, _sfxSlider);
+            SoundManager.instance.SetPanel(_bgmSlider, _sfxSlider);
         }
     }
 }

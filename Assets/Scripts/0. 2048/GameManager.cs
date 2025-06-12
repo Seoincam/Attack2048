@@ -92,15 +92,14 @@ public class GameManager : MonoBehaviour, INewTurnListener
     void Awake()
     {
         // 로딩 됐나 체크
-        if (ObjectPoolManager.instance == null) SceneManager.LoadScene("Lobby");
+        if (ObjectPoolManager.instance == null)
+            SceneManager.LoadScene("Lobby");
 
         EventManager.InitEvents();
 
         // 싱글턴
         if (Instance == null) Instance = this;
         else Destroy(gameObject);
-
-        Application.targetFrameRate = 60;
 
         // Obstacle Array 초기화
         for (int x = 0; x < 5; x++) for (int y = 0; y < 5; y++)
