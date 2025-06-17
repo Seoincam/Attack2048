@@ -55,7 +55,7 @@ public class StageManager : MonoBehaviour
             NextStagePanel.SetActive(false);
 
             // 슬라임 액션 비활성화
-            foreach (Transform action in ObjectPoolManager.instance.SlimeActionGroup)
+            foreach (Transform action in ObjectPoolManager.Instance.SlimeActionGroup)
             {
                 if (!action.gameObject.activeSelf) continue;
                 SlimeActionBase slimeAction = action.GetComponent<SlimeActionBase>();

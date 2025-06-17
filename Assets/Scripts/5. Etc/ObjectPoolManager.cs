@@ -9,10 +9,8 @@ using UnityEngine;
 
 public enum Group { Tile, Effect, SlimeAction }
 
-public class ObjectPoolManager : MonoBehaviour
+public class ObjectPoolManager : SingleTone<ObjectPoolManager>
 {
-    public static ObjectPoolManager instance;
-
     [SerializeField] private List<GameObject> _prefabs;
     private List<List<GameObject>> pools;
     private Dictionary<Group, Transform> _groupMap = new();
@@ -23,16 +21,6 @@ public class ObjectPoolManager : MonoBehaviour
 
     public bool IsInitialized { get; private set; }
     [HideInInspector] public float _initProgress = 0; // 로딩바 반영
-
-    void Awake()
-    {
-        if (instance == null)
-        {
-            instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
-        else if (instance != this) Destroy(gameObject);
-    }
 
     public void Init()
     {

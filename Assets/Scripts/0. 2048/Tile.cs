@@ -18,7 +18,7 @@ public class Tile : MonoBehaviour
 
     public void StartProtect()
     {
-        EventManager.Subscribe(GameEvent.NewTurn, FinishProtect);
+        EventManager.Subscribe(GamePhase.NewTurnPhase, FinishProtect);
         protectText.SetActive(true);
         IsProtected = true;
     }
@@ -35,7 +35,7 @@ public class Tile : MonoBehaviour
     private IEnumerator Unsubscribe()
     {
         yield return new WaitForSeconds(0.05f);
-        EventManager.Unsubscribe(GameEvent.NewTurn, FinishProtect);
+        EventManager.Unsubscribe(GamePhase.NewTurnPhase, FinishProtect);
     }
 
     // 버그 방지
@@ -45,7 +45,7 @@ public class Tile : MonoBehaviour
         {
             protectText.SetActive(false);
             IsProtected = false;
-            EventManager.Unsubscribe(GameEvent.NewTurn, FinishProtect);
+            EventManager.Unsubscribe(GamePhase.NewTurnPhase, FinishProtect);
         }
     }
 

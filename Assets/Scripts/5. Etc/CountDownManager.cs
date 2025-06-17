@@ -1,8 +1,6 @@
 using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.Events;
 
 public class CountDownManager : MonoBehaviour
 {
@@ -16,28 +14,28 @@ public class CountDownManager : MonoBehaviour
         GameManager.Instance.IsPaused = true;
 
         // 0.3초 후 카운트 다운 실행
-        if (EventManager.GetEvent(GameEvent.CountDownPhase) != null && EventManager.GetEvent(GameEvent.CountDownPhase).Count != 0)
+        var countDown = EventManager.GetEvent(GamePhase.CountDownPhase);
+        if (countDown != null && countDown.Count != 0)
         {
-            EventManager.Publish(GameEvent.CountDownPhase);
+            EventManager.Publish(GamePhase.CountDownPhase);
         }
 
-        // 0.3초 후 0이 된 애들이 있다면 실행
-        if (EventManager.GetEvent(GameEvent.TriggerPhase) != null && EventManager.GetEvent(GameEvent.TriggerPhase).Count != 0)
+
+        // 0이 된 슬라임 액션(벽, 삭제 등)이 있다면 실행
+        var execute = EventManager.GetEvent(GamePhase.ExecutePhase);
+        if (execute != null && execute.Count != 0)
         {
-            List<UnityAction> actionList = EventManager.GetEvent(GameEvent.TriggerPhase).ToList();
+            var actionList = EventManager.GetEvent(GamePhase.ExecutePhase).ToList();
+            float waitTime = actionList.Count == 1 ? 0.2f : 0.45f / actionList.Count;
 
-            float waitTime = 0.3f;
-            if (actionList.Count >= 3) waitTime = 0.1f;
-
-
-                for (int i = 0; i < actionList.Count; i++)
-                {
-                    yield return new WaitForSeconds(waitTime);
-                    actionList[i]?.Invoke();
-                }
+            for (int i = 0; i < actionList.Count; i++)
+            {
+                yield return new WaitForSeconds(waitTime);
+                actionList[i]?.Invoke();
+            }
         }
 
         GameManager.Instance.IsPaused = false;
-        EventManager.Publish(GameEvent.NewTurn);
+        EventManager.Publish(GamePhase.NewTurnPhase);
     }
 }

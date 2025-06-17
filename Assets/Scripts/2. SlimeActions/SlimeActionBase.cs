@@ -36,7 +36,7 @@ public abstract class SlimeActionBase : MonoBehaviour, ICountDownListener
     // EventManager에 구독.
     public void Subscribe_CountDown()
     {
-        EventManager.Subscribe(GameEvent.CountDownPhase, OnEnter_CountDownPhase);
+        EventManager.Subscribe(GamePhase.CountDownPhase, OnEnter_CountDownPhase);
     }
 
     // 후처리에서 실행.
@@ -45,7 +45,7 @@ public abstract class SlimeActionBase : MonoBehaviour, ICountDownListener
         _lifeCounter--;
 
         if (_lifeCounter == 0)
-            EventManager.Subscribe(GameEvent.TriggerPhase, Execute);
+            EventManager.Subscribe(GamePhase.ExecutePhase, Execute);
     }
 
     // 수명이 다하면 실행할 로직.
@@ -58,8 +58,8 @@ public abstract class SlimeActionBase : MonoBehaviour, ICountDownListener
     public IEnumerator DestroySelf()
     {
         yield return new WaitForSeconds(0.05f);
-        EventManager.Unsubscribe(GameEvent.CountDownPhase, OnEnter_CountDownPhase);
-        EventManager.Unsubscribe(GameEvent.TriggerPhase, Execute);
+        EventManager.Unsubscribe(GamePhase.CountDownPhase, OnEnter_CountDownPhase);
+        EventManager.Unsubscribe(GamePhase.ExecutePhase, Execute);
         gameObject.SetActive(false);
     }
 }

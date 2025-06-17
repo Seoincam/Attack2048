@@ -89,7 +89,7 @@ public class Delete : SlimeActionBase, IShowLife, IMakeWarningEffect, IMakeDelet
 
     public void MakeDeleteEffect()
     {
-        ParticleSystem particle = ObjectPoolManager.instance.GetObject(27, Group.Effect).GetComponent<ParticleSystem>();
+        ParticleSystem particle = ObjectPoolManager.Instance.GetObject(27, Group.Effect).GetComponent<ParticleSystem>();
         particle.transform.position = transform.position;
         particle.Play();
     }

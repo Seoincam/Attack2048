@@ -9,34 +9,24 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class SlimeActionManager : MonoBehaviour
+public class SlimeActionManager: MonoBehaviour
 {
     // - - - - - - - - - - - - - - - - - - - - -
     // 필드
     // - - - - - - - - - - - - - - - - - - - - -
+    public static SlimeActionManager Instance;
+
     private ObjectPoolManager _pooler;
 
 
     // - - - - - - - - - - - - - - - - - - - - -
     // Unity 콜백
     // - - - - - - - - - - - - - - - - - - - - -
-
-    // 이벤트 매니저에 각 메서드를 구독.
     void Awake()
     {
-        _pooler = ObjectPoolManager.instance;
+        Instance = this;
 
-        EventManager.Subscribe(GameEvent.Delete, Delete);
-        EventManager.Subscribe(GameEvent.Delete6, Delete6);
-        EventManager.Subscribe(GameEvent.Wall, Wall);
-        EventManager.Subscribe(GameEvent.Petrify, Petrify);
-        EventManager.Subscribe(GameEvent.Imprison, Imprison);
-        EventManager.Subscribe(GameEvent.Change, Change);
-        EventManager.Subscribe(GameEvent.Translocate3, Translocate3);
-        EventManager.Subscribe(GameEvent.Translocate7, Translocate7);
-        EventManager.Subscribe(GameEvent.ForcedMove, ForcedMove);
-        EventManager.Subscribe(GameEvent.ReverseMove, ReverseMove);
-        EventManager.Subscribe(GameEvent.Blind, Blind);
+        _pooler = ObjectPoolManager.Instance;
     }
 
 
@@ -46,7 +36,7 @@ public class SlimeActionManager : MonoBehaviour
     // - - - - - - - - - - - - - - - - - - - - -
 
     // 삭제
-    private void Delete()
+    public void Delete()
     {
         GameObject obj = _pooler.GetObject(18, Group.SlimeAction);
         Delete delete = obj.GetComponent<Delete>();
@@ -57,7 +47,7 @@ public class SlimeActionManager : MonoBehaviour
     }
 
     // 삭제 (6스테이지 한줄 삭제)
-    private void Delete6()
+    public void Delete6()
     {
         // ToDo : 기존에 delete 없나 체크
         int randomLineX = Random.Range(0, 5);
@@ -93,7 +83,7 @@ public class SlimeActionManager : MonoBehaviour
     }
 
     // 벽
-    private void Wall()
+    public void Wall()
     {
         GameObject obj = _pooler.GetObject(25, Group.SlimeAction);
         Wall wall = obj.GetComponent<Wall>();
@@ -125,7 +115,7 @@ public class SlimeActionManager : MonoBehaviour
     }
 
     // 석화 대기
-    private void Petrify()
+    public void Petrify()
     {
         GameObject obj = _pooler.GetObject(23, Group.SlimeAction);
         PetrifyPrep petrifyPrep = obj.GetComponent<PetrifyPrep>();
@@ -135,7 +125,7 @@ public class SlimeActionManager : MonoBehaviour
     }
 
     // 감금 대기
-    private void Imprison()
+    public void Imprison()
     {
         GameObject obj = _pooler.GetObject(21, Group.SlimeAction);
         ImprisonPrep imprison1 = obj.GetComponent<ImprisonPrep>();
@@ -166,7 +156,7 @@ public class SlimeActionManager : MonoBehaviour
         new Vector2Int(4,0)
     };
 
-    private void Change()
+    public void Change()
     {
         GameObject obj = _pooler.GetObject(17, Group.SlimeAction);
         Change change = obj.GetComponent<Change>();
@@ -208,7 +198,7 @@ public class SlimeActionManager : MonoBehaviour
     }
 
     // 이동 (3 스테이지)
-    private void Translocate3()
+    public void Translocate3()
     {
         GameObject obj = _pooler.GetObject(24, Group.SlimeAction);
         Translocate3 translocate = obj.GetComponent<Translocate3>();
@@ -216,7 +206,7 @@ public class SlimeActionManager : MonoBehaviour
     }
     
     // 이동 (7 스테이지)
-    private void Translocate7()
+    public void Translocate7()
     {
         // Vertical or Horizontal
         int random = Random.Range(0,2);
@@ -250,7 +240,7 @@ public class SlimeActionManager : MonoBehaviour
         }
     }
 
-    private void ReverseMove()
+    public void ReverseMove()
     {
         GameObject obj = _pooler.GetObject(29, Group.SlimeAction);
         ReverseMove reversemove = obj.GetComponent<ReverseMove>();
@@ -258,7 +248,7 @@ public class SlimeActionManager : MonoBehaviour
     }
     
     // 이동 방향 강제 (4 스테이지)
-    private void ForcedMove()
+    public void ForcedMove()
     {
         GameObject obj = _pooler.GetObject(19, Group.SlimeAction);
         ForcedMove forcedmove = obj.GetComponent<ForcedMove>();
@@ -266,7 +256,7 @@ public class SlimeActionManager : MonoBehaviour
     }
 
     // ToDo: 현재는 타일 있는 곳에만 설치됨. 이게 맞나 확인해야함.
-    private void Blind()
+    public void Blind()
     {
         GameObject obj = _pooler.GetObject(31, Group.SlimeAction);
         Blind blind = obj.GetComponent<Blind>();

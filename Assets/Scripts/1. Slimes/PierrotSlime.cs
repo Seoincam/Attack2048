@@ -44,7 +44,7 @@ public class PierrotSlime : SlimeBase
         if (_changeCounter == 0)
         {
             _changeCounter = ChangeInterval;
-            EventManager.Publish(GameEvent.Change);
+            SlimeActionManager.Instance.Change();
         }
     }
 
@@ -56,7 +56,7 @@ public class PierrotSlime : SlimeBase
         if (_translocateCounter == 0)
         {
             _translocateCounter = TranslocateInterval;
-            EventManager.Publish(GameEvent.Translocate3);
+            SlimeActionManager.Instance.Translocate3();
         }
     }
 }

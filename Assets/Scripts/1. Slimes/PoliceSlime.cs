@@ -47,7 +47,7 @@ public class PoliceSlime : SlimeBase
         if (_imprisionCounter == 0)
         {
             _imprisionCounter = ImprisionInterval;
-            EventManager.Publish(GameEvent.Imprison);
+            SlimeActionManager.Instance.Imprison();
         }
     }
      // 강제 이동
@@ -58,7 +58,7 @@ public class PoliceSlime : SlimeBase
         if (_forcedMoveCounter == 0)
         {
             _forcedMoveCounter = ForcedMoveInterval;
-            EventManager.Publish(GameEvent.ForcedMove);
+            SlimeActionManager.Instance.ForcedMove();
         }
     }
 }

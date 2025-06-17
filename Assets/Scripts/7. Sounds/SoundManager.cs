@@ -1,12 +1,10 @@
 using UnityEngine; 
 using UnityEngine.UI; 
 
-public class SoundManager : MonoBehaviour
+public class SoundManager : SingleTone<SoundManager>
 {
     // 필드    
     // - - - - - - - - - - 
-    public static SoundManager instance;
-
     [Header("Audio Player")]
     [SerializeField] private AudioSource BGM;
     [SerializeField] private AudioSource SFX;
@@ -14,28 +12,12 @@ public class SoundManager : MonoBehaviour
     [Header("Audio Clip")]
     [SerializeField] private AudioClip LobbyBGM;
 
-    private float BgmVolume;
-    private float SfxVolume;
+    private float BgmVolume = .25f;
+    private float SfxVolume = .75f;
 
 
     // Unity 콜백    
     // - - - - - - - - - - 
-    void Awake()
-    {
-        // 싱글톤
-        if (instance == null)
-        {
-            instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
-        else if (instance != this)
-            Destroy(gameObject);
-
-        // 기본 볼륨
-        BgmVolume = 0.75f;
-        SfxVolume = 0.75f;
-    }
-
     void Start()
     {
         PlayBGM(LobbyBGM);

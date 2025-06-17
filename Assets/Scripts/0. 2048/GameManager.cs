@@ -42,7 +42,7 @@ public class GameManager : MonoBehaviour, INewTurnListener
     public GameObject[,] TileArray = new GameObject[5, 5]; // 타일 배열
     public Obstacle[,] ObstacleArray = new Obstacle[5, 5]; // 장애물 배열 (삭제, 벽, 석화, 감금, 이동)
 
-    private bool _canGetInput; // 입력을 받나? (GameManager 내부에서 설정)
+    private bool _canGetInput = false; // 입력을 받나? (GameManager 내부에서 설정)
     public bool IsPaused { get; set; } // 멈췄나? (설정, 도감, 상점, 후처리 등 실행중인가?)
     public bool CanMove { get => _canGetInput && !IsPaused; }
     [HideInInspector] public bool IsReversed = false; // 상하좌우 반전중인가?
@@ -92,10 +92,8 @@ public class GameManager : MonoBehaviour, INewTurnListener
     void Awake()
     {
         // 로딩 됐나 체크
-        if (ObjectPoolManager.instance == null)
+        if (ObjectPoolManager.Instance == null)
             SceneManager.LoadScene("Lobby");
-
-        EventManager.InitEvents();
 
         // 싱글턴
         if (Instance == null) Instance = this;
@@ -106,16 +104,17 @@ public class GameManager : MonoBehaviour, INewTurnListener
             {
                 ObstacleArray[x, y] = new Obstacle(x, y);
             }
-
-        _pointManager = GetComponent<PointManager>();
-        _countManager = GetComponent<CountDownManager>();
-        _pooler = ObjectPoolManager.instance;
-        Subscribe_NewTurn();
-
     }
 
     void Start()
     {
+        _pointManager = GetComponent<PointManager>();
+        _countManager = GetComponent<CountDownManager>();
+        _pooler = ObjectPoolManager.Instance;
+
+        EventManager.InitEvents();
+        Subscribe_NewTurn();
+        
         Debug.Log("게임 시작!");
 
         Spawn();
@@ -133,7 +132,7 @@ public class GameManager : MonoBehaviour, INewTurnListener
 
     public void Subscribe_NewTurn()
     {
-        EventManager.Subscribe(GameEvent.NewTurn, OnEnter_NewTurn);
+        EventManager.Subscribe(GamePhase.NewTurnPhase, OnEnter_NewTurn);
     }
 
     // - - - - - - - - - - - - - - - - - - - - -

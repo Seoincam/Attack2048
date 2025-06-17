@@ -52,7 +52,7 @@ public class ImprisonPrep : SlimeActionBase, IShowLife, IMakeWarningEffect
     protected override void Execute()
     {
         GameManager.Instance.ObstacleArray[_x, _y].RemoveImprisonPrep();
-        GameObject obj = ObjectPoolManager.instance.GetObject(20, Group.SlimeAction);
+        GameObject obj = ObjectPoolManager.Instance.GetObject(20, Group.SlimeAction);
         Imprison imprison = obj.GetComponent<Imprison>();
 
         // 위치 설정

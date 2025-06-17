@@ -11,6 +11,9 @@ public abstract class SlimeBase : MonoBehaviour, INewTurnListener
     public int DefaltTurns;
     public int ClearValue = 128;
 
+    [Header("Sound")]
+    [SerializeField] private AudioClip slimeBgm;
+
 
     // - - - - - - - - 
     // Unity 콜백
@@ -18,7 +21,8 @@ public abstract class SlimeBase : MonoBehaviour, INewTurnListener
     protected virtual void Start()
     {
         Subscribe_NewTurn();
-
+        if (SoundManager.Instance != null)
+            SoundManager.Instance.PlayBGM(slimeBgm);
     }
 
     public void Init(StageManager slimeManager)
@@ -32,7 +36,7 @@ public abstract class SlimeBase : MonoBehaviour, INewTurnListener
     // 사망 로직
     // - - - - - - - - - - 
     public void Die() {
-        EventManager.Unsubscribe(GameEvent.NewTurn, OnEnter_NewTurn);
+        EventManager.Unsubscribe(GamePhase.NewTurnPhase, OnEnter_NewTurn);
         _slimeManager.OnGameClear();
         gameObject.SetActive(false);
     }
@@ -42,8 +46,8 @@ public abstract class SlimeBase : MonoBehaviour, INewTurnListener
     // INewTurnListener
     // - - - - - - - - - - -
     public void Subscribe_NewTurn() {
-        EventManager.Subscribe(GameEvent.NewTurn, OnEnter_NewTurn);
+        EventManager.Subscribe(GamePhase.NewTurnPhase, OnEnter_NewTurn);
     }
 
-    public virtual void OnEnter_NewTurn(){} // 각 자식 슬라임 클래스에서 해당 메서드 안에 매턴 마다 발생하는 항목 작성
+    public abstract void OnEnter_NewTurn(); // 각 자식 슬라임 클래스에서 해당 메서드 안에 매턴 마다 발생하는 항목 작성
 }

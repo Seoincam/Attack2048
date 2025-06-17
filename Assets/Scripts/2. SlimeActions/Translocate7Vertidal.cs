@@ -26,7 +26,7 @@ public class Translocate7Vertical : SlimeActionBase, IShowLife, IMakeWarningEffe
     void Awake()
     {
         G = GameManager.Instance;
-        _pooler = ObjectPoolManager.instance;
+        _pooler = ObjectPoolManager.Instance;
 
         GetRenderer();
     }

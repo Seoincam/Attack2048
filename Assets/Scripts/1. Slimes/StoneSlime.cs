@@ -54,7 +54,7 @@ public class StoneSlime : SlimeBase
         if (_petrifyCounter == 0)
         {
             _petrifyCounter = PetrifyInterval;
-            EventManager.Publish(GameEvent.Petrify);
+            SlimeActionManager.Instance.Petrify();
         }
     }
 
@@ -66,7 +66,7 @@ public class StoneSlime : SlimeBase
         if (_wallCounter == 0)
         {
             _wallCounter = WallInterval;
-            EventManager.Publish(GameEvent.Wall);
+            SlimeActionManager.Instance.Wall();
         }
     }
     
@@ -78,7 +78,7 @@ public class StoneSlime : SlimeBase
         if (_deleteCounter == 0)
         {
             _deleteCounter = DeleteInterval;
-            EventManager.Publish(GameEvent.Delete);
+            SlimeActionManager.Instance.Delete();
         }
     }
 }

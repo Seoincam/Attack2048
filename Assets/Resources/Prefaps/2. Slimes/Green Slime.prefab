@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8475608977743314576}
   - component: {fileID: 6140804009217736381}
-  - component: {fileID: 751445415127097532}
+  - component: {fileID: -8118168467572832803}
   m_Layer: 0
   m_Name: Green Slime
   m_TagString: Untagged
@@ -88,7 +88,7 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &751445415127097532
+--- !u!114 &-8118168467572832803
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -102,3 +102,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DefaltTurns: 300
   ClearValue: 64
+  slimeBgm: {fileID: 8300000, guid: 10f1b96fb22ee464a987f8b442a05a5c, type: 3}

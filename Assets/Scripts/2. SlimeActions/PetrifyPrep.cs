@@ -62,7 +62,7 @@ public class PetrifyPrep : SlimeActionBase, IShowLife, IMakeWarningEffect
         if (G.TileArray[_x, _y] == null || (G.TileArray[_x, _y] != null && !G.TileArray[_x, _y].GetComponent<Tile>().IsProtected))
         {
             G.DeleteTile(_x, _y);
-            GameObject obj = ObjectPoolManager.instance.GetObject(22, Group.SlimeAction);
+            GameObject obj = ObjectPoolManager.Instance.GetObject(22, Group.SlimeAction);
             Petrify petrify = obj.GetComponent<Petrify>();
             petrify.Init(_x, _y);
         }

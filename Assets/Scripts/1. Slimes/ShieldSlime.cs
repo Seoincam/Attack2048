@@ -12,6 +12,7 @@ public class ShieldSlime : SlimeBase
     // - - - - - - - - - -
     [Header("[ Shield Slime Logic ]")]
     [SerializeField, Tooltip("벽 생성 간격")] private int WallInterval;
+    [SerializeField, Tooltip("벽 생성 개수")] private int WallCount;
     [SerializeField, Tooltip("벽 생성 남은 턴 수")] private int _wallCounter;
 
     [Space, SerializeField, Tooltip("삭제 생성 간격")] private int DeleteInterval;
@@ -55,9 +56,9 @@ public class ShieldSlime : SlimeBase
 
         if (_wallCounter == 0)
         {
-            EventManager.Publish(GameEvent.Wall);
-            EventManager.Publish(GameEvent.Wall);
-            EventManager.Publish(GameEvent.Wall);
+            for (int i = 0; i < WallCount; i++)
+                SlimeActionManager.Instance.Wall();
+
             _wallCounter = WallInterval;
         }
     }
@@ -70,7 +71,7 @@ public class ShieldSlime : SlimeBase
         if (_deleteCounter == 0)
         {
             _deleteCounter = DeleteInterval;
-            EventManager.Publish(GameEvent.Delete);
+            SlimeActionManager.Instance.Delete();
         }
     }
 }

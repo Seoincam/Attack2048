@@ -32,7 +32,7 @@ public class Translocate3 : SlimeActionBase, IShowLife, IMakeWarningEffect, IMak
 
         GetRenderer();
 
-        _pooler = ObjectPoolManager.instance;
+        _pooler = ObjectPoolManager.Instance;
     }
 
     void Update()

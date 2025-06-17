@@ -54,7 +54,8 @@ public class WizardSlime : SlimeBase
         if (_reverseMoveCounter == 0)
         {
             _reverseMoveCounter = ReverseMoveInterval;
-            EventManager.Publish(GameEvent.ReverseMove);
+            // EventManager.Publish(GameEvent.ReverseMove);
+            SlimeActionManager.Instance.ReverseMove();
         }
     }
 
@@ -66,7 +67,7 @@ public class WizardSlime : SlimeBase
         if (_translocateCounter == 0)
         {
             _translocateCounter = TranslocateInterval;
-            EventManager.Publish(GameEvent.Translocate7);
+            SlimeActionManager.Instance.Translocate7();
         }
     }
 
@@ -78,7 +79,7 @@ public class WizardSlime : SlimeBase
         if (_blindCounter == 0)
         {
             _blindCounter = BlindInterval;
-            EventManager.Publish(GameEvent.Blind);
+            SlimeActionManager.Instance.Blind();
         }
     }
 }
