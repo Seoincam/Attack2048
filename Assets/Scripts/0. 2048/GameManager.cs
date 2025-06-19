@@ -1,7 +1,8 @@
+using System;
 using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Random = UnityEngine.Random;
 
 /*
     흐름 :
@@ -35,9 +36,12 @@ public class GameManager : MonoBehaviour, INewTurnListener
     // 필드
     // - - - - - - - - - - - - - - - - - - - - -
     public static GameManager Instance;
-    private PointManager _pointManager;
+
+    public PointManager _pointManager;
     private CountDownManager _countManager;
     private ObjectPoolManager _pooler;
+
+    public event Action OnRemainingTurnChanged;
 
     public GameObject[,] TileArray = new GameObject[5, 5]; // 타일 배열
     public Obstacle[,] ObstacleArray = new Obstacle[5, 5]; // 장애물 배열 (삭제, 벽, 석화, 감금, 이동)
@@ -48,15 +52,6 @@ public class GameManager : MonoBehaviour, INewTurnListener
     [HideInInspector] public bool IsReversed = false; // 상하좌우 반전중인가?
 
     private int _curTurns;
-    public int CurTurns
-    {
-        get => _curTurns;
-        set
-        {
-            _curTurns = value;
-            remainingTurnsText.text = $"Remaining Turns: {_curTurns}";
-        }
-    }
 
     public int ClearValue { get; set; }
 
@@ -72,9 +67,6 @@ public class GameManager : MonoBehaviour, INewTurnListener
     [Space, Header("Object")]
     [SerializeField] private GameObject[] TilePrefabs;      // 2, 4, 8... 타일 프리팹 배열 (index = log2 - 1)
 
-    [Space, Header("UI")]
-    [SerializeField] private TextMeshProUGUI remainingTurnsText;
-
 
     private int x, y, i, j;
     private bool wait, move;
@@ -85,6 +77,14 @@ public class GameManager : MonoBehaviour, INewTurnListener
     private HashSet<Tile> _movingTiles; // 매턴마다 이동하는 타일 저장
     private bool _isChecking; // 타일 이동 체크 중인가?
 
+    public int CurTurns {
+        get => _curTurns;
+        private set
+        {
+            _curTurns = value;
+            OnRemainingTurnChanged?.Invoke();
+        }
+    }
 
     // - - - - - - - - - - - - - - - - - - - - -
     // Unity 콜백
@@ -98,6 +98,10 @@ public class GameManager : MonoBehaviour, INewTurnListener
         // 싱글턴
         if (Instance == null) Instance = this;
         else Destroy(gameObject);
+        
+        _pointManager = GetComponent<PointManager>();
+        _countManager = GetComponent<CountDownManager>();
+        _pooler = ObjectPoolManager.Instance;
 
         // Obstacle Array 초기화
         for (int x = 0; x < 5; x++) for (int y = 0; y < 5; y++)
@@ -108,13 +112,9 @@ public class GameManager : MonoBehaviour, INewTurnListener
 
     void Start()
     {
-        _pointManager = GetComponent<PointManager>();
-        _countManager = GetComponent<CountDownManager>();
-        _pooler = ObjectPoolManager.Instance;
-
         EventManager.InitEvents();
         Subscribe_NewTurn();
-        
+
         Debug.Log("게임 시작!");
 
         Spawn();
@@ -307,7 +307,7 @@ public class GameManager : MonoBehaviour, INewTurnListener
                 }
             }
             //반전일 때 
-            else if(IsReversed)
+            else if (IsReversed)
             {
                 if (gap.y > 0 && Mathf.Abs(gap.x) < 0.5f) // 위 -> 아래로 반전됨
                 {
@@ -561,5 +561,14 @@ public class GameManager : MonoBehaviour, INewTurnListener
         }
 
         return false;
+    }
+
+    public void SetTurn(int amount)
+    {
+        CurTurns = amount;
+    }
+    public void AddTurns(int amount)
+    {
+        CurTurns += amount;
     }
 }

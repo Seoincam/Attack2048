@@ -107,8 +107,9 @@ public class StoreManager : MonoBehaviour
 
         // 포인트 부족하면 return 
         if (!_pointManager.CheckPoint(AddTurnCost)) return;
+        
         _pointManager.UsePoint(AddTurnCost);
-        GameManager.Instance.CurTurns += AddTurnAmount;
+        GameManager.Instance.AddTurns(AddTurnAmount);
     }
 
 

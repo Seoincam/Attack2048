@@ -3,10 +3,10 @@
 //  - 포인트 관리 클래스.
 // - - - - - - - - - - - - - - - - - -
 
-using TMPro;
+using System;
 using UnityEngine;
 
-[System.Serializable]
+[Serializable]
 public struct PointRule {
     [Tooltip("타일 숫자")] public int tileValue;
     [Tooltip("획득 포인트")] public int point;
@@ -17,16 +17,19 @@ public class PointManager : MonoBehaviour
     // - - - - - - - - - -
     // 필드
     // - - - - - - - - - -
-    private int _points;
-    private int Points {
-        get => _points;
-        set {
-            _points = value;
-            pointsText.text = $"{_points}pt";
+    public event Action OnPointChanged;
+
+    private int _point;
+    public int Point {
+        get => _point;
+        private set
+        {
+            _point = value;
+            OnPointChanged?.Invoke();
         }
     }
     
-    [SerializeField] private TextMeshProUGUI pointsText;
+    
     [SerializeField, Tooltip( "포인트 규칙" )] private PointRule[] PointRules;
     [SerializeField, Tooltip( "(테스트용) 초기 포인트" )] private int TestPoints;
 
@@ -36,7 +39,7 @@ public class PointManager : MonoBehaviour
     // - - - - - - - - - -
     void Awake()
     {
-        Points = TestPoints;
+        Point = TestPoints;
     }
 
 
@@ -48,7 +51,7 @@ public class PointManager : MonoBehaviour
     public void GetPoint(int tileValue) {
         foreach(PointRule combineValue in PointRules) {
             if(combineValue.tileValue == tileValue) {
-                Points += combineValue.point;
+                Point += combineValue.point;
                 break;
             }
         }
@@ -56,13 +59,13 @@ public class PointManager : MonoBehaviour
 
     // 돈 충분한가 체크
     public bool CheckPoint(int amount) {
-        if(Points >= amount) {
+        if(Point >= amount) {
             return true;
         }
         else return false;
     }
 
     public void UsePoint(int amount) {
-        Points -= amount;
+        Point -= amount;
     }
 }

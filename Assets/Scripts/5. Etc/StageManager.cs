@@ -1,17 +1,16 @@
- using TMPro;
+using System;
 using UnityEngine;
 
 public class StageManager : MonoBehaviour
 {
+    public static StageManager Instance { get; private set; }
+
+    public event EventHandler OnSlimeChanged;
+    private SlimeBase _currentSlime;
+
     [Header("UI")]
     [SerializeField] private Transform slimeCanvas;
-    [SerializeField] private TextMeshProUGUI stageText;
-    [SerializeField] private TextMeshProUGUI clearValueText;
-
     [SerializeField] private GameObject NextStagePanel;
-
-    
-    private SlimeBase _currentSlime;
 
     [Space, Header("Setting")]
     [SerializeField, Tooltip("슬라임들의 순서를 결정")]
@@ -19,6 +18,18 @@ public class StageManager : MonoBehaviour
 
     [SerializeField, Tooltip("(테스트용) 시작 스테이지 / 실제 스테이지 숫자 - 1로 기입")]
     private int _stageIndex = 0;
+
+    void Awake()
+    {
+        // 로딩 됐나 체크
+        if (ObjectPoolManager.Instance == null)
+            return;
+
+        if (Instance == null)
+            Instance = this;
+        else if (Instance != this)
+            Destroy(gameObject);
+    }
 
     void Start()
     {
@@ -38,11 +49,11 @@ public class StageManager : MonoBehaviour
         _currentSlime = Instantiate(_slimes[index]).GetComponent<SlimeBase>();
         _currentSlime.Init(this);
 
-        GameManager.Instance.CurTurns = _currentSlime.DefaltTurns;
+        GameManager.Instance.SetTurn(_currentSlime.DefaltTurns);
         GameManager.Instance.ClearValue = _currentSlime.ClearValue;
-        clearValueText.text = $"Clear: {_currentSlime.ClearValue}";
-
-        stageText.text = $"Stage {index + 1}";
+        
+        OnSlimeChanged?.Invoke(this,
+            new SlimeInfo(clearValue: _currentSlime.ClearValue, stageIndex: index + 1));
     }
 
     public void NextStageButton()
@@ -73,6 +84,18 @@ public class StageManager : MonoBehaviour
         else
         {
             Debug.Log("클리어!");
+        }
+    }
+    
+    public class SlimeInfo : EventArgs
+    {
+        public int clearValue;
+        public int stageIndex;
+        
+        public SlimeInfo(int clearValue, int stageIndex)
+        {
+            this.clearValue = clearValue;
+            this.stageIndex = stageIndex;
         }
     }
 }

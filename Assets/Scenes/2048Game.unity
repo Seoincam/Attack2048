@@ -1691,6 +1691,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fc641c295aae64073a7787dd751af74f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _pointManager: {fileID: 0}
   IsReversed: 0
   probablity_4: 15
   TilePrefabs:
@@ -1711,7 +1712,6 @@ MonoBehaviour:
   - {fileID: 6047435193558059963, guid: 853aa6daa65e1447f8299c5198d83afe, type: 3}
   - {fileID: 691568085597732685, guid: cc0991b7fd03045dbbed2909b0bfa763, type: 3}
   - {fileID: 2976873772146142562, guid: 6ea36061cca524241a58bc733e410901, type: 3}
-  remainingTurnsText: {fileID: 1769213545}
   forcedDirection: 0
 --- !u!4 &1024858048
 Transform:
@@ -1740,7 +1740,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 869d0de72d44f459f92eb8d18a6398be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pointsText: {fileID: 1088444605}
   PointRules:
   - tileValue: 8
     point: 1
@@ -1799,8 +1798,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   slimeCanvas: {fileID: 0}
-  stageText: {fileID: 1283577746}
-  clearValueText: {fileID: 1155411062}
   NextStagePanel: {fileID: 366811878}
   _slimes:
   - {fileID: 4141383320853085762, guid: 5969765332a08407f99ce79af83cbe30, type: 3}
@@ -4000,6 +3997,7 @@ GameObject:
   - component: {fileID: 1604864860}
   - component: {fileID: 1604864859}
   - component: {fileID: 1604864858}
+  - component: {fileID: 1604864862}
   m_Layer: 5
   m_Name: UI Canvas
   m_TagString: Untagged
@@ -4101,6 +4099,22 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &1604864862
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1604864857}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f9d4f98670e041c3873022f797bd91f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  remainingTurnsText: {fileID: 1769213545}
+  pointsText: {fileID: 1088444605}
+  stageText: {fileID: 1283577746}
+  clearValueText: {fileID: 1155411062}
 --- !u!1 &1627479695
 GameObject:
   m_ObjectHideFlags: 0
