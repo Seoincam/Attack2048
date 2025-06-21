@@ -637,7 +637,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 359809065}
-  - component: {fileID: 359809066}
   m_Layer: 5
   m_Name: Codex Panel
   m_TagString: Untagged
@@ -672,22 +671,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &359809066
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 359809064}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7f7b2cde38e55457399c45df989f8993, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Codex:
-  - {fileID: 324478846}
-  - {fileID: 604804383}
-  IndexText: {fileID: 969695843}
 --- !u!1 &370992533
 GameObject:
   m_ObjectHideFlags: 0
@@ -850,8 +833,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1998217185}
-        m_TargetAssemblyTypeName: SettingButton, Assembly-CSharp
+      - m_Target: {fileID: 1660736889}
+        m_TargetAssemblyTypeName: LobbyUiManager, Assembly-CSharp
         m_MethodName: CloseSetting
         m_Mode: 1
         m_Arguments:
@@ -911,7 +894,6 @@ GameObject:
   - component: {fileID: 467059125}
   - component: {fileID: 467059128}
   - component: {fileID: 467059127}
-  - component: {fileID: 467059126}
   m_Layer: 0
   m_Name: Setting Panel
   m_TagString: Untagged
@@ -942,20 +924,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 900, y: 900}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &467059126
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 467059124}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8db9d1384899144b4aaecea3f56b50a5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _bgmSlider: {fileID: 792796966}
-  _sfxSlider: {fileID: 1906633927}
 --- !u!114 &467059127
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1730,9 +1698,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 359809066}
-        m_TargetAssemblyTypeName: CodexManager, Assembly-CSharp
-        m_MethodName: OpenBtn
+      - m_Target: {fileID: 1660736889}
+        m_TargetAssemblyTypeName: LobbyUiManager, Assembly-CSharp
+        m_MethodName: OpenCodex
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2832,9 +2800,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 359809066}
-        m_TargetAssemblyTypeName: CodexManager, Assembly-CSharp
-        m_MethodName: PrevBtn
+      - m_Target: {fileID: 1660736889}
+        m_TargetAssemblyTypeName: LobbyUiManager, Assembly-CSharp
+        m_MethodName: PreviousButton
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3576,9 +3544,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 359809066}
-        m_TargetAssemblyTypeName: CodexManager, Assembly-CSharp
-        m_MethodName: NextBtn
+      - m_Target: {fileID: 1660736889}
+        m_TargetAssemblyTypeName: LobbyUiManager, Assembly-CSharp
+        m_MethodName: NextButton
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3910,6 +3878,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _creditPanel: {fileID: 822020707}
+  settingPanel: {fileID: 467059125}
+  codexPanel: {fileID: 359809065}
+  Codex:
+  - {fileID: 324478846}
+  - {fileID: 604804383}
 --- !u!1 &1672655805
 GameObject:
   m_ObjectHideFlags: 0
@@ -4088,9 +4061,9 @@ RectTransform:
   - {fileID: 619394802}
   - {fileID: 273504476}
   - {fileID: 117066431}
-  - {fileID: 822020708}
-  - {fileID: 359809065}
   - {fileID: 467059125}
+  - {fileID: 359809065}
+  - {fileID: 822020708}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -4557,7 +4530,6 @@ GameObject:
   - component: {fileID: 1998217184}
   - component: {fileID: 1998217183}
   - component: {fileID: 1998217182}
-  - component: {fileID: 1998217185}
   m_Layer: 5
   m_Name: Setting Btn
   m_TagString: Untagged
@@ -4629,8 +4601,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1998217185}
-        m_TargetAssemblyTypeName: SettingButton, Assembly-CSharp
+      - m_Target: {fileID: 1660736889}
+        m_TargetAssemblyTypeName: LobbyUiManager, Assembly-CSharp
         m_MethodName: OpenSetting
         m_Mode: 1
         m_Arguments:
@@ -4679,19 +4651,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1998217180}
   m_CullTransparentMesh: 1
---- !u!114 &1998217185
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1998217180}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ac3e7a6b2871d4f5bb28fe432bf83723, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _settingPanel: {fileID: 467059124}
 --- !u!1 &2037835654
 GameObject:
   m_ObjectHideFlags: 0
@@ -4970,9 +4929,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 359809066}
-        m_TargetAssemblyTypeName: CodexManager, Assembly-CSharp
-        m_MethodName: ExitBtn
+      - m_Target: {fileID: 1660736889}
+        m_TargetAssemblyTypeName: LobbyUiManager, Assembly-CSharp
+        m_MethodName: CloseCodex
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -5136,8 +5095,8 @@ SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 30292499}
+  - {fileID: 1191685799}
   - {fileID: 1660736888}
   - {fileID: 519420032}
   - {fileID: 1616320215}
   - {fileID: 1703712057}
-  - {fileID: 1191685799}

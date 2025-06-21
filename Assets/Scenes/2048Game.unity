@@ -439,9 +439,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1567406739}
-        m_TargetAssemblyTypeName: CodexManager, Assembly-CSharp
-        m_MethodName: NextBtn
+      - m_Target: {fileID: 1604864862}
+        m_TargetAssemblyTypeName: InGameUiMnanager, Assembly-CSharp
+        m_MethodName: NextButton
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1031,7 +1031,6 @@ GameObject:
   - component: {fileID: 534308374}
   - component: {fileID: 534308376}
   - component: {fileID: 534308375}
-  - component: {fileID: 534308377}
   m_Layer: 0
   m_Name: Setting Panel
   m_TagString: Untagged
@@ -1100,20 +1099,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 534308373}
   m_CullTransparentMesh: 1
---- !u!114 &534308377
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 534308373}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8db9d1384899144b4aaecea3f56b50a5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _bgmSlider: {fileID: 1875632310}
-  _sfxSlider: {fileID: 1709384205}
 --- !u!1 &560526869
 GameObject:
   m_ObjectHideFlags: 0
@@ -1193,6 +1178,52 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 560526869}
   m_CullTransparentMesh: 1
+--- !u!1 &566691806
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 566691808}
+  - component: {fileID: 566691807}
+  m_Layer: 0
+  m_Name: Main
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &566691807
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 566691806}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3d5ab40a1d5f442f5b2d7a4d26e06b06, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Managers: {fileID: 1024858048}
+  UiManager: {fileID: 1604864861}
+--- !u!4 &566691808
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 566691806}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.066092, y: -1.4671621, z: -99.95706}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &634076101
 GameObject:
   m_ObjectHideFlags: 0
@@ -1436,9 +1467,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1567406739}
-        m_TargetAssemblyTypeName: CodexManager, Assembly-CSharp
-        m_MethodName: OpenBtn
+      - m_Target: {fileID: 1604864862}
+        m_TargetAssemblyTypeName: InGameUiMnanager, Assembly-CSharp
+        m_MethodName: OpenCodex
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1569,9 +1600,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1567406739}
-        m_TargetAssemblyTypeName: CodexManager, Assembly-CSharp
-        m_MethodName: ExitBtn
+      - m_Target: {fileID: 1604864862}
+        m_TargetAssemblyTypeName: InGameUiMnanager, Assembly-CSharp
+        m_MethodName: CloseCodex
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1691,7 +1722,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fc641c295aae64073a7787dd751af74f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _pointManager: {fileID: 0}
   IsReversed: 0
   probablity_4: 15
   TilePrefabs:
@@ -1831,7 +1861,7 @@ GameObject:
   - component: {fileID: 1038038203}
   - component: {fileID: 1038038204}
   m_Layer: 5
-  m_Name: Bottom Button Group
+  m_Name: Store Button Group
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2345,7 +2375,7 @@ GameObject:
   - component: {fileID: 1155411063}
   - component: {fileID: 1155411062}
   m_Layer: 0
-  m_Name: Slime Clear Value Text
+  m_Name: Clear Value Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2480,7 +2510,6 @@ GameObject:
   - component: {fileID: 1208836824}
   - component: {fileID: 1208836826}
   - component: {fileID: 1208836825}
-  - component: {fileID: 1208836827}
   m_Layer: 5
   m_Name: Dark Background
   m_TagString: Untagged
@@ -2546,18 +2575,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1208836823}
   m_CullTransparentMesh: 1
---- !u!114 &1208836827
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1208836823}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2e4f71d35949e4f798a26cad023f9282, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1218258260
 GameObject:
   m_ObjectHideFlags: 0
@@ -2815,7 +2832,7 @@ GameObject:
   - component: {fileID: 1283577747}
   - component: {fileID: 1283577746}
   m_Layer: 5
-  m_Name: Current Stage Text
+  m_Name: Stage Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3413,8 +3430,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1627479700}
-        m_TargetAssemblyTypeName: SettingButton, Assembly-CSharp
+      - m_Target: {fileID: 1604864862}
+        m_TargetAssemblyTypeName: InGameUiMnanager, Assembly-CSharp
         m_MethodName: CloseSetting
         m_Mode: 1
         m_Arguments:
@@ -3875,9 +3892,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1567406739}
-        m_TargetAssemblyTypeName: CodexManager, Assembly-CSharp
-        m_MethodName: PrevBtn
+      - m_Target: {fileID: 1604864862}
+        m_TargetAssemblyTypeName: InGameUiMnanager, Assembly-CSharp
+        m_MethodName: PreviousButton
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3934,7 +3951,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1567406738}
-  - component: {fileID: 1567406739}
   m_Layer: 5
   m_Name: Codex Panel
   m_TagString: Untagged
@@ -3969,22 +3985,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1567406739
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1567406737}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7f7b2cde38e55457399c45df989f8993, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Codex:
-  - {fileID: 1023820084}
-  - {fileID: 1901725362}
-  IndexText: {fileID: 1699956132}
 --- !u!1 &1604864857
 GameObject:
   m_ObjectHideFlags: 0
@@ -4085,10 +4085,10 @@ RectTransform:
   - {fileID: 1769213544}
   - {fileID: 1283577745}
   - {fileID: 1155411061}
-  - {fileID: 1038038203}
-  - {fileID: 1088444604}
   - {fileID: 1627479696}
   - {fileID: 848207989}
+  - {fileID: 1088444604}
+  - {fileID: 1038038203}
   - {fileID: 534308374}
   - {fileID: 1567406738}
   - {fileID: 366811879}
@@ -4115,6 +4115,11 @@ MonoBehaviour:
   pointsText: {fileID: 1088444605}
   stageText: {fileID: 1283577746}
   clearValueText: {fileID: 1155411062}
+  settingPanel: {fileID: 534308374}
+  codexPanel: {fileID: 1567406738}
+  Codex:
+  - {fileID: 1023820084}
+  - {fileID: 1901725362}
 --- !u!1 &1627479695
 GameObject:
   m_ObjectHideFlags: 0
@@ -4127,7 +4132,6 @@ GameObject:
   - component: {fileID: 1627479699}
   - component: {fileID: 1627479698}
   - component: {fileID: 1627479697}
-  - component: {fileID: 1627479700}
   m_Layer: 5
   m_Name: Setting Btn
   m_TagString: Untagged
@@ -4199,8 +4203,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1627479700}
-        m_TargetAssemblyTypeName: SettingButton, Assembly-CSharp
+      - m_Target: {fileID: 1604864862}
+        m_TargetAssemblyTypeName: InGameUiMnanager, Assembly-CSharp
         m_MethodName: OpenSetting
         m_Mode: 1
         m_Arguments:
@@ -4249,19 +4253,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1627479695}
   m_CullTransparentMesh: 1
---- !u!114 &1627479700
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1627479695}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ac3e7a6b2871d4f5bb28fe432bf83723, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _settingPanel: {fileID: 534308373}
 --- !u!1 &1673302096
 GameObject:
   m_ObjectHideFlags: 0
@@ -5695,6 +5686,7 @@ CanvasRenderer:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
+  - {fileID: 566691808}
   - {fileID: 1024858048}
   - {fileID: 1604864861}
   - {fileID: 317869294}

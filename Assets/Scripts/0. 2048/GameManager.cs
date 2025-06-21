@@ -1,23 +1,22 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using Random = UnityEngine.Random;
 
 /*
     흐름 :
 
     0. 새 턴
-        (OnEnter_NewTurn)
+        (GameManager.OnEnter_NewTurn)
 
     1. 입력 감지                 
-        (GetMouseOrTouch)
+        (GameManger.GetMouseOrTouch)
 
     2. 입력 처리               
-        (ExecuteInput -> MoveOrCombine)
+        (GameManger.ExecuteInput -> GameManger.MoveOrCombine)
 
     3. 이동이 발생했다면, 모든 타일 이동 끝날 때까지 대기 
-        (CheckIsMoveEnd)
+        (GameManger.CheckIsMoveEnd)
 
     4. 카운트 다운 페이즈
         (CountDownManager)
@@ -37,11 +36,11 @@ public class GameManager : MonoBehaviour, INewTurnListener
     // - - - - - - - - - - - - - - - - - - - - -
     public static GameManager Instance;
 
-    public PointManager _pointManager;
     private CountDownManager _countManager;
     private ObjectPoolManager _pooler;
 
     public event Action OnRemainingTurnChanged;
+    public event EventHandler OnGetPoint;
 
     public GameObject[,] TileArray = new GameObject[5, 5]; // 타일 배열
     public Obstacle[,] ObstacleArray = new Obstacle[5, 5]; // 장애물 배열 (삭제, 벽, 석화, 감금, 이동)
@@ -89,17 +88,13 @@ public class GameManager : MonoBehaviour, INewTurnListener
     // - - - - - - - - - - - - - - - - - - - - -
     // Unity 콜백
     // - - - - - - - - - - - - - - - - - - - - -
-    void Awake()
+    public void Init()
     {
-        // 로딩 됐나 체크
-        if (ObjectPoolManager.Instance == null)
-            SceneManager.LoadScene("Lobby");
-
         // 싱글턴
         if (Instance == null) Instance = this;
         else Destroy(gameObject);
         
-        _pointManager = GetComponent<PointManager>();
+        // _pointManager = GetComponent<PointManager>();
         _countManager = GetComponent<CountDownManager>();
         _pooler = ObjectPoolManager.Instance;
 
@@ -110,9 +105,8 @@ public class GameManager : MonoBehaviour, INewTurnListener
             }
     }
 
-    void Start()
+    public void StartGame()
     {
-        EventManager.InitEvents();
         Subscribe_NewTurn();
 
         Debug.Log("게임 시작!");
@@ -436,10 +430,12 @@ public class GameManager : MonoBehaviour, INewTurnListener
             TileArray[x2, y2].tag = "Combine";
 
             // 포인트 획득
-            if (TileArray[x2, y2].GetComponent<Tile>().value >= 4) { _pointManager.GetPoint(TileArray[x2, y2].GetComponent<Tile>().value); }
+            if (TileArray[x2, y2].GetComponent<Tile>().value >= 4)
+                OnGetPoint?.Invoke(this, new PointManager.PointInfo(TileArray[x2, y2].GetComponent<Tile>().value));
 
             // 클리어
-            if (TileArray[x2, y2].GetComponent<Tile>().value >= ClearValue) { GetComponent<StageManager>().OnGameClear(); }
+            if (TileArray[x2, y2].GetComponent<Tile>().value >= ClearValue)
+                GetComponent<StageManager>().OnGameClear();
         }
     }
 

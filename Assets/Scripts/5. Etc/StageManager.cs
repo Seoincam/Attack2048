@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class StageManager : MonoBehaviour
 {
-    public static StageManager Instance { get; private set; }
+    // public static StageManager Instance { get; private set; }
 
     public event EventHandler OnSlimeChanged;
     private SlimeBase _currentSlime;
@@ -19,19 +19,15 @@ public class StageManager : MonoBehaviour
     [SerializeField, Tooltip("(테스트용) 시작 스테이지 / 실제 스테이지 숫자 - 1로 기입")]
     private int _stageIndex = 0;
 
-    void Awake()
-    {
-        // 로딩 됐나 체크
-        if (ObjectPoolManager.Instance == null)
-            return;
+    // void Awake()
+    // {
+    //     if (Instance == null)
+    //         Instance = this;
+    //     else if (Instance != this)
+    //         Destroy(gameObject);
+    // }
 
-        if (Instance == null)
-            Instance = this;
-        else if (Instance != this)
-            Destroy(gameObject);
-    }
-
-    void Start()
+    public void Init()
     {
         SpawnSlime(_stageIndex);
     }
