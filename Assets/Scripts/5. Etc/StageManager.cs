@@ -11,6 +11,7 @@ public class StageManager : MonoBehaviour
     [Header("UI")]
     [SerializeField] private Transform slimeCanvas;
     [SerializeField] private GameObject NextStagePanel;
+    [SerializeField] private GameObject FailPanel;
 
     [Space, Header("Setting")]
     [SerializeField, Tooltip("슬라임들의 순서를 결정")]
@@ -36,6 +37,22 @@ public class StageManager : MonoBehaviour
     {
         NextStagePanel.SetActive(true);
         GameManager.Instance.IsPaused = true;
+    }
+
+    public bool StageManagerAlive()
+    {
+        return _currentSlime != null && _currentSlime.gameObject.activeSelf;
+    }
+
+    public void OnGameFail()
+    {
+        FailPanel.SetActive(true);
+        GameManager.Instance.IsPaused = true;
+    }
+
+    public void CloseGameFail()
+    {
+        FailPanel.SetActive(false);
     }
 
     private void SpawnSlime(int index)

@@ -76,7 +76,8 @@ public class GameManager : MonoBehaviour, INewTurnListener
     private HashSet<Tile> _movingTiles; // 매턴마다 이동하는 타일 저장
     private bool _isChecking; // 타일 이동 체크 중인가?
 
-    public int CurTurns {
+    public int CurTurns
+    {
         get => _curTurns;
         private set
         {
@@ -93,7 +94,7 @@ public class GameManager : MonoBehaviour, INewTurnListener
         // 싱글턴
         if (Instance == null) Instance = this;
         else Destroy(gameObject);
-        
+
         // _pointManager = GetComponent<PointManager>();
         _countManager = GetComponent<CountDownManager>();
         _pooler = ObjectPoolManager.Instance;
@@ -135,12 +136,12 @@ public class GameManager : MonoBehaviour, INewTurnListener
     public void OnEnter_NewTurn()
     {
         CurTurns--;
-        if (CurTurns <= 0)
+        var stage = GetComponent<StageManager>();
+
+        if (!CheckCanMove() || (CurTurns <= 0 && stage.StageManagerAlive()))
         {
-            // Debug.Log("이동 횟수 소진! 게임 종료!");
-            // ResetTileArray();
-            // CurTurns = maxTurns;
-            // Debug.Log($"게임 재시작! 이동 횟수: {CurTurns}");
+            stage.OnGameFail();
+            return;
         }
 
         Spawn();
@@ -184,6 +185,28 @@ public class GameManager : MonoBehaviour, INewTurnListener
                     for (i = 0; i < x; i++)
                         if (CheckMoveOrCombine(i + 1, y, i, y)) return true;
         }
+        return false;
+    }
+    //상하좌우 하나라도 이동 가능한지 체크
+    //전체 다 이동 불가면 False, 한 방향이라도 이동 가능하면 true
+    public bool CheckCanMove()
+    {
+        for (x = 0; x < 5; x++)
+            for (y = 0; y < 4; y++)
+                for (i = 4; i > y; i--)
+                    if (CheckMoveOrCombine(x, i - 1, x, i)) return true;
+        for (x = 0; x < 5; x++)
+            for (y = 4; y > 0; y--)
+                for (i = 0; i < y; i++)
+                    if (CheckMoveOrCombine(x, i + 1, x, i)) return true;
+        for (y = 0; y < 5; y++)
+            for (x = 0; x < 4; x++)
+                for (i = 4; i > x; i--)
+                    if (CheckMoveOrCombine(i - 1, y, i, y)) return true;
+        for (y = 0; y < 5; y++)
+            for (x = 4; x > 0; x--)
+                for (i = 0; i < x; i++)
+                    if (CheckMoveOrCombine(i + 1, y, i, y)) return true;
         return false;
     }
     bool CheckMoveOrCombine(int x1, int y1, int x2, int y2)

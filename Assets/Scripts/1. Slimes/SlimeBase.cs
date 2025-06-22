@@ -41,6 +41,15 @@ public abstract class SlimeBase : MonoBehaviour, INewTurnListener
         gameObject.SetActive(false);
     }
 
+    // - - - - - - - - - - 
+    // 패배 로직
+    // - - - - - - - - - - 
+    public void Fail() {
+        EventManager.Unsubscribe(GamePhase.NewTurnPhase, OnEnter_NewTurn);
+        _slimeManager.OnGameClear();
+        gameObject.SetActive(false);
+    }
+
 
     // - - - - - - - - - - - 
     // INewTurnListener

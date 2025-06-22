@@ -102,4 +102,5 @@ public class InGameUiMnanager : MonoBehaviour
             _indexText.text = $"{_index + 1} / {Codex.Length}";
         }
     }
+
 }
