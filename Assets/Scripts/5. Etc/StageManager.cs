@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class StageManager : MonoBehaviour
 {
@@ -20,13 +21,6 @@ public class StageManager : MonoBehaviour
     [SerializeField, Tooltip("(테스트용) 시작 스테이지 / 실제 스테이지 숫자 - 1로 기입")]
     private int _stageIndex = 0;
 
-    // void Awake()
-    // {
-    //     if (Instance == null)
-    //         Instance = this;
-    //     else if (Instance != this)
-    //         Destroy(gameObject);
-    // }
 
     public void Init()
     {
@@ -48,6 +42,25 @@ public class StageManager : MonoBehaviour
     {
         FailPanel.SetActive(true);
         GameManager.Instance.IsPaused = true;
+    }
+
+    // TODO: 실패시 로비 가는 버튼에 할당
+    public void GoToLobbyButton()
+    {
+        // 슬라임 액션 비활성화
+        foreach (Transform action in ObjectPoolManager.Instance.SlimeActionGroup)
+        {
+            if (!action.gameObject.activeSelf) continue;
+            SlimeActionBase slimeAction = action.GetComponent<SlimeActionBase>();
+            slimeAction.StartCoroutine(slimeAction.DestroySelf());
+        }
+
+        // 타일 초기화
+        GameManager.Instance.ResetTileArray();
+        // 장애물 배열 초기화
+        GameManager.Instance.ResetObstacleArray();
+
+        SceneManager.LoadScene("Lobby");
     }
 
     public void CloseGameFail()

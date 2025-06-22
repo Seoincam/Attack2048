@@ -18,7 +18,8 @@ public class LoadingSceneController : MonoBehaviour
         operation.allowSceneActivation = false;
 
         // 씬 전환되면서 미리 ObjectPooler에 오브젝트 생성해서 게임 중 성능 최적화
-        ObjectPoolManager.Instance.Init(); 
+        if(!ObjectPoolManager.Instance.IsInitialized)
+            ObjectPoolManager.Instance.Init(); 
 
         float timer = 1.2f;
         while (!operation.isDone)
