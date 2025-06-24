@@ -56,16 +56,12 @@ public class StageManager : MonoBehaviour
         }
 
         // 타일 초기화
-        GameManager.Instance.ResetTileArray();
+        GameManager.Instance.ClearTileArray();
         // 장애물 배열 초기화
         GameManager.Instance.ResetObstacleArray();
+        FailPanel.SetActive(false);
 
         SceneManager.LoadScene("Lobby");
-    }
-
-    public void CloseGameFail()
-    {
-        FailPanel.SetActive(false);
     }
 
     private void SpawnSlime(int index)

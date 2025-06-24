@@ -539,6 +539,15 @@ public class GameManager : MonoBehaviour, INewTurnListener
         Spawn();
     }
 
+    public void ClearTileArray()
+    {
+        for (int x = 0; x < 5; x++)
+            for (int y = 0; y < 5; y++)
+            {
+                DeleteTile(x, y);
+            }
+    }
+
     // 기존 장애물 삭제
     public void ResetObstacleArray()
     {

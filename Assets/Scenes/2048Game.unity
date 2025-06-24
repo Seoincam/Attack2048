@@ -4135,7 +4135,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: X
+  m_Text: "\uB85C\uBE44\uB85C \uB3CC\uC544\uAC00\uAE30\n"
 --- !u!222 &1571406929
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -4157,7 +4157,7 @@ GameObject:
   - component: {fileID: 1580806416}
   - component: {fileID: 1580806415}
   m_Layer: 0
-  m_Name: Exit Btn
+  m_Name: Lobby Btn
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4178,11 +4178,11 @@ RectTransform:
   - {fileID: 1571406927}
   m_Father: {fileID: 2064295993}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 1, y: 1}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -30, y: -30}
-  m_SizeDelta: {x: 100, y: 100}
-  m_Pivot: {x: 1, y: 1}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: -126}
+  m_SizeDelta: {x: 600, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1580806415
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4229,7 +4229,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1024858054}
         m_TargetAssemblyTypeName: StageManager, Assembly-CSharp
-        m_MethodName: CloseGameFail
+        m_MethodName: GoToLobbyButton
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -5913,7 +5913,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &2064295993
 RectTransform:
   m_ObjectHideFlags: 0
