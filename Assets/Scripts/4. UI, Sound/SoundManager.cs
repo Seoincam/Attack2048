@@ -10,18 +10,10 @@ public class SoundManager : SingleTone<SoundManager>
     [SerializeField] private AudioSource SFX;
 
     [Header("Audio Clip")]
-    [SerializeField] private AudioClip LobbyBGM;
+    public AudioClip LobbyBGM;
 
     private float BgmVolume = .25f;
     private float SfxVolume = .75f;
-
-
-    // Unity 콜백    
-    // - - - - - - - - - - 
-    void Start()
-    {
-        PlayBGM(LobbyBGM);
-    }
 
 
     // 설정

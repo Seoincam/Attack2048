@@ -1827,9 +1827,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a48dfc4c85092465dbee694b60518324, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  slimeCanvas: {fileID: 0}
-  NextStagePanel: {fileID: 366811878}
-  FailPanel: {fileID: 2064295992}
   _slimes:
   - {fileID: 4141383320853085762, guid: 5969765332a08407f99ce79af83cbe30, type: 3}
   - {fileID: 6597955752300780520, guid: ff2f334fd53c5478cbdbd71191c691c5, type: 3}
@@ -1838,7 +1835,7 @@ MonoBehaviour:
   - {fileID: 2783905767982787501, guid: bfc7ac41847f2416191b876009236e09, type: 3}
   - {fileID: 72323390830630359, guid: b30fc5131fc8a4c9e86db2a81071791b, type: 3}
   - {fileID: 3445808771769029929, guid: 554366196dd324ed7b546e945c139e0f, type: 3}
-  _stageIndex: 0
+  TestStartIndex: 0
 --- !u!114 &1024858055
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4404,6 +4401,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5f9d4f98670e041c3873022f797bd91f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  loadingSO: {fileID: 11400000, guid: 4a8dca91fb4c74ae7afc6a407a558ccc, type: 2}
   remainingTurnsText: {fileID: 1769213545}
   pointsText: {fileID: 1088444605}
   stageText: {fileID: 1283577746}
@@ -4413,6 +4411,8 @@ MonoBehaviour:
   Codex:
   - {fileID: 1023820084}
   - {fileID: 1901725362}
+  NextStagePanel: {fileID: 366811878}
+  FailPanel: {fileID: 2064295992}
 --- !u!1 &1627479695
 GameObject:
   m_ObjectHideFlags: 0
@@ -5913,7 +5913,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2064295993
 RectTransform:
   m_ObjectHideFlags: 0

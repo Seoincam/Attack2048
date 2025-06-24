@@ -470,6 +470,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3211233e6180447368121ba5362310b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  loadingSO: {fileID: 11400000, guid: 4a8dca91fb4c74ae7afc6a407a558ccc, type: 2}
   progressBar: {fileID: 517161617}
 --- !u!4 &429782227
 Transform:

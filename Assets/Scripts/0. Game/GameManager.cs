@@ -140,7 +140,7 @@ public class GameManager : MonoBehaviour, INewTurnListener
 
         if (!CheckCanMove() || (CurTurns <= 0 && stage.StageManagerAlive()))
         {
-            stage.OnGameFail();
+            stage.GameFail();
             return;
         }
 
@@ -458,7 +458,7 @@ public class GameManager : MonoBehaviour, INewTurnListener
 
             // 클리어
             if (TileArray[x2, y2].GetComponent<Tile>().value >= ClearValue)
-                GetComponent<StageManager>().OnGameClear();
+                GetComponent<StageManager>().GameClear();
         }
     }
 

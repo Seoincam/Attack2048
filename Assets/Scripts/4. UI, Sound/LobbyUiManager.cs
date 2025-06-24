@@ -4,8 +4,9 @@ using UnityEngine.SceneManagement;
 
 public class LobbyUiManager : MonoBehaviour
 {
-    [SerializeField] private GameObject _creditPanel;
+    [SerializeField] private LoadingSO loadingSO;
 
+    [SerializeField] private GameObject creditPanel;
     [SerializeField] private Transform settingPanel;
     [SerializeField] private Transform codexPanel;
     [SerializeField] private GameObject[] Codex;
@@ -25,22 +26,28 @@ public class LobbyUiManager : MonoBehaviour
         _indexText = codexPanel.Find("Index Text").GetComponent<Text>();
     }
 
+    void Start()
+    {
+        SoundManager.Instance.PlayBGM(SoundManager.Instance.LobbyBGM);
+    }
+
 
     // Lobby Buttons
     // - - - - - - - - -    
     public void GameStart()
     {
-        SceneManager.LoadScene(2);
+        loadingSO.SceneName = "2048Game";
+        SceneManager.LoadScene("Loading");
     }
 
     public void OpenCredit()
     {
-        _creditPanel.SetActive(true);
+        creditPanel.SetActive(true);
     }
 
     public void CloseCredit()
     {
-        _creditPanel.SetActive(false);
+        creditPanel.SetActive(false);
     }
 
     public void Exit()

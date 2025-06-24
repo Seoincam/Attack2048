@@ -3877,7 +3877,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1c2901cfcd12f4dde95a99e030c74b18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _creditPanel: {fileID: 822020707}
+  loadingSO: {fileID: 11400000, guid: 4a8dca91fb4c74ae7afc6a407a558ccc, type: 2}
+  creditPanel: {fileID: 822020707}
   settingPanel: {fileID: 467059125}
   codexPanel: {fileID: 359809065}
   Codex:

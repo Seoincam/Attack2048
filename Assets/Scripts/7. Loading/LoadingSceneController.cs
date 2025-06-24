@@ -5,11 +5,12 @@ using UnityEngine.UI;
 
 public class LoadingSceneController : MonoBehaviour
 {
+    [SerializeField] private  LoadingSO loadingSO;
     [SerializeField] private Slider progressBar;
 
     void Start()
     {
-        StartCoroutine(LoadSceneAsync("2048Game"));
+        StartCoroutine(LoadSceneAsync(loadingSO.SceneName));
     }
 
     private IEnumerator LoadSceneAsync(string sceneName)

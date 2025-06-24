@@ -37,7 +37,7 @@ public abstract class SlimeBase : MonoBehaviour, INewTurnListener
     // - - - - - - - - - - 
     public void Die() {
         EventManager.Unsubscribe(GamePhase.NewTurnPhase, OnEnter_NewTurn);
-        _slimeManager.OnGameClear();
+        _slimeManager.GameClear();
         gameObject.SetActive(false);
     }
 
@@ -46,7 +46,7 @@ public abstract class SlimeBase : MonoBehaviour, INewTurnListener
     // - - - - - - - - - - 
     public void Fail() {
         EventManager.Unsubscribe(GamePhase.NewTurnPhase, OnEnter_NewTurn);
-        _slimeManager.OnGameClear();
+        _slimeManager.GameClear();
         gameObject.SetActive(false);
     }
 
