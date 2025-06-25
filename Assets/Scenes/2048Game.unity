@@ -1836,6 +1836,7 @@ MonoBehaviour:
   - {fileID: 72323390830630359, guid: b30fc5131fc8a4c9e86db2a81071791b, type: 3}
   - {fileID: 3445808771769029929, guid: 554366196dd324ed7b546e945c139e0f, type: 3}
   TestStartIndex: 0
+  _stageIndex: 0
 --- !u!114 &1024858055
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3690,7 +3691,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 0
     m_WrapAround: 0
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
@@ -3720,19 +3721,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1454810706}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1024858054}
-        m_TargetAssemblyTypeName: SlimeManager, Assembly-CSharp
-        m_MethodName: NextStageButton
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &1454810706
 MonoBehaviour:
   m_ObjectHideFlags: 0

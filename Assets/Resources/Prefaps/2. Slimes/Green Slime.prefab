@@ -101,5 +101,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DefaltTurns: 300
-  ClearValue: 64
+  ClearValue: 8
   slimeBgm: {fileID: 8300000, guid: 10f1b96fb22ee464a987f8b442a05a5c, type: 3}

@@ -15,13 +15,13 @@ public class StageManager : MonoBehaviour
 
     [SerializeField, Tooltip("(테스트용) 시작 스테이지 / 실제 스테이지 숫자 - 1로 기입")]
     private int TestStartIndex = 0;
-    public int StageIndex { get; private set; }
+    public int _stageIndex;
 
 
     public void Init()
     {
-        StageIndex = TestStartIndex;
-        SpawnSlime(StageIndex);
+        _stageIndex = TestStartIndex;
+        SpawnSlime(_stageIndex);
     }
 
     public void GameClear()
@@ -55,9 +55,9 @@ public class StageManager : MonoBehaviour
 
     public bool GoNextStage()
     {
-        if (++StageIndex < _slimes.Length)
+        if (++_stageIndex < _slimes.Length)
         {
-            SpawnSlime(StageIndex);
+            SpawnSlime(_stageIndex);
             return true;
         }
 

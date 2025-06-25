@@ -994,7 +994,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DefaltTurns: 300
-  ClearValue: 128
+  ClearValue: 8
   slimeBgm: {fileID: 8300000, guid: 36263a0ad52b94f03acd6c0f711e7cb1, type: 3}
   WallInterval: 3
   WallCount: 3

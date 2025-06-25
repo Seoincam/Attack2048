@@ -125,6 +125,7 @@ public class InGameUiMnanager : MonoBehaviour
     {
         if (main.Stage.GoNextStage())
         {
+            NextStagePanel.GetComponentInChildren<Button>().onClick.RemoveAllListeners();
             NextStagePanel.SetActive(false);
 
             // 슬라임 액션 비활성화
