@@ -17,7 +17,6 @@ public class Translocate7Horizontal : SlimeActionBase, IShowLife, IMakeWarningEf
     int _a, _b;
 
     private SpriteRenderer[] tList;
-    private GameManager G;
     private ObjectPoolManager _pooler;
 
 
@@ -25,7 +24,6 @@ public class Translocate7Horizontal : SlimeActionBase, IShowLife, IMakeWarningEf
     // - - - - - - - - - - 
     void Awake()
     {
-        G = GameManager.Instance;
         _pooler = ObjectPoolManager.Instance;
 
         GetRenderer();
@@ -41,6 +39,8 @@ public class Translocate7Horizontal : SlimeActionBase, IShowLife, IMakeWarningEf
     // - - - - - - - - - - 
     public override void Init(int a, int b)
     {
+        var G = GameManager.Instance;
+
         base.Init();
         UpdateLifeText();
 
@@ -79,6 +79,8 @@ public class Translocate7Horizontal : SlimeActionBase, IShowLife, IMakeWarningEf
 
     protected override void Execute()
     {
+        var G = GameManager.Instance;
+
         // 실제 이동
         for (int i = 0; i < 5; i++)
         {
@@ -136,11 +138,11 @@ public class Translocate7Horizontal : SlimeActionBase, IShowLife, IMakeWarningEf
         for (int i = 0; i < 5; i++)
         {
             particle = _pooler.GetObject(27, Group.Effect).GetComponent<ParticleSystem>();
-            particle.transform.position = G.LocateTile(i, _a);
+            particle.transform.position = GameManager.Instance.LocateTile(i, _a);
             particle.Play();
 
             particle = _pooler.GetObject(27, Group.Effect).GetComponent<ParticleSystem>();
-            particle.transform.position = G.LocateTile(i, _b);
+            particle.transform.position = GameManager.Instance.LocateTile(i, _b);
             particle.Play();
         }
     }

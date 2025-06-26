@@ -15,7 +15,6 @@ public class Translocate3 : SlimeActionBase, IShowLife, IMakeWarningEffect, IMak
     
     private SpriteRenderer[] tList;
 
-    private GameManager G;
     private ObjectPoolManager _pooler;
 
 
@@ -23,12 +22,10 @@ public class Translocate3 : SlimeActionBase, IShowLife, IMakeWarningEffect, IMak
     // - - - - - - - - - - 
     void Awake()
     {
-        G = GameManager.Instance;
-
-        t_0_0.transform.position = G.LocateTile(0, 0);
-        t_0_4.transform.position = G.LocateTile(0, 4);
-        t_4_4.transform.position = G.LocateTile(4, 4);
-        t_4_0.transform.position = G.LocateTile(4, 0);
+        t_0_0.transform.position = GameManager.Instance.LocateTile(0, 0);
+        t_0_4.transform.position = GameManager.Instance.LocateTile(0, 4);
+        t_4_4.transform.position = GameManager.Instance.LocateTile(4, 4);
+        t_4_0.transform.position = GameManager.Instance.LocateTile(4, 0);
 
         GetRenderer();
 
@@ -50,7 +47,7 @@ public class Translocate3 : SlimeActionBase, IShowLife, IMakeWarningEffect, IMak
 
         for (int x = 0; x < 5; x += 4)
             for (int y = 0; y < 5; y += 4)
-                G.ObstacleArray[x, y].PlaceTranslocate();        
+                GameManager.Instance.ObstacleArray[x, y].PlaceTranslocate();        
     }
 
 
@@ -64,6 +61,8 @@ public class Translocate3 : SlimeActionBase, IShowLife, IMakeWarningEffect, IMak
 
     protected override void Execute()
     {
+        var G = GameManager.Instance;
+
         // 실제 이동
         if (G.TileArray[0, 0] != null) G.TileArray[0, 0].transform.position = G.LocateTile(0, 4);
         if (G.TileArray[0, 4] != null) G.TileArray[0, 4].transform.position = G.LocateTile(4, 4);
@@ -115,7 +114,7 @@ public class Translocate3 : SlimeActionBase, IShowLife, IMakeWarningEffect, IMak
             for (int y = 0; y < 5; y += 4)
             {
                 particle = _pooler.GetObject(27, Group.Effect).GetComponent<ParticleSystem>();
-                particle.transform.position = G.LocateTile(x, y);
+                particle.transform.position = GameManager.Instance.LocateTile(x, y);
                 particle.Play();
             }
     }

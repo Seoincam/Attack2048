@@ -20,14 +20,12 @@ public class Delete : SlimeActionBase, IShowLife, IMakeWarningEffect, IMakeDelet
     private int _x, _y; // Square 배열 상의 현재 위치
 
     private SpriteRenderer _renderer;
-    private GameManager G;
 
 
     // Unity 콜백
     // - - - - - - - - - - 
     void Awake()
     {
-        G = GameManager.Instance;
         GetRenderer();
     }
     void Update()
@@ -46,7 +44,7 @@ public class Delete : SlimeActionBase, IShowLife, IMakeWarningEffect, IMakeDelet
         UpdateLifeText();
 
         _x = x; _y = y;
-        G.ObstacleArray[_x, _y].PlaceDelete();
+        GameManager.Instance.ObstacleArray[_x, _y].PlaceDelete();
     }
 
 
@@ -60,9 +58,13 @@ public class Delete : SlimeActionBase, IShowLife, IMakeWarningEffect, IMakeDelet
 
     protected override void Execute()
     {
-        if (G.TileArray[_x, _y] != null && !G.TileArray[_x, _y].GetComponent<Tile>().IsProtected)
-            G.DeleteTile(_x, _y);
-        G.ObstacleArray[_x, _y].RemoveDelete();
+        if (GameManager.Instance.TileArray[_x, _y] != null
+            && !GameManager.Instance.TileArray[_x, _y].GetComponent<Tile>().IsProtected)
+        {
+            GameManager.Instance.DeleteTile(_x, _y);
+        }
+            
+        GameManager.Instance.ObstacleArray[_x, _y].RemoveDelete();
 
         MakeDeleteEffect();
         base.Execute();

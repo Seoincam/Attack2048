@@ -15,14 +15,12 @@ public class PetrifyPrep : SlimeActionBase, IShowLife, IMakeWarningEffect
     private int _x, _y; // Square 배열 상의 현재 위치
     
     private SpriteRenderer _renderer;
-    private GameManager G;
 
 
     // Unity 콜백
     // - - - - - - - - - - 
     void Awake()
     {
-        G = GameManager.Instance;
         GetRenderer();
     }
 
@@ -40,7 +38,7 @@ public class PetrifyPrep : SlimeActionBase, IShowLife, IMakeWarningEffect
         UpdateLifeText();
 
         _x = x; _y = y;
-        G.ObstacleArray[x, y].PlacePetrifyPrep();
+        GameManager.Instance.ObstacleArray[x, y].PlacePetrifyPrep();
     }
 
 
@@ -54,14 +52,15 @@ public class PetrifyPrep : SlimeActionBase, IShowLife, IMakeWarningEffect
 
     protected override void Execute()
     {
-        G.ObstacleArray[_x, _y].RemovePetrifyPrep();
+        GameManager.Instance.ObstacleArray[_x, _y].RemovePetrifyPrep();
 
         // Tile이 null이면 실행
         // Tile이 null 아니고 보호 아니면 실행
         // Tile이 null 아니고 보호면 실행x
-        if (G.TileArray[_x, _y] == null || (G.TileArray[_x, _y] != null && !G.TileArray[_x, _y].GetComponent<Tile>().IsProtected))
+        if (GameManager.Instance.TileArray[_x, _y] == null
+            || (GameManager.Instance.TileArray[_x, _y] != null && !GameManager.Instance.TileArray[_x, _y].GetComponent<Tile>().IsProtected))
         {
-            G.DeleteTile(_x, _y);
+            GameManager.Instance.DeleteTile(_x, _y);
             GameObject obj = ObjectPoolManager.Instance.GetObject(22, Group.SlimeAction);
             Petrify petrify = obj.GetComponent<Petrify>();
             petrify.Init(_x, _y);

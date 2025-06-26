@@ -11,13 +11,6 @@ public class Wall : SlimeActionBase, IShowLife, IMakeDeleteEffect
     private int x1, y1, x2, y2;
     [SerializeField] private Text lifeText;
 
-    private GameManager G;
-
-    void Awake()
-    {
-        G = GameManager.Instance;
-    }
-
     // Wall의 실제 위치를 지정하고 gamemanager에 알림
     public void Init(int x1, int y1, int x2, int y2)
     {
@@ -30,7 +23,7 @@ public class Wall : SlimeActionBase, IShowLife, IMakeDeleteEffect
         this.y2 = y2;
 
         // 위치 계산
-        transform.position = (G.LocateTile(x1, y1) + G.LocateTile(x2, y2)) / 2;
+        transform.position = (GameManager.Instance.LocateTile(x1, y1) + GameManager.Instance.LocateTile(x2, y2)) / 2;
 
         // 벽의 위치에 따라 회전 e.g. 위, 아래에 생성될 경우 90도 회전
         if (x1 == x2)
@@ -84,13 +77,13 @@ public class Wall : SlimeActionBase, IShowLife, IMakeDeleteEffect
         {
             if (y1 < y2)
             {
-                G.ObstacleArray[x1, y1].PlaceWall(1);
-                G.ObstacleArray[x2, y2].PlaceWall(0);
+                GameManager.Instance.ObstacleArray[x1, y1].PlaceWall(1);
+                GameManager.Instance.ObstacleArray[x2, y2].PlaceWall(0);
             }
             else
             {
-                G.ObstacleArray[x1, y1].PlaceWall(0);
-                G.ObstacleArray[x2, y2].PlaceWall(1);
+                GameManager.Instance.ObstacleArray[x1, y1].PlaceWall(0);
+                GameManager.Instance.ObstacleArray[x2, y2].PlaceWall(1);
             }
         }
 
@@ -98,13 +91,13 @@ public class Wall : SlimeActionBase, IShowLife, IMakeDeleteEffect
         {
             if (x1 < x2)
             {
-                G.ObstacleArray[x1, y1].PlaceWall(3);
-                G.ObstacleArray[x2, y2].PlaceWall(2);
+                GameManager.Instance.ObstacleArray[x1, y1].PlaceWall(3);
+                GameManager.Instance.ObstacleArray[x2, y2].PlaceWall(2);
             }
             else
             {
-                G.ObstacleArray[x1, y1].PlaceWall(2);
-                G.ObstacleArray[x2, y2].PlaceWall(3);
+                GameManager.Instance.ObstacleArray[x1, y1].PlaceWall(2);
+                GameManager.Instance.ObstacleArray[x2, y2].PlaceWall(3);
             }
         }
     }
@@ -117,13 +110,13 @@ public class Wall : SlimeActionBase, IShowLife, IMakeDeleteEffect
         {
             if (y1 < y2)
             {
-                G.ObstacleArray[x1, y1].RemoveWall(1);
-                G.ObstacleArray[x2, y2].RemoveWall(0);
+                GameManager.Instance.ObstacleArray[x1, y1].RemoveWall(1);
+                GameManager.Instance.ObstacleArray[x2, y2].RemoveWall(0);
             }
             else
             {
-                G.ObstacleArray[x1, y1].RemoveWall(0);
-                G.ObstacleArray[x2, y2].RemoveWall(1);
+                GameManager.Instance.ObstacleArray[x1, y1].RemoveWall(0);
+                GameManager.Instance.ObstacleArray[x2, y2].RemoveWall(1);
             }
         }
 
@@ -131,13 +124,13 @@ public class Wall : SlimeActionBase, IShowLife, IMakeDeleteEffect
         {
             if (x1 < x2)
             {
-                G.ObstacleArray[x1, y1].RemoveWall(3);
-                G.ObstacleArray[x2, y2].RemoveWall(2);
+                GameManager.Instance.ObstacleArray[x1, y1].RemoveWall(3);
+                GameManager.Instance.ObstacleArray[x2, y2].RemoveWall(2);
             }
             else
             {
-                G.ObstacleArray[x1, y1].RemoveWall(2);
-                G.ObstacleArray[x2, y2].RemoveWall(3);
+                GameManager.Instance.ObstacleArray[x1, y1].RemoveWall(2);
+                GameManager.Instance.ObstacleArray[x2, y2].RemoveWall(3);
             }
         }
     }
