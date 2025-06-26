@@ -1835,7 +1835,7 @@ MonoBehaviour:
   - {fileID: 2783905767982787501, guid: bfc7ac41847f2416191b876009236e09, type: 3}
   - {fileID: 72323390830630359, guid: b30fc5131fc8a4c9e86db2a81071791b, type: 3}
   - {fileID: 3445808771769029929, guid: 554366196dd324ed7b546e945c139e0f, type: 3}
-  TestStartIndex: 0
+  TestStartIndex: 5
   _stageIndex: 0
 --- !u!114 &1024858055
 MonoBehaviour:
