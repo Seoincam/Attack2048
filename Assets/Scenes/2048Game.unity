@@ -1799,10 +1799,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   darkBackground: {fileID: 1208836823}
-  PreventDestroyCost: 10
-  DestoryTileCost: 10
-  AddTurnCost: 10
-  AddTurnAmount: 50
+  PreventDestroyCost: 15
+  DestoryTileCost: 15
+  AddTurnCost: 40
+  AddTurnAmount: 5
 --- !u!114 &1024858052
 MonoBehaviour:
   m_ObjectHideFlags: 0
