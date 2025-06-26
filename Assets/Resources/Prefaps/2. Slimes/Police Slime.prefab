@@ -100,7 +100,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9b4fd83987e5a43a3b8116aad1204d64, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DefaltTurns: 300
+  DefaltTurns: 100
   ClearValue: 128
   slimeBgm: {fileID: 8300000, guid: 10f1b96fb22ee464a987f8b442a05a5c, type: 3}
   ImprisionInterval: 3
