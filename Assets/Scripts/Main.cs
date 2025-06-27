@@ -31,14 +31,14 @@ public class Main : MonoBehaviour
 
     void Start()
     {
+        EventManager.InitEvents();
+        var ui = UiManager.GetComponent<InGameUiMnanager>();
+        ui.Init(this);
         Game.Init();
         Store.Init(Point);
         Point.Init();
         Stage.Init();
 
-        EventManager.InitEvents();
-        var ui = UiManager.GetComponent<InGameUiMnanager>();
-        ui.Init(this);
         GameManager.Instance.StartGame();
         ui.RefreshAllUi();
     }
