@@ -2254,7 +2254,7 @@ MonoBehaviour:
     point: 20
   - tileValue: 512
     point: 30
-  TestPoints: 150
+  TestPoints: 0
 --- !u!114 &1024858051
 MonoBehaviour:
   m_ObjectHideFlags: 0

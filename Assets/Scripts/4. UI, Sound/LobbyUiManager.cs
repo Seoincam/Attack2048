@@ -52,6 +52,7 @@ public class LobbyUiManager : MonoBehaviour
 
     public void Exit()
     {
+        SoundManager.Instance?.SaveSetting();
         Application.Quit();
     }
     
