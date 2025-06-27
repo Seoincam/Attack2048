@@ -2,23 +2,36 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using TMPro;
-using System;
 
 public class InGameUiMnanager : MonoBehaviour
 {
+    // 필드
+    // - - - - - - - - -
     [SerializeField] private LoadingSO loadingSO;
 
-    [SerializeField] private TextMeshProUGUI remainingTurnsText;
-    [SerializeField] private TextMeshProUGUI pointsText;
+    [Space, SerializeField] private TextMeshProUGUI remainingTurnsText;
     [SerializeField] private TextMeshProUGUI stageText;
     [SerializeField] private TextMeshProUGUI clearValueText;
 
-    [SerializeField] private Transform settingPanel;
+    [Space, SerializeField] private Button settingButton;
+    [SerializeField] private Button codexButton;
+
+    [Space, SerializeField] private Transform settingPanel;
     [SerializeField] private Transform codexPanel;
     [SerializeField] private GameObject[] Codex;
 
-    [SerializeField] private GameObject NextStagePanel;
-    [SerializeField] private GameObject FailPanel;
+    [Space, SerializeField] private Button informationButton;
+    [SerializeField] private GameObject informationPanel;
+    [SerializeField] private TextMeshProUGUI pointsText;
+    [SerializeField] private Button preventDestroyButton;
+    [SerializeField] private Button addTurnButton;
+    [SerializeField] private Button destroyTileButton;
+
+    [Space, SerializeField] private GameObject nextStagePanel;
+    [SerializeField] private GameObject failPanel;
+
+    [Space, SerializeField] private Canvas darkCanvas;
+    [SerializeField] private GameObject darkPanel;
 
     private Text _indexText;
     private int _index;
@@ -26,12 +39,17 @@ public class InGameUiMnanager : MonoBehaviour
     private Main main;
 
 
+
+    // 초기화
+    // - - - - - - - - -
     public void Init(Main main)
     {
         this.main = main;
 
         main.Game.OnRemainingTurnChanged += OnRemainingTurnChanged;
         main.Point.OnPointChanged += OnPointChanged;
+        main.Store.OnClickButton += OnClickStoreButton;
+
         main.Stage.OnSlimeChanged += OnSlimeChanged;
 
         main.Stage.OnGameClear += OnGameClear;
@@ -43,9 +61,30 @@ public class InGameUiMnanager : MonoBehaviour
             settingPanel.Find("SFX/SFX Slider").GetComponent<Slider>()
         );
 
+        settingButton.onClick.AddListener(OpenSetting);
+        codexButton.onClick.AddListener(OpenCodex);
+
+        settingPanel.Find("Retry Button").GetComponent<Button>().onClick.AddListener(Retry);
+        settingPanel.Find("Lobby Button").GetComponent<Button>().onClick.AddListener(GoLobbyButton);
+
         _indexText = codexPanel.Find("Index Text").GetComponent<Text>();
+
+        informationButton.onClick.AddListener(OpenInformation);
+        informationPanel.GetComponentInChildren<Button>().onClick.AddListener(CloseInformation);
+
+        preventDestroyButton.onClick.AddListener(PreventDestroy);
+        addTurnButton.onClick.AddListener(AddTurn);
+        destroyTileButton.onClick.AddListener(DestroyTile);
+
+        preventDestroyButton.GetComponentInChildren<Text>().text = $"파괴 방지\n{main.Store.PreventDestroyCost}pt";
+        addTurnButton.GetComponentInChildren<Text>().text = $"턴 추가\n{main.Store.AddTurnCost}pt";
+        destroyTileButton.GetComponentInChildren<Text>().text = $"타일 파괴\n{main.Store.DestroyTileCost}pt";
     }
 
+
+
+    // delegate
+    // - - - - - - - - -
     private void OnRemainingTurnChanged()
     {
         remainingTurnsText.text = $"Remaining Turns: {GameManager.Instance.CurTurns}";
@@ -53,42 +92,106 @@ public class InGameUiMnanager : MonoBehaviour
 
     private void OnPointChanged()
     {
-        pointsText.text = $"{main.Point.Points}pt";
+        var point = main.Point.Points;
+
+        pointsText.text = $"{point}pt";
+
+        preventDestroyButton.interactable = point >= main.Store.PreventDestroyCost;
+        addTurnButton.interactable = point >= main.Store.AddTurnCost;
+        destroyTileButton.interactable = point >= main.Store.DestroyTileCost;
     }
 
-    private void OnSlimeChanged(object _, EventArgs slimeInfo)
+    private void OnClickStoreButton(object _, StoreManager.ClickInfo clickInfo)
     {
-        if (slimeInfo is StageManager.SlimeInfo info)
-        {
-            stageText.text = $"Stage {info.stageIndex}";
-            clearValueText.text = $"Clear: {info.clearValue}";
-        }
+        SetAllButtons(!clickInfo.isSelecting);
+        if (!clickInfo.isSelecting)
+            SetDarkPanel(false);
+    }
+
+    private void OnSlimeChanged(object _, StageManager.SlimeInfo slimeInfo)
+    {
+        stageText.text = $"Stage {slimeInfo.stageIndex}";
+        clearValueText.text = $"Clear: {slimeInfo.clearValue}";
     }
 
     // Setting Panel
     // - - - - - - - - -
-    public void OpenSetting()
+    private void OpenSetting()
     {
+        if (!main.Game.CanGetInput)
+            return;
+
+        SetAllButtons(false);
+        SetDarkPanel(value: true);
         main.Game.IsPaused = true;
         settingPanel.gameObject.SetActive(true);
     }
 
-    public void CloseSetting()
+    private void CloseSetting()
     {
+        SetAllButtons(true);
+        SetDarkPanel(value: false);
         main.Game.IsPaused = false;
         settingPanel.gameObject.SetActive(false);
+    }
+
+    private void Retry()
+    {
+        // 슬라임 액션 비활성화
+        foreach (Transform action in ObjectPoolManager.Instance.SlimeActionGroup)
+        {
+            if (!action.gameObject.activeSelf)
+                continue;
+            var slimeAction = action.GetComponent<SlimeActionBase>();
+            slimeAction.StartCoroutine(slimeAction.DestroySelf());
+        }
+
+        GameManager.Instance.ResetTileArray();
+        GameManager.Instance.ResetObstacleArray();
+        main.Point.ResetPoint();
+
+        main.Stage.ChangeStage(0, isRetry: true);
+        CloseSetting();
+    }
+
+
+    // Store Button
+    // - - - - - - - - -
+    private void PreventDestroy()
+    {
+        SetDarkPanel(true, "Defalut");
+        main.Store.PreventDestroyBtn();
+    }
+
+    private void AddTurn()
+    {
+        SetDarkPanel(true, "Defalut");
+        main.Store.AddTurnBtn();
+    }
+
+    private void DestroyTile()
+    {
+        SetDarkPanel(true, "Defalut");
+        main.Store.DestoryTileBtn();
     }
 
     // Codex Panel
     // - - - - - - - - -
     public void OpenCodex()
     {
+        if (!main.Game.CanGetInput)
+            return;
+
+        SetAllButtons(false);
+        SetDarkPanel(value: true);
         main.Game.IsPaused = true;
         codexPanel.gameObject.SetActive(true);
     }
 
     public void CloseCodex()
     {
+        SetAllButtons(true);
+        SetDarkPanel(value: false);
         main.Game.IsPaused = false;
         codexPanel.gameObject.SetActive(false);
     }
@@ -112,21 +215,23 @@ public class InGameUiMnanager : MonoBehaviour
         }
     }
 
+
     // Game Claer & Fail
     // - - - - - - - - -
     private void OnGameClear()
     {
-        NextStagePanel.GetComponentInChildren<Button>().onClick.AddListener(NextStageButton);
-        NextStagePanel.SetActive(true);
-        GameManager.Instance.IsPaused = true;
+        SetAllButtons(false);
+        SetDarkPanel(value: true);
+        nextStagePanel.GetComponentInChildren<Button>().onClick.AddListener(NextStageButton);
+        nextStagePanel.SetActive(true);
     }
 
     private void NextStageButton()
     {
-        if (main.Stage.GoNextStage())
+        if (main.Stage.ChangeStage(main.Stage.StageIndex + 1, isRetry: false))
         {
-            NextStagePanel.GetComponentInChildren<Button>().onClick.RemoveAllListeners();
-            NextStagePanel.SetActive(false);
+            nextStagePanel.GetComponentInChildren<Button>().onClick.RemoveAllListeners();
+            nextStagePanel.SetActive(false);
 
             // 슬라임 액션 비활성화
             foreach (Transform action in ObjectPoolManager.Instance.SlimeActionGroup)
@@ -139,6 +244,8 @@ public class InGameUiMnanager : MonoBehaviour
 
             GameManager.Instance.ResetTileArray();
             GameManager.Instance.ResetObstacleArray();
+            SetAllButtons(true);
+            SetDarkPanel(value: false);
             GameManager.Instance.IsPaused = false;
         }
 
@@ -150,8 +257,10 @@ public class InGameUiMnanager : MonoBehaviour
 
     private void OnGameFail()
     {
-        FailPanel.GetComponentInChildren<Button>().onClick.AddListener(GoLobbyButton);
-        FailPanel.SetActive(true);
+        failPanel.GetComponentInChildren<Button>().onClick.AddListener(GoLobbyButton);
+        failPanel.SetActive(true);
+        SetAllButtons(false);
+        SetDarkPanel(value: true);
         GameManager.Instance.IsPaused = true;
     }
 
@@ -172,5 +281,43 @@ public class InGameUiMnanager : MonoBehaviour
 
         loadingSO.SceneName = "Lobby";
         SceneManager.LoadScene("Loading");
+    }
+
+
+    // Bottom Buttons
+    private void OpenInformation()
+    {
+        SetAllButtons(false);
+        SetDarkPanel(true);
+        informationPanel.SetActive(true);
+    }
+
+    private void CloseInformation()
+    {
+        SetAllButtons(true);
+        SetDarkPanel(false);
+        informationPanel.SetActive(false);
+    }
+
+
+    // etc
+    // - - - - - - - - -
+    private void SetAllButtons(bool value)
+    {
+        var point = main.Point.Points;
+
+        preventDestroyButton.interactable = value ? point >= main.Store.PreventDestroyCost : false;
+        addTurnButton.interactable = value ? point >= main.Store.AddTurnCost : false;
+        destroyTileButton.interactable = value ? point >= main.Store.DestroyTileCost : false;
+
+        settingButton.interactable = value;
+        codexButton.interactable = value;
+        informationButton.interactable = value;
+    }
+
+    private void SetDarkPanel(bool value, string layerName = "AboveTile")
+    {
+        darkCanvas.sortingLayerName = layerName;
+        darkPanel.SetActive(value);
     }
 }

@@ -40,15 +40,17 @@ public class GameManager : MonoBehaviour, INewTurnListener
     private ObjectPoolManager _pooler;
 
     public event Action OnRemainingTurnChanged;
-    public event EventHandler OnGetPoint;
+    public event EventHandler<PointManager.PointGetInfo> OnGetPoint;
 
     public GameObject[,] TileArray = new GameObject[5, 5]; // 타일 배열
     public Obstacle[,] ObstacleArray = new Obstacle[5, 5]; // 장애물 배열 (삭제, 벽, 석화, 감금, 이동)
 
-    private bool _canGetInput = false; // 입력을 받나? (GameManager 내부에서 설정)
-    public bool IsPaused { get; set; } // 멈췄나? (설정, 도감, 상점, 후처리 등 실행중인가?)
-    public bool CanMove { get => _canGetInput && !IsPaused; }
     [HideInInspector] public bool IsReversed = false; // 상하좌우 반전중인가?
+    private bool _canGetInput = false; // 입력을 받나? (GameManager 내부에서 설정)
+    public bool IsPaused { private get; set; } // 설정, 도감, 상점 등 실행중인가?
+    public bool IsExecuting { private get; set; } // 슬라임 패턴 실행 중인가? 
+    public bool CanGetInput { get => _canGetInput && !IsPaused && !IsExecuting; }
+
 
     private int _curTurns;
 
@@ -121,7 +123,7 @@ public class GameManager : MonoBehaviour, INewTurnListener
     {
         if (_isChecking) CheckIsMoveEnd();
 
-        if (!_isChecking && CanMove) GetInput();
+        if (!_isChecking && CanGetInput) GetInput();
     }
 
 
@@ -454,7 +456,7 @@ public class GameManager : MonoBehaviour, INewTurnListener
 
             // 포인트 획득
             if (TileArray[x2, y2].GetComponent<Tile>().value >= 4)
-                OnGetPoint?.Invoke(this, new PointManager.PointInfo(TileArray[x2, y2].GetComponent<Tile>().value));
+                OnGetPoint?.Invoke(this, new PointManager.PointGetInfo(TileArray[x2, y2].GetComponent<Tile>().value));
 
             // 클리어
             if (TileArray[x2, y2].GetComponent<Tile>().value >= ClearValue)

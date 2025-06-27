@@ -23,6 +23,11 @@ public class GameSetting : SingleTone<GameSetting>
         SetCameraSize();
     }
 
+    private void SetFrameRate()
+    {
+        Application.targetFrameRate = 60;
+    }
+    
     private void SetCameraSize()
     {
         float targetAspect = 9f / 16f;
@@ -32,10 +37,5 @@ public class GameSetting : SingleTone<GameSetting>
         float scale = targetAspect / currentAspect;
 
         CameraSize = baseSize * scale;
-    }
-
-    private void SetFrameRate()
-    {
-        Application.targetFrameRate = 60;
     }
 }

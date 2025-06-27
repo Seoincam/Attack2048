@@ -48,9 +48,6 @@ TagManager:
   - name: AboveTile
     uniqueID: 3081353969
     locked: 0
-  - name: Slime
-    uniqueID: 288725845
-    locked: 0
   - name: UI
     uniqueID: 2077174955
     locked: 0

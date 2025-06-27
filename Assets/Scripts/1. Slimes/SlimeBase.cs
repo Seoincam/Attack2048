@@ -35,9 +35,11 @@ public abstract class SlimeBase : MonoBehaviour, INewTurnListener
     // - - - - - - - - - - 
     // 사망 로직
     // - - - - - - - - - - 
-    public void Die() {
+    public void Die(bool isRetry) {
+        if (!isRetry)
+            _slimeManager.GameClear();
+
         EventManager.Unsubscribe(GamePhase.NewTurnPhase, OnEnter_NewTurn);
-        _slimeManager.GameClear();
         gameObject.SetActive(false);
     }
 

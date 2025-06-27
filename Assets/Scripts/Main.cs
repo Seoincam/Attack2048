@@ -14,6 +14,7 @@ public class Main : MonoBehaviour
 
     public GameManager Game { get; private set; }
     public PointManager Point { get; private set; }
+    public StoreManager Store { get; private set; }
     public StageManager Stage { get; private set; }
 
     void Awake()
@@ -24,6 +25,7 @@ public class Main : MonoBehaviour
 
         Game = Managers.GetComponent<GameManager>();
         Point = Managers.GetComponent<PointManager>();
+        Store = Managers.GetComponent<StoreManager>();
         Stage = Managers.GetComponent<StageManager>();
     }
 
@@ -31,6 +33,7 @@ public class Main : MonoBehaviour
     {
         UiManager.GetComponent<InGameUiMnanager>().Init(this);
 
+        Store.Init(Point);
         Game.Init();
         Point.Init();
         Stage.Init();

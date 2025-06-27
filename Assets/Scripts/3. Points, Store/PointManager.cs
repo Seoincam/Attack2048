@@ -14,9 +14,11 @@ public struct PointRule {
 
 public class PointManager : MonoBehaviour
 {
-    // - - - - - - - - - -
     // 필드
     // - - - - - - - - - -
+    [SerializeField, Tooltip("포인트 규칙")] private PointRule[] PointRules;
+    [SerializeField, Tooltip("(테스트용) 초기 포인트")] private int TestPoints;
+
     public event Action OnPointChanged;
 
     private int _points;
@@ -31,39 +33,25 @@ public class PointManager : MonoBehaviour
     }
 
 
-    [SerializeField, Tooltip("포인트 규칙")] private PointRule[] PointRules;
-    [SerializeField, Tooltip("(테스트용) 초기 포인트")] private int TestPoints;
-
-
-    // - - - - - - - - - -
-    // Unity 콜백
-    // - - - - - - - - - -
     public void Init()
     {
         GameManager.Instance.OnGetPoint += GetPoint;
         Points = TestPoints;
     }
 
-
-    // - - - - - - - - - -
     // 로직
     // - - - - - - - - - -
-
     // 계산 및 포인트 획득
-    public void GetPoint(object _, EventArgs pointInfo)
+    public void GetPoint(object _, PointGetInfo pointInfo)
     {
-        if (pointInfo is PointInfo info)
+        foreach (PointRule combineValue in PointRules)
         {
-            foreach (PointRule combineValue in PointRules)
+            if (combineValue.tileValue == pointInfo.tileValue)
             {
-                if (combineValue.tileValue == info.tileValue)
-                {
-                    Points += combineValue.point;
-                    break;
-                }
+                Points += combineValue.point;
+                break;
             }
         }
-
     }
 
     // 돈 충분한가 체크
@@ -81,11 +69,18 @@ public class PointManager : MonoBehaviour
         Points -= amount;
     }
 
-    public class PointInfo: EventArgs
+    public void ResetPoint()
+    {
+        Points = TestPoints;
+    }
+
+
+
+    public class PointGetInfo : EventArgs
     {
         public int tileValue;
 
-        public PointInfo(int tileValue)
+        public PointGetInfo(int tileValue)
         {
             this.tileValue = tileValue;
         }

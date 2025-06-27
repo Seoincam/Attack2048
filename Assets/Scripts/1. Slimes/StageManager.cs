@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class StageManager : MonoBehaviour
 {
-    public event EventHandler OnSlimeChanged;
+    public event EventHandler<SlimeInfo> OnSlimeChanged;
     public event Action OnGameClear;
     public event Action OnGameFail;
 
@@ -15,17 +15,18 @@ public class StageManager : MonoBehaviour
 
     [SerializeField, Tooltip("(테스트용) 시작 스테이지 / 실제 스테이지 숫자 - 1로 기입")]
     private int TestStartIndex = 0;
-    public int _stageIndex;
+    public int StageIndex { get; private set; }
 
 
     public void Init()
     {
-        _stageIndex = TestStartIndex;
-        SpawnSlime(_stageIndex);
+        StageIndex = TestStartIndex;
+        SpawnSlime(StageIndex, isRetry: false);
     }
 
     public void GameClear()
     {
+        GameManager.Instance.IsPaused = true;
         OnGameClear?.Invoke();
     }
 
@@ -39,9 +40,10 @@ public class StageManager : MonoBehaviour
         OnGameFail?.Invoke();
     }
 
-    private void SpawnSlime(int index)
+    private void SpawnSlime(int index, bool isRetry)
     {
-        if (_currentSlime != null) _currentSlime.Die();
+        if (_currentSlime != null)
+            _currentSlime.Die(isRetry);
 
         _currentSlime = Instantiate(_slimes[index]).GetComponent<SlimeBase>();
         _currentSlime.Init(this);
@@ -53,11 +55,12 @@ public class StageManager : MonoBehaviour
             new SlimeInfo(clearValue: _currentSlime.ClearValue, stageIndex: index + 1));
     }
 
-    public bool GoNextStage()
+    public bool ChangeStage(int stageIndex, bool isRetry)
     {
-        if (++_stageIndex < _slimes.Length)
+        if (stageIndex < _slimes.Length)
         {
-            SpawnSlime(_stageIndex);
+            StageIndex = stageIndex;
+            SpawnSlime(stageIndex, isRetry);
             return true;
         }
 

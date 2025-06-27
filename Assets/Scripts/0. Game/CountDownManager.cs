@@ -11,7 +11,7 @@ public class CountDownManager : MonoBehaviour
 
     private IEnumerator CountDownCoroutine()
     {
-        GameManager.Instance.IsPaused = true;
+        GameManager.Instance.IsExecuting = true;
 
         // 0.3초 후 카운트 다운 실행
         var countDown = EventManager.GetEvent(GamePhase.CountDownPhase);
@@ -35,7 +35,7 @@ public class CountDownManager : MonoBehaviour
             }
         }
 
-        GameManager.Instance.IsPaused = false;
+        GameManager.Instance.IsExecuting = false;
         EventManager.Publish(GamePhase.NewTurnPhase);
     }
 }
