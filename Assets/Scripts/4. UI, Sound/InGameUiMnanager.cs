@@ -73,7 +73,7 @@ public class InGameUiMnanager : MonoBehaviour
         informationPanel.GetComponentInChildren<Button>().onClick.AddListener(CloseInformation);
 
         preventDestroyButton.onClick.AddListener(PreventDestroy);
-        addTurnButton.onClick.AddListener(AddTurn);
+        addTurnButton.onClick.AddListener(main.Store.AddTurnBtn);
         destroyTileButton.onClick.AddListener(DestroyTile);
 
         preventDestroyButton.GetComponentInChildren<Text>().text = $"파괴 방지\n{main.Store.PreventDestroyCost}pt";
@@ -161,12 +161,6 @@ public class InGameUiMnanager : MonoBehaviour
     {
         SetDarkPanel(true, "Defalut");
         main.Store.PreventDestroyBtn();
-    }
-
-    private void AddTurn()
-    {
-        SetDarkPanel(true, "Defalut");
-        main.Store.AddTurnBtn();
     }
 
     private void DestroyTile()

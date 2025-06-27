@@ -105,7 +105,7 @@ public class StoreManager : MonoBehaviour
                     IsDestroying = false;
             }
 
-            OnClickButton?.Invoke(this, new ClickInfo(isSelecting: false));
+            StartCoroutine(FinishSelect());
         }
     }
 
@@ -189,6 +189,12 @@ public class StoreManager : MonoBehaviour
     {
         yield return new WaitForSeconds(0.15f);
         GameManager.Instance.IsPaused = false;
+    }
+
+    private IEnumerator FinishSelect()
+    {
+        yield return new WaitForSeconds(0.1f);
+        OnClickButton?.Invoke(this, new ClickInfo(isSelecting: false));
     }
 
 
