@@ -2254,7 +2254,7 @@ MonoBehaviour:
     point: 20
   - tileValue: 512
     point: 30
-  TestPoints: 0
+  TestPoints: 30
 --- !u!114 &1024858051
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5281,6 +5281,7 @@ MonoBehaviour:
   failPanel: {fileID: 2064295992}
   darkCanvas: {fileID: 317869293}
   darkPanel: {fileID: 1208836823}
+  darkPanelText: {fileID: 1079577544}
 --- !u!1 &1627479695
 GameObject:
   m_ObjectHideFlags: 0

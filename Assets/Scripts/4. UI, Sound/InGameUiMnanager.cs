@@ -32,6 +32,7 @@ public class InGameUiMnanager : MonoBehaviour, INewTurnListener
 
     [Space, SerializeField] private Canvas darkCanvas;
     [SerializeField] private GameObject darkPanel;
+    [SerializeField] private GameObject darkPanelText;
 
     private Text _indexText;
     private int _index;
@@ -181,7 +182,7 @@ public class InGameUiMnanager : MonoBehaviour, INewTurnListener
     // - - - - - - - - -
     private void PreventDestroy()
     {
-        SetDarkPanel(true, "Defalut");
+        SetDarkPanel(true, isStoreButton: true, layerName: "Defalut");
         main.Store.PreventDestroyBtn();
     }
     //todo
@@ -190,7 +191,7 @@ public class InGameUiMnanager : MonoBehaviour, INewTurnListener
         GameManager gamemanager = GameManager.Instance;
         if (gamemanager.CountTile() > 1)
         {
-            SetDarkPanel(true, "Defalut");
+            SetDarkPanel(true, isStoreButton: true, layerName: "Defalut");
             main.Store.DestoryTileBtn();
         }
         else Debug.Log("파괴 불가");
@@ -339,11 +340,13 @@ public class InGameUiMnanager : MonoBehaviour, INewTurnListener
         informationButton.interactable = value;
     }
 
-    private void SetDarkPanel(bool value, string layerName = "AboveTile")
+    private void SetDarkPanel(bool value, bool isStoreButton = false, string layerName = "AboveTile")
     {
         darkCanvas.sortingLayerName = layerName;
+        darkPanelText.SetActive(isStoreButton);
         darkPanel.SetActive(value);
     }
+    
     public void RefreshAllUi()
     {
         OnPointChanged();            // 버튼 조건 다시 계산
