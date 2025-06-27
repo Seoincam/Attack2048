@@ -26,7 +26,7 @@ public class SoundManager : SingleTone<SoundManager>
     {
         base.Awake();
         _soundSetting = LoadSetting();
-        Debug.Log(Application.persistentDataPath);
+        // Debug.Log(Application.persistentDataPath);
     }
 
 
