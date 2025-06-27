@@ -52,7 +52,7 @@ public class LobbyUiManager : MonoBehaviour
 
     public void Exit()
     {
-        
+        Application.Quit();
     }
     
     // Setting Panel
