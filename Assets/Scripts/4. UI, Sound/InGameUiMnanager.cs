@@ -281,6 +281,7 @@ public class InGameUiMnanager : MonoBehaviour
     // Bottom Buttons
     private void OpenInformation()
     {
+        GameManager.Instance.IsPaused = true;
         SetAllButtons(false);
         SetDarkPanel(true);
         informationPanel.SetActive(true);
@@ -288,6 +289,7 @@ public class InGameUiMnanager : MonoBehaviour
 
     private void CloseInformation()
     {
+        GameManager.Instance.IsPaused = false;
         SetAllButtons(true);
         SetDarkPanel(false);
         informationPanel.SetActive(false);
