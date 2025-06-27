@@ -3,7 +3,7 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using TMPro;
 
-public class InGameUiMnanager : MonoBehaviour
+public class InGameUiMnanager : MonoBehaviour, INewTurnListener
 {
     // 필드
     // - - - - - - - - -
@@ -79,6 +79,28 @@ public class InGameUiMnanager : MonoBehaviour
         preventDestroyButton.GetComponentInChildren<Text>().text = $"파괴 방지\n{main.Store.PreventDestroyCost}pt";
         addTurnButton.GetComponentInChildren<Text>().text = $"턴 추가\n{main.Store.AddTurnCost}pt";
         destroyTileButton.GetComponentInChildren<Text>().text = $"타일 파괴\n{main.Store.DestroyTileCost}pt";
+        this.Subscribe_NewTurn();
+        OnPointChanged();
+    }
+
+
+    // - - - - - - - - - - - 
+    // INewTurnListener
+    // - - - - - - - - - - -
+    public void OnEnter_NewTurn()
+    {
+        StartCoroutine(DelayUpdateUI());
+    }
+
+    public void Subscribe_NewTurn()
+    {
+        EventManager.Subscribe(GamePhase.NewTurnPhase, OnEnter_NewTurn);
+    }
+    // 타일이 스폰된 후까지 기다린 후 체크
+    private System.Collections.IEnumerator DelayUpdateUI()
+    {
+        yield return null;
+        OnPointChanged();
     }
 
 
@@ -98,7 +120,7 @@ public class InGameUiMnanager : MonoBehaviour
 
         preventDestroyButton.interactable = point >= main.Store.PreventDestroyCost;
         addTurnButton.interactable = point >= main.Store.AddTurnCost;
-        destroyTileButton.interactable = point >= main.Store.DestroyTileCost;
+        destroyTileButton.interactable = (point >= main.Store.DestroyTileCost) && (GameManager.Instance.CountTile() > 1);
     }
 
     private void OnClickStoreButton(object _, StoreManager.ClickInfo clickInfo)
@@ -162,11 +184,16 @@ public class InGameUiMnanager : MonoBehaviour
         SetDarkPanel(true, "Defalut");
         main.Store.PreventDestroyBtn();
     }
-
+    //todo
     private void DestroyTile()
     {
-        SetDarkPanel(true, "Defalut");
-        main.Store.DestoryTileBtn();
+        GameManager gamemanager = GameManager.Instance;
+        if (gamemanager.CountTile() > 1)
+        {
+            SetDarkPanel(true, "Defalut");
+            main.Store.DestoryTileBtn();
+        }
+        else Debug.Log("파괴 불가");
     }
 
     // Codex Panel
@@ -238,6 +265,7 @@ public class InGameUiMnanager : MonoBehaviour
 
             GameManager.Instance.ResetTileArray();
             GameManager.Instance.ResetObstacleArray();
+            main.Point.ResetToZeroPoints();
             SetAllButtons(true);
             SetDarkPanel(value: false);
             GameManager.Instance.IsPaused = false;
@@ -304,7 +332,7 @@ public class InGameUiMnanager : MonoBehaviour
 
         preventDestroyButton.interactable = value ? point >= main.Store.PreventDestroyCost : false;
         addTurnButton.interactable = value ? point >= main.Store.AddTurnCost : false;
-        destroyTileButton.interactable = value ? point >= main.Store.DestroyTileCost : false;
+        destroyTileButton.interactable = value && (point >= main.Store.DestroyTileCost) && GameManager.Instance.CountTile() > 1;
 
         settingButton.interactable = value;
         codexButton.interactable = value;
@@ -315,5 +343,10 @@ public class InGameUiMnanager : MonoBehaviour
     {
         darkCanvas.sortingLayerName = layerName;
         darkPanel.SetActive(value);
+    }
+    public void RefreshAllUi()
+    {
+        OnPointChanged();            // 버튼 조건 다시 계산
+        OnRemainingTurnChanged();    // 남은 턴 텍스트 갱신
     }
 }

@@ -69,9 +69,23 @@ public class Translocate3 : SlimeActionBase, IShowLife, IMakeWarningEffect, IMak
         if (G.TileArray[4, 4] != null) G.TileArray[4, 4].transform.position = G.LocateTile(4, 0);
         if (G.TileArray[4, 0] != null) G.TileArray[4, 0].transform.position = G.LocateTile(0, 0);
 
-        // 타일 배열 수정
-        (G.TileArray[0, 0], G.TileArray[0, 4], G.TileArray[4, 4], G.TileArray[4, 0])
-            = (G.TileArray[4, 0], G.TileArray[0, 0], G.TileArray[0, 4], G.TileArray[4, 4]);
+        // 기존 타일 백업
+        var t00 = G.TileArray[0, 0];
+        var t04 = G.TileArray[0, 4];
+        var t44 = G.TileArray[4, 4];
+        var t40 = G.TileArray[4, 0];
+
+        // 배열 교환
+        G.TileArray[0, 0] = t40;
+        G.TileArray[0, 4] = t00;
+        G.TileArray[4, 4] = t04;
+        G.TileArray[4, 0] = t44;
+
+        // 타일 내부 정보 업데이트
+        if (t40 != null) t40.GetComponent<Tile>().Init(0, 0);
+        if (t00 != null) t00.GetComponent<Tile>().Init(0, 4);
+        if (t04 != null) t04.GetComponent<Tile>().Init(4, 4);
+        if (t44 != null) t44.GetComponent<Tile>().Init(4, 0);
 
         // 장애물 배열 수정
         for (int x = 0; x < 5; x += 4)

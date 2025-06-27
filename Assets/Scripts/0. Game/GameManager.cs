@@ -87,6 +87,22 @@ public class GameManager : MonoBehaviour, INewTurnListener
             OnRemainingTurnChanged?.Invoke();
         }
     }
+// 타일 개수 확인 함수
+public int CountTile()
+{
+    int count = 0;
+
+    if (TileArray == null)
+    {
+        return 0;
+    }
+
+    for (int x = 0; x < 5; x++)
+        for (int y = 0; y < 5; y++)
+            if (TileArray[x, y] != null) count++;
+
+    return count;
+}
 
     // - - - - - - - - - - - - - - - - - - - - -
     // Unity 콜백
