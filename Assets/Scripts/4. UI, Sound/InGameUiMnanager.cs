@@ -157,6 +157,9 @@ public class InGameUiMnanager : MonoBehaviour, INewTurnListener
 
         pointsText.text = $"{point}pt";
 
+        if (nextStagePanel.activeSelf)
+            return;
+
         preventDestroyButton.interactable = point >= main.Store.PreventDestroyCost;
         addTurnButton.interactable = point >= main.Store.AddTurnCost;
         destroyTileButton.interactable = (point >= main.Store.DestroyTileCost) && (GameManager.Instance.CountTile() > 1);
@@ -316,7 +319,7 @@ public class InGameUiMnanager : MonoBehaviour, INewTurnListener
 
             GameManager.Instance.ResetTileArray();
             GameManager.Instance.ResetObstacleArray();
-            main.Point.ResetToZeroPoints();
+            main.Point.ResetPoint();
             SetAllButtons(true);
             SetDarkPanel(isTurnOn: false);
             GameManager.Instance.IsPaused = false;
