@@ -48,8 +48,14 @@ TagManager:
   - name: AboveTile
     uniqueID: 3081353969
     locked: 0
-  - name: UI
+  - name: BelowUI
+    uniqueID: 1221357175
+    locked: 0
+  - name: DefaultUI
     uniqueID: 2077174955
+    locked: 0
+  - name: AboveUI
+    uniqueID: 708302001
     locked: 0
   m_RenderingLayers:
   - Default

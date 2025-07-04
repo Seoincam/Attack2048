@@ -9,6 +9,7 @@ using UnityEngine;
 public class GameSetting : SingleTone<GameSetting>
 {
     public float CameraSize { get; private set; }
+    public int testStartIndex;
 
     protected override void Awake()
     {

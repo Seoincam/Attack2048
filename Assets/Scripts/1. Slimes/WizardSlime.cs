@@ -14,9 +14,10 @@ public class WizardSlime : SlimeBase
 
     [Space, SerializeField, Tooltip("블라인드 생성 간격")] private int BlindInterval;
     [SerializeField, Tooltip("블라인드 생성 남은 턴 수")] private int _blindCounter;
+    [SerializeField, Tooltip("블라인드 생성 수")] private int blindCount;
 
 
-
+    // FixMe: 다시하기 눌렀을 때 상하좌우반전 패턴이었다면 상하좌우반전 유지됨.
 
     // - - - - - - - - - - 
     // Unity 콜백
@@ -54,7 +55,6 @@ public class WizardSlime : SlimeBase
         if (_reverseMoveCounter == 0)
         {
             _reverseMoveCounter = ReverseMoveInterval;
-            // EventManager.Publish(GameEvent.ReverseMove);
             SlimeActionManager.Instance.ReverseMove();
         }
     }
@@ -79,7 +79,8 @@ public class WizardSlime : SlimeBase
         if (_blindCounter == 0)
         {
             _blindCounter = BlindInterval;
-            SlimeActionManager.Instance.Blind();
+            for (int i = 0; i < blindCount; i++)
+                SlimeActionManager.Instance.Blind();
         }
     }
 }

@@ -218,7 +218,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Life: 2
   _lifeCounter: 0
-  _particleGroup: {fileID: 0}
   lifeText: {fileID: 4777787170531723279}
 --- !u!1 &4771384395675331701
 GameObject:
@@ -533,8 +532,8 @@ Canvas:
   m_VertexColorAlwaysGammaSpace: 0
   m_AdditionalShaderChannelsFlag: 0
   m_UpdateRectTransformForStandalone: 0
-  m_SortingLayerID: 2077174955
-  m_SortingOrder: 0
+  m_SortingLayerID: -1213613327
+  m_SortingOrder: 1
   m_TargetDisplay: 0
 --- !u!114 &3724877632843854398
 MonoBehaviour:

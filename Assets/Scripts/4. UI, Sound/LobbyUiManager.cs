@@ -6,29 +6,66 @@ public class LobbyUiManager : MonoBehaviour
 {
     [SerializeField] private LoadingSO loadingSO;
 
-    [SerializeField] private GameObject creditPanel;
+    [Header("Default Buttons")]
+    [SerializeField] private Button startButton;
+    [SerializeField] private Button creditButton;
+    [SerializeField] private Button exitButton;
+
+    [Header("Setting")]
+    [SerializeField] private Button settingButton;
     [SerializeField] private Transform settingPanel;
+
+    [Header("Codex")]
+    [SerializeField] private Button codexButton;
     [SerializeField] private Transform codexPanel;
-    [SerializeField] private GameObject[] Codex;
+    [SerializeField] private CodexSO[] codexSO;
+    private int currentCodexIndex;
 
-    private Text _indexText;
-    private int _index;
+    [Header("etc")]
+    [SerializeField] private Transform creditPanel;
+    [SerializeField] private InputField testStartIndexInputFied;
 
 
-    void Awake()
-    {
-        SoundManager.Instance.SetPanel
-        (
-            settingPanel.Find("BGM/BGM Slider").GetComponent<Slider>(),
-            settingPanel.Find("SFX/SFX Slider").GetComponent<Slider>()
-        );
 
-        _indexText = codexPanel.Find("Index Text").GetComponent<Text>();
-    }
-
+    // 초기화
+    // - - - - - - - - -
     void Start()
     {
+        InitSetting();
+        InitCodex();
+        InitCredit();
+
+        startButton.onClick.AddListener(GameStart);
         SoundManager.Instance.PlayBGM(SoundManager.Instance.LobbyBGM);
+    }
+
+    void InitSetting()
+    {
+        settingButton.onClick.AddListener(OnOpenSettingButtonTapped);
+        settingPanel.Find("Close Button").GetComponent<Button>().onClick.AddListener(OnCloseSettingButtonTapped);
+
+        SoundManager.Instance.SetPanel
+        (
+            settingPanel.Find("BGM Layout Group/BGM Slider").GetComponent<Slider>(),
+            settingPanel.Find("SFX Layout Group/SFX Slider").GetComponent<Slider>()
+        );
+    }
+
+    void InitCodex()
+    {
+        codexButton.onClick.AddListener(OnOpenCodexButtonTapped);
+        codexPanel.Find("Close Button").GetComponent<Button>().onClick.AddListener(OnCloseCodexButtonTapped);
+        codexPanel.Find("Prev Button").GetComponent<Button>().onClick.AddListener(OnPreviousCodexButtonTapped);
+        codexPanel.Find("Next Button").GetComponent<Button>().onClick.AddListener(OnNextCodexButtonTapped);
+        currentCodexIndex = 0;
+
+        UpdateCodexUI();
+    }
+
+    void InitCredit()
+    {
+        creditButton.onClick.AddListener(OnOpenCreditButtonTapped);
+        creditPanel.Find("Close Button").GetComponent<Button>().onClick.AddListener(OnCloseCreditButtonTapped);
     }
 
 
@@ -36,18 +73,9 @@ public class LobbyUiManager : MonoBehaviour
     // - - - - - - - - -    
     public void GameStart()
     {
+        GameSetting.Instance.testStartIndex = Mathf.Clamp(int.Parse(testStartIndexInputFied.text), min: 0, max: 6);
         loadingSO.SceneName = "2048Game";
         SceneManager.LoadScene("Loading");
-    }
-
-    public void OpenCredit()
-    {
-        creditPanel.SetActive(true);
-    }
-
-    public void CloseCredit()
-    {
-        creditPanel.SetActive(false);
     }
 
     public void Exit()
@@ -55,47 +83,73 @@ public class LobbyUiManager : MonoBehaviour
         SoundManager.Instance?.SaveSetting();
         Application.Quit();
     }
+
+
+    // Credit Panel
+    // - - - - - - - - -
+    private void OnOpenCreditButtonTapped()
+    {
+        creditPanel.gameObject.SetActive(true);
+    }
+
+    private void OnCloseCreditButtonTapped()
+    {
+        creditPanel.gameObject.SetActive(false);
+    }
     
+
     // Setting Panel
     // - - - - - - - - -
-    public void OpenSetting()
+    public void OnOpenSettingButtonTapped()
     {
         settingPanel.gameObject.SetActive(true);
     }
 
-    public void CloseSetting()
+    public void OnCloseSettingButtonTapped()
     {
         settingPanel.gameObject.SetActive(false);
     }
 
+
     // Codex Panel
     // - - - - - - - - -
-    public void OpenCodex()
+    private void OnOpenCodexButtonTapped()
     {
+        // SetAllButtons(false);
+        // SetDarkPanel(isTurnOn: true);
+        // main.Game.IsPaused = true;
         codexPanel.gameObject.SetActive(true);
     }
-    
-    public void CloseCodex()
+
+    private void OnCloseCodexButtonTapped()
     {
+        // SetAllButtons(true);
+        // SetDarkPanel(isTurnOn: false);
+        // main.Game.IsPaused = false;
         codexPanel.gameObject.SetActive(false);
     }
 
-    public void PreviousButton()
+    private void OnPreviousCodexButtonTapped()
     {
-        if (_index > 0)
-        {
-            Codex[_index].SetActive(false);
-            Codex[--_index].SetActive(true);
-            _indexText.text = $"{_index + 1} / {Codex.Length}";
-        }
+        currentCodexIndex--;
+        Mathf.Clamp(currentCodexIndex, min: 0, max: codexSO.Length - 1);
+        UpdateCodexUI();
     }
-    public void NextButton()
+
+    private void OnNextCodexButtonTapped()
     {
-        if (_index < Codex.Length - 1)
-        {
-            Codex[_index].SetActive(false);
-            Codex[++_index].SetActive(true);
-            _indexText.text = $"{_index + 1} / {Codex.Length}";
-        }
+        currentCodexIndex++;
+        Mathf.Clamp(currentCodexIndex, min: 0, max: codexSO.Length - 1);
+        UpdateCodexUI();
+    }
+
+    void UpdateCodexUI()
+    {
+        codexPanel.Find("Prev Button").GetComponent<Button>().interactable = currentCodexIndex > 0;
+        codexPanel.Find("Next Button").GetComponent<Button>().interactable = currentCodexIndex < codexSO.Length - 1;
+        codexPanel.Find("Index Text").GetComponent<Text>().text = $"{currentCodexIndex + 1} / {codexSO.Length}";
+
+        codexPanel.Find("Stage Codex/Name Text").GetComponent<Text>().text = codexSO[currentCodexIndex].slimeName ?? "이름이 없음";
+        codexPanel.Find("Stage Codex/Description Text").GetComponent<Text>().text = codexSO[currentCodexIndex].slimeDescription ?? "설명이 없음";
     }
 }

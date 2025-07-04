@@ -3,6 +3,7 @@
 //  - 블라인드 클래스.
 // - - - - - - - - - - - - - - - - - -
 
+using Unity.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,6 +12,7 @@ public class Blind : SlimeActionBase, IShowLife, IMakeDeleteEffect
     // - - - - - - - - - - 
     // 필드
     [SerializeField] private Text lifeText;
+    private int _x, _y;
 
 
     // - - - - - - - - - - 
@@ -19,6 +21,9 @@ public class Blind : SlimeActionBase, IShowLife, IMakeDeleteEffect
     {
         base.Init(x, y);
         UpdateLifeText();
+
+        _x = x;
+        _y = y;
     }
 
 
@@ -32,6 +37,7 @@ public class Blind : SlimeActionBase, IShowLife, IMakeDeleteEffect
 
     protected override void Execute()
     {
+        GameManager.Instance.ObstacleArray[_x, _y].RemoveBlind();
         MakeDeleteEffect();
         base.Execute();
     }

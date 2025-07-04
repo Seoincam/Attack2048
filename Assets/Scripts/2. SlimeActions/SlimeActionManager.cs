@@ -42,7 +42,7 @@ public class SlimeActionManager: MonoBehaviour
         Delete delete = obj.GetComponent<Delete>();
 
         // 위치 설정
-        Vector2Int selected = GetRandomPosition(false);
+        Vector2Int selected = GetRandomPosition();
         delete.Init(selected.x, selected.y, false);
     }
 
@@ -120,7 +120,7 @@ public class SlimeActionManager: MonoBehaviour
         GameObject obj = _pooler.GetObject(23, Group.SlimeAction);
         PetrifyPrep petrifyPrep = obj.GetComponent<PetrifyPrep>();
         // 위치 설정
-        Vector2Int selected = GetRandomPosition(false);
+        Vector2Int selected = GetRandomPosition();
         petrifyPrep.Init(selected.x, selected.y);
     }
 
@@ -134,12 +134,12 @@ public class SlimeActionManager: MonoBehaviour
         ImprisonPrep imprison2 = obj.GetComponent<ImprisonPrep>();
 
         // 위치 설정
-        Vector2Int selected1 = GetRandomPosition(false);
-        Vector2Int selected2 = GetRandomPosition(false);
+        Vector2Int selected1 = GetRandomPosition();
+        Vector2Int selected2 = GetRandomPosition();
         //감금이 겹치치 않도록
         do
         {
-            selected2 = GetRandomPosition(false);
+            selected2 = GetRandomPosition();
         }
         while(selected1 == selected2); 
 
@@ -162,7 +162,7 @@ public class SlimeActionManager: MonoBehaviour
         Change change = obj.GetComponent<Change>();
 
         // 변경할 타일 위치 설정
-        Vector2Int selected = GetRandomPosition(false);
+        Vector2Int selected = GetRandomPosition();
 
         // 변경할 타일이 네 모퉁이 아니게
         int count = 0;
@@ -188,7 +188,7 @@ public class SlimeActionManager: MonoBehaviour
 
             if (!isValid)
             {
-                selected = GetRandomPosition(false);
+                selected = GetRandomPosition();
                 continue;
             }
             break;
@@ -263,8 +263,15 @@ public class SlimeActionManager: MonoBehaviour
 
         // 위치 설정
         // 이미 타일이 있는 곳에 설치
-        Vector2Int selected = GetRandomPosition(true);
+        var selected = Vector2Int.zero;
+        do
+        {
+            selected = GetRandomPosition(onlyOnTile: true);
+        }
+        while (GameManager.Instance.ObstacleArray[selected.x, selected.y].isBlind);
+
         blind.Init(selected.x, selected.y);
+        GameManager.Instance.ObstacleArray[selected.x, selected.y].PlaceBlind();
     }
 
 
@@ -274,14 +281,14 @@ public class SlimeActionManager: MonoBehaviour
     // - - - - - - - - - - - - - - - - - - - - -
 
     // 5*5 보드 중 하나 랜덤 선택
-    // [bool onlyTile] true: 이미 타일 있는 칸만, false: 그냥 아무 칸이나
-    private Vector2Int GetRandomPosition(bool onlyTile)
+    // [파라미터 onlyOnTile] true: 이미 타일 있는 칸만, false: 그냥 아무 칸이나
+    private Vector2Int GetRandomPosition(bool onlyOnTile = false)
     {
         GameManager G = GameManager.Instance;
 
         Vector2Int selected = new Vector2Int(Random.Range(0, 5), Random.Range(0, 5));
 
-        if (onlyTile)
+        if (onlyOnTile)
         {
             int count = 0;
             while (true)

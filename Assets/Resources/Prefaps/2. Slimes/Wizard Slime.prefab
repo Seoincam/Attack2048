@@ -109,3 +109,4 @@ MonoBehaviour:
   _translocateCounter: 0
   BlindInterval: 3
   _blindCounter: 0
+  blindCount: 2

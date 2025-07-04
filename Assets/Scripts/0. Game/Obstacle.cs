@@ -20,6 +20,7 @@ public class Obstacle
     private bool isImprison; // 실제 감금
     private bool isChange;
     private bool isTranslocate;
+    public bool isBlind { get; private set; }
 
 
     public Obstacle(int x, int y)
@@ -72,6 +73,8 @@ public class Obstacle
     public void PlaceTranslocate() => isTranslocate = true;
     public void RemoveTranslocate() => isTranslocate = false;
 
+    public void PlaceBlind() => isBlind = true;
+    public void RemoveBlind() => isBlind = false;
 
     // (x1, y1): 타일의 이동 전 위치
     public bool CanMove(int x1, int y1)

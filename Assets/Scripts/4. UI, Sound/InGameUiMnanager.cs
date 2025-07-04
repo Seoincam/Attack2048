@@ -13,12 +13,15 @@ public class InGameUiMnanager : MonoBehaviour, INewTurnListener
     [SerializeField] private TextMeshProUGUI stageText;
     [SerializeField] private TextMeshProUGUI clearValueText;
 
-    [Space, SerializeField] private Button settingButton;
+    [Header("Setting")]
+    [SerializeField] private Button settingButton;
+    [SerializeField] private Transform settingPanel;
+    
+    [Header("Codex")]
     [SerializeField] private Button codexButton;
-
-    [Space, SerializeField] private Transform settingPanel;
     [SerializeField] private Transform codexPanel;
-    [SerializeField] private GameObject[] Codex;
+    [SerializeField] private CodexSO[] codexSO;
+    private int currentCodexIndex;
 
     [Space, SerializeField] private Button informationButton;
     [SerializeField] private GameObject informationPanel;
@@ -34,8 +37,8 @@ public class InGameUiMnanager : MonoBehaviour, INewTurnListener
     [SerializeField] private GameObject darkPanel;
     [SerializeField] private GameObject darkPanelText;
 
-    private Text _indexText;
-    private int _index;
+    // private Text _indexText;
+    // private int _index;
 
     private Main main;
 
@@ -47,28 +50,9 @@ public class InGameUiMnanager : MonoBehaviour, INewTurnListener
     {
         this.main = main;
 
-        main.Game.OnRemainingTurnChanged += OnRemainingTurnChanged;
-        main.Point.OnPointChanged += OnPointChanged;
-        main.Store.OnClickButton += OnClickStoreButton;
-
-        main.Stage.OnSlimeChanged += OnSlimeChanged;
-
-        main.Stage.OnGameClear += OnGameClear;
-        main.Stage.OnGameFail += OnGameFail;
-
-        SoundManager.Instance.SetPanel
-        (
-            settingPanel.Find("BGM/BGM Slider").GetComponent<Slider>(),
-            settingPanel.Find("SFX/SFX Slider").GetComponent<Slider>()
-        );
-
-        settingButton.onClick.AddListener(OpenSetting);
-        codexButton.onClick.AddListener(OpenCodex);
-
-        settingPanel.Find("Retry Button").GetComponent<Button>().onClick.AddListener(Retry);
-        settingPanel.Find("Lobby Button").GetComponent<Button>().onClick.AddListener(GoLobbyButton);
-
-        _indexText = codexPanel.Find("Index Text").GetComponent<Text>();
+        InitDelegate();
+        InitSetting();
+        InitCodex();
 
         informationButton.onClick.AddListener(OpenInformation);
         informationPanel.GetComponentInChildren<Button>().onClick.AddListener(CloseInformation);
@@ -82,6 +66,41 @@ public class InGameUiMnanager : MonoBehaviour, INewTurnListener
         destroyTileButton.GetComponentInChildren<Text>().text = $"타일 파괴\n{main.Store.DestroyTileCost}pt";
         this.Subscribe_NewTurn();
         OnPointChanged();
+    }
+
+    void InitDelegate()
+    {
+        main.Game.OnRemainingTurnChanged += OnRemainingTurnChanged;
+        main.Point.OnPointChanged += OnPointChanged;
+        main.Store.OnClickButton += OnClickStoreButton;
+        main.Stage.OnSlimeChanged += OnSlimeChanged;
+        main.Stage.OnGameClear += OnGameClear;
+        main.Stage.OnGameFail += OnGameFail;
+    }
+
+    void InitSetting()
+    {
+        settingButton.onClick.AddListener(OnOpenSettingButtonTapped);
+        settingPanel.Find("Close Button").GetComponent<Button>().onClick.AddListener(OnCloseSettingButtonTapped);
+        settingPanel.Find("Button Layout Group/Retry Button").GetComponent<Button>().onClick.AddListener(Retry);
+        settingPanel.Find("Button Layout Group/Lobby Button").GetComponent<Button>().onClick.AddListener(GoLobbyButton);
+
+        SoundManager.Instance.SetPanel
+        (
+            settingPanel.Find("BGM Layout Group/BGM Slider").GetComponent<Slider>(),
+            settingPanel.Find("SFX Layout Group/SFX Slider").GetComponent<Slider>()
+        );
+    }
+
+    void InitCodex()
+    {
+        codexButton.onClick.AddListener(OnOpenCodexButtonTapped);
+        codexPanel.Find("Close Button").GetComponent<Button>().onClick.AddListener(OnCloseCodexButtonTapped);
+        codexPanel.Find("Prev Button").GetComponent<Button>().onClick.AddListener(OnPreviousCodexButtonTapped);
+        codexPanel.Find("Next Button").GetComponent<Button>().onClick.AddListener(OnNextCodexButtonTapped);
+        currentCodexIndex = 0;
+
+        UpdateCodexUI();
     }
 
 
@@ -137,23 +156,24 @@ public class InGameUiMnanager : MonoBehaviour, INewTurnListener
         clearValueText.text = $"Clear: {slimeInfo.clearValue}";
     }
 
+
     // Setting Panel
     // - - - - - - - - -
-    private void OpenSetting()
+    private void OnOpenSettingButtonTapped()
     {
         if (!main.Game.CanGetInput)
             return;
 
         SetAllButtons(false);
-        SetDarkPanel(value: true);
+        SetDarkPanel(isTurnOn: true);
         main.Game.IsPaused = true;
         settingPanel.gameObject.SetActive(true);
     }
 
-    private void CloseSetting()
+    private void OnCloseSettingButtonTapped()
     {
         SetAllButtons(true);
-        SetDarkPanel(value: false);
+        SetDarkPanel(isTurnOn: false);
         main.Game.IsPaused = false;
         settingPanel.gameObject.SetActive(false);
     }
@@ -174,7 +194,53 @@ public class InGameUiMnanager : MonoBehaviour, INewTurnListener
         main.Point.ResetPoint();
 
         main.Stage.ChangeStage(0, isRetry: true);
-        CloseSetting();
+        OnCloseSettingButtonTapped();
+    }
+
+
+    // Codex Panel
+    // - - - - - - - - -
+    private void OnOpenCodexButtonTapped()
+    {
+        if (!main.Game.CanGetInput)
+            return;
+
+        SetAllButtons(false);
+        SetDarkPanel(isTurnOn: true);
+        main.Game.IsPaused = true;
+        codexPanel.gameObject.SetActive(true);
+    }
+
+    private void OnCloseCodexButtonTapped()
+    {
+        SetAllButtons(true);
+        SetDarkPanel(isTurnOn: false);
+        main.Game.IsPaused = false;
+        codexPanel.gameObject.SetActive(false);
+    }
+
+    private void OnPreviousCodexButtonTapped()
+    {
+        currentCodexIndex--;
+        Mathf.Clamp(currentCodexIndex, min: 0, max: codexSO.Length - 1);
+        UpdateCodexUI();
+    }
+
+    private void OnNextCodexButtonTapped()
+    {
+        currentCodexIndex++;
+        Mathf.Clamp(currentCodexIndex, min: 0, max: codexSO.Length - 1);
+        UpdateCodexUI();
+    }
+
+    void UpdateCodexUI()
+    {
+        codexPanel.Find("Prev Button").GetComponent<Button>().interactable = currentCodexIndex > 0;
+        codexPanel.Find("Next Button").GetComponent<Button>().interactable = currentCodexIndex < codexSO.Length - 1;
+        codexPanel.Find("Index Text").GetComponent<Text>().text = $"{currentCodexIndex + 1} / {codexSO.Length}";
+
+        codexPanel.Find("Stage Codex/Name Text").GetComponent<Text>().text = codexSO[currentCodexIndex].slimeName ?? "이름이 없음";
+        codexPanel.Find("Stage Codex/Description Text").GetComponent<Text>().text = codexSO[currentCodexIndex].slimeDescription ?? "설명이 없음";
     }
 
 
@@ -185,6 +251,7 @@ public class InGameUiMnanager : MonoBehaviour, INewTurnListener
         SetDarkPanel(true, isStoreButton: true, layerName: "Defalut");
         main.Store.PreventDestroyBtn();
     }
+
     //todo
     private void DestroyTile()
     {
@@ -197,53 +264,13 @@ public class InGameUiMnanager : MonoBehaviour, INewTurnListener
         else Debug.Log("파괴 불가");
     }
 
-    // Codex Panel
-    // - - - - - - - - -
-    public void OpenCodex()
-    {
-        if (!main.Game.CanGetInput)
-            return;
-
-        SetAllButtons(false);
-        SetDarkPanel(value: true);
-        main.Game.IsPaused = true;
-        codexPanel.gameObject.SetActive(true);
-    }
-
-    public void CloseCodex()
-    {
-        SetAllButtons(true);
-        SetDarkPanel(value: false);
-        main.Game.IsPaused = false;
-        codexPanel.gameObject.SetActive(false);
-    }
-
-    public void PreviousButton()
-    {
-        if (_index > 0)
-        {
-            Codex[_index].SetActive(false);
-            Codex[--_index].SetActive(true);
-            _indexText.text = $"{_index + 1} / {Codex.Length}";
-        }
-    }
-    public void NextButton()
-    {
-        if (_index < Codex.Length - 1)
-        {
-            Codex[_index].SetActive(false);
-            Codex[++_index].SetActive(true);
-            _indexText.text = $"{_index + 1} / {Codex.Length}";
-        }
-    }
-
 
     // Game Claer & Fail
     // - - - - - - - - -
     private void OnGameClear()
     {
         SetAllButtons(false);
-        SetDarkPanel(value: true);
+        SetDarkPanel(isTurnOn: true);
         nextStagePanel.GetComponentInChildren<Button>().onClick.AddListener(NextStageButton);
         nextStagePanel.SetActive(true);
     }
@@ -268,7 +295,7 @@ public class InGameUiMnanager : MonoBehaviour, INewTurnListener
             GameManager.Instance.ResetObstacleArray();
             main.Point.ResetToZeroPoints();
             SetAllButtons(true);
-            SetDarkPanel(value: false);
+            SetDarkPanel(isTurnOn: false);
             GameManager.Instance.IsPaused = false;
         }
 
@@ -283,7 +310,7 @@ public class InGameUiMnanager : MonoBehaviour, INewTurnListener
         failPanel.GetComponentInChildren<Button>().onClick.AddListener(GoLobbyButton);
         failPanel.SetActive(true);
         SetAllButtons(false);
-        SetDarkPanel(value: true);
+        SetDarkPanel(isTurnOn: true);
         GameManager.Instance.IsPaused = true;
     }
 
@@ -340,11 +367,11 @@ public class InGameUiMnanager : MonoBehaviour, INewTurnListener
         informationButton.interactable = value;
     }
 
-    private void SetDarkPanel(bool value, bool isStoreButton = false, string layerName = "AboveTile")
+    private void SetDarkPanel(bool isTurnOn, bool isStoreButton = false, string layerName = "DefaultUI")
     {
         darkCanvas.sortingLayerName = layerName;
         darkPanelText.SetActive(isStoreButton);
-        darkPanel.SetActive(value);
+        darkPanel.SetActive(isTurnOn);
     }
     
     public void RefreshAllUi()

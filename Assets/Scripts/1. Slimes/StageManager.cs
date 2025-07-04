@@ -13,14 +13,12 @@ public class StageManager : MonoBehaviour
     [SerializeField, Tooltip("슬라임들의 순서를 결정")]
     private GameObject[] _slimes;
 
-    [SerializeField, Tooltip("(테스트용) 시작 스테이지 / 실제 스테이지 숫자 - 1로 기입")]
-    private int TestStartIndex = 0;
     public int StageIndex { get; private set; }
 
 
     public void Init()
     {
-        StageIndex = TestStartIndex;
+        StageIndex = GameSetting.Instance.testStartIndex;
         SpawnSlime(StageIndex, isRetry: false);
     }
 
