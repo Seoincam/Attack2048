@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using TMPro;
+using System;
 
 public class InGameUiMnanager : MonoBehaviour, INewTurnListener
 {
@@ -37,11 +38,23 @@ public class InGameUiMnanager : MonoBehaviour, INewTurnListener
     [SerializeField] private GameObject darkPanel;
     [SerializeField] private GameObject darkPanelText;
 
-    // private Text _indexText;
-    // private int _index;
-
     private Main main;
+    private event Action OnEscapeButtonTapped;
 
+
+    // 뒤로가기 감지
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            var current = OnEscapeButtonTapped;
+            OnEscapeButtonTapped?.Invoke();
+
+            // 기존에 설정이 열려있었다면 설정을 닫기만 함.
+            if (current != OnCloseSettingButtonTapped)
+                OnOpenSettingButtonTapped();
+        }
+    }
 
 
     // 초기화
@@ -53,17 +66,11 @@ public class InGameUiMnanager : MonoBehaviour, INewTurnListener
         InitDelegate();
         InitSetting();
         InitCodex();
+        InitStore();
 
         informationButton.onClick.AddListener(OpenInformation);
         informationPanel.GetComponentInChildren<Button>().onClick.AddListener(CloseInformation);
 
-        preventDestroyButton.onClick.AddListener(PreventDestroy);
-        addTurnButton.onClick.AddListener(main.Store.AddTurnBtn);
-        destroyTileButton.onClick.AddListener(DestroyTile);
-
-        preventDestroyButton.GetComponentInChildren<Text>().text = $"파괴 방지\n{main.Store.PreventDestroyCost}pt";
-        addTurnButton.GetComponentInChildren<Text>().text = $"턴 추가\n{main.Store.AddTurnCost}pt";
-        destroyTileButton.GetComponentInChildren<Text>().text = $"타일 파괴\n{main.Store.DestroyTileCost}pt";
         this.Subscribe_NewTurn();
         OnPointChanged();
     }
@@ -103,6 +110,17 @@ public class InGameUiMnanager : MonoBehaviour, INewTurnListener
         UpdateCodexUI();
     }
 
+    void InitStore()
+    {
+        preventDestroyButton.onClick.AddListener(PreventDestroy);
+        addTurnButton.onClick.AddListener(main.Store.AddTurnBtn);
+        destroyTileButton.onClick.AddListener(DestroyTile);
+
+        preventDestroyButton.GetComponentInChildren<Text>().text = $"파괴 방지\n{main.Store.PreventDestroyCost}pt";
+        addTurnButton.GetComponentInChildren<Text>().text = $"턴 추가\n{main.Store.AddTurnCost}pt";
+        destroyTileButton.GetComponentInChildren<Text>().text = $"타일 파괴\n{main.Store.DestroyTileCost}pt";
+    }
+
 
     // - - - - - - - - - - - 
     // INewTurnListener
@@ -116,13 +134,14 @@ public class InGameUiMnanager : MonoBehaviour, INewTurnListener
     {
         EventManager.Subscribe(GamePhase.NewTurnPhase, OnEnter_NewTurn);
     }
+
+
     // 타일이 스폰된 후까지 기다린 후 체크
     private System.Collections.IEnumerator DelayUpdateUI()
     {
         yield return null;
         OnPointChanged();
     }
-
 
 
     // delegate
@@ -164,6 +183,7 @@ public class InGameUiMnanager : MonoBehaviour, INewTurnListener
         if (!main.Game.CanGetInput)
             return;
 
+        OnEscapeButtonTapped = OnCloseSettingButtonTapped;
         SetAllButtons(false);
         SetDarkPanel(isTurnOn: true);
         main.Game.IsPaused = true;
@@ -172,6 +192,7 @@ public class InGameUiMnanager : MonoBehaviour, INewTurnListener
 
     private void OnCloseSettingButtonTapped()
     {
+        OnEscapeButtonTapped = null;
         SetAllButtons(true);
         SetDarkPanel(isTurnOn: false);
         main.Game.IsPaused = false;
@@ -205,6 +226,7 @@ public class InGameUiMnanager : MonoBehaviour, INewTurnListener
         if (!main.Game.CanGetInput)
             return;
 
+        OnEscapeButtonTapped = OnCloseCodexButtonTapped;
         SetAllButtons(false);
         SetDarkPanel(isTurnOn: true);
         main.Game.IsPaused = true;
@@ -213,6 +235,7 @@ public class InGameUiMnanager : MonoBehaviour, INewTurnListener
 
     private void OnCloseCodexButtonTapped()
     {
+        OnEscapeButtonTapped = null;
         SetAllButtons(true);
         SetDarkPanel(isTurnOn: false);
         main.Game.IsPaused = false;

@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
-using Mono.Cecil.Cil;
+using UnityEditor;
 
 public class LobbyUiManager : MonoBehaviour
 {
@@ -10,7 +10,6 @@ public class LobbyUiManager : MonoBehaviour
     [Header("Default Buttons")]
     [SerializeField] private Button startButton;
     [SerializeField] private Button creditButton;
-    [SerializeField] private Button exitButton;
 
     [Header("Setting")]
     [SerializeField] private Button settingButton;
@@ -22,11 +21,26 @@ public class LobbyUiManager : MonoBehaviour
     [SerializeField] private CodexSO[] codexSO;
     private int currentCodexIndex;
 
+    [Header("Exit")]
+    [SerializeField] private Button escapeButton;
+    [SerializeField] private Transform escapePanel;
+    private bool isEscapePopUp = false;
+
     [Header("etc")]
     [SerializeField] private Transform creditPanel;
     [SerializeField] private InputField testStartIndexInputFied;
 
-    private bool isPanelPopOver = false;
+    // 뒤로가기 감지
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            if (isEscapePopUp)
+                OnCancleExitButtonTapped();
+            else
+                OnEscapeButtonTapped();
+        }
+    }
 
 
 
@@ -37,8 +51,9 @@ public class LobbyUiManager : MonoBehaviour
         InitSetting();
         InitCodex();
         InitCredit();
+        InitEscape();
 
-        startButton.onClick.AddListener(GameStart);
+        startButton.onClick.AddListener(OnStartButtonTapped);
         SoundManager.Instance.PlayBGM(SoundManager.Instance.LobbyBGM);
     }
 
@@ -71,23 +86,58 @@ public class LobbyUiManager : MonoBehaviour
         creditPanel.Find("Close Button").GetComponent<Button>().onClick.AddListener(OnCloseCreditButtonTapped);
     }
 
+    void InitEscape()
+    {
+        escapeButton.onClick.AddListener(OnEscapeButtonTapped);
+        escapePanel.Find("Button Layout Group/Exit Button").GetComponent<Button>().onClick.AddListener(OnExitButtonTapped);
+        escapePanel.Find("Button Layout Group/Cancle Button").GetComponent<Button>().onClick.AddListener(OnCancleExitButtonTapped);
+    }
+
 
     // Lobby Buttons
     // - - - - - - - - -    
-    public void GameStart()
+    private void OnStartButtonTapped()
     {
-        if (isPanelPopOver)
-            return;
-
         GameSetting.Instance.testStartIndex = int.TryParse(testStartIndexInputFied.text, out int inputIndex) ? inputIndex : 0;
         loadingSO.SceneName = "2048Game";
         SceneManager.LoadScene("Loading");
     }
 
-    public void Exit()
+    // Exit Panel
+    // - - - - - - - - 
+    private void OnEscapeButtonTapped()
+    {
+        SetAllButton(canInteractive: false);
+
+        codexPanel.gameObject.SetActive(false);
+        creditPanel.gameObject.SetActive(false);
+        settingPanel.gameObject.SetActive(false);
+
+        isEscapePopUp = true;
+        escapePanel.gameObject.SetActive(true);
+    }
+
+    private void OnCancleExitButtonTapped()
+    {
+        SetAllButton(canInteractive: true);
+
+        isEscapePopUp = false;
+        escapePanel.gameObject.SetActive(false);
+    }
+
+    private void OnExitButtonTapped()
     {
         SoundManager.Instance?.SaveSetting();
-        Application.Quit();
+
+#if UNITY_ANDROID && !UNITY_EDITOR
+        using (var unityPlayer = new AndroidJavaClass("com.unity3d.player.UnityPlayer"))
+        {
+            var activity = unityPlayer.GetStatic<AndroidJavaObject>("currentActivity");
+            activity.Call<bool>("moveTaskToBack", true);
+        }
+#elif UNITY_EDITOR
+        EditorApplication.isPlaying = false;
+#endif
     }
 
 
@@ -95,34 +145,28 @@ public class LobbyUiManager : MonoBehaviour
     // - - - - - - - - -
     private void OnOpenCreditButtonTapped()
     {
-        if (isPanelPopOver)
-            return;
-
-        isPanelPopOver = true;
+        SetAllButton(canInteractive: false);
         creditPanel.gameObject.SetActive(true);
     }
 
     private void OnCloseCreditButtonTapped()
     {
-        isPanelPopOver = false;
+        SetAllButton(canInteractive: true);
         creditPanel.gameObject.SetActive(false);
     }
-    
+
 
     // Setting Panel
     // - - - - - - - - -
     public void OnOpenSettingButtonTapped()
     {
-        if (isPanelPopOver)
-            return;
-
-        isPanelPopOver = true;
+        SetAllButton(canInteractive: false);
         settingPanel.gameObject.SetActive(true);
     }
 
     public void OnCloseSettingButtonTapped()
     {
-        isPanelPopOver = false;
+        SetAllButton(canInteractive: true);
         settingPanel.gameObject.SetActive(false);
     }
 
@@ -131,16 +175,13 @@ public class LobbyUiManager : MonoBehaviour
     // - - - - - - - - -
     private void OnOpenCodexButtonTapped()
     {
-        if (isPanelPopOver)
-            return;
-
-        isPanelPopOver = true;
+        SetAllButton(canInteractive: false);
         codexPanel.gameObject.SetActive(true);
     }
 
     private void OnCloseCodexButtonTapped()
     {
-        isPanelPopOver = false;
+        SetAllButton(canInteractive: true);
         codexPanel.gameObject.SetActive(false);
     }
 
@@ -166,5 +207,17 @@ public class LobbyUiManager : MonoBehaviour
 
         codexPanel.Find("Stage Codex/Name Text").GetComponent<Text>().text = codexSO[currentCodexIndex].slimeName ?? "이름이 없음";
         codexPanel.Find("Stage Codex/Description Text").GetComponent<Text>().text = codexSO[currentCodexIndex].slimeDescription ?? "설명이 없음";
+    }
+
+
+    // All Buttons
+    private void SetAllButton(bool canInteractive)
+    {
+        startButton.interactable = canInteractive;
+        creditButton.interactable = canInteractive;
+        escapeButton.interactable = canInteractive;
+
+        settingButton.interactable = canInteractive;
+        codexButton.interactable = canInteractive;
     }
 }
