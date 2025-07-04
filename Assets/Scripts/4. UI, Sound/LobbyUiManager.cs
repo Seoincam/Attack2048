@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using Mono.Cecil.Cil;
 
 public class LobbyUiManager : MonoBehaviour
 {
@@ -24,6 +25,8 @@ public class LobbyUiManager : MonoBehaviour
     [Header("etc")]
     [SerializeField] private Transform creditPanel;
     [SerializeField] private InputField testStartIndexInputFied;
+
+    private bool isPanelPopOver = false;
 
 
 
@@ -73,7 +76,10 @@ public class LobbyUiManager : MonoBehaviour
     // - - - - - - - - -    
     public void GameStart()
     {
-        GameSetting.Instance.testStartIndex = Mathf.Clamp(int.Parse(testStartIndexInputFied.text), min: 0, max: 6);
+        if (isPanelPopOver)
+            return;
+
+        GameSetting.Instance.testStartIndex = int.TryParse(testStartIndexInputFied.text, out int inputIndex) ? inputIndex : 0;
         loadingSO.SceneName = "2048Game";
         SceneManager.LoadScene("Loading");
     }
@@ -89,11 +95,16 @@ public class LobbyUiManager : MonoBehaviour
     // - - - - - - - - -
     private void OnOpenCreditButtonTapped()
     {
+        if (isPanelPopOver)
+            return;
+
+        isPanelPopOver = true;
         creditPanel.gameObject.SetActive(true);
     }
 
     private void OnCloseCreditButtonTapped()
     {
+        isPanelPopOver = false;
         creditPanel.gameObject.SetActive(false);
     }
     
@@ -102,11 +113,16 @@ public class LobbyUiManager : MonoBehaviour
     // - - - - - - - - -
     public void OnOpenSettingButtonTapped()
     {
+        if (isPanelPopOver)
+            return;
+
+        isPanelPopOver = true;
         settingPanel.gameObject.SetActive(true);
     }
 
     public void OnCloseSettingButtonTapped()
     {
+        isPanelPopOver = false;
         settingPanel.gameObject.SetActive(false);
     }
 
@@ -115,17 +131,16 @@ public class LobbyUiManager : MonoBehaviour
     // - - - - - - - - -
     private void OnOpenCodexButtonTapped()
     {
-        // SetAllButtons(false);
-        // SetDarkPanel(isTurnOn: true);
-        // main.Game.IsPaused = true;
+        if (isPanelPopOver)
+            return;
+
+        isPanelPopOver = true;
         codexPanel.gameObject.SetActive(true);
     }
 
     private void OnCloseCodexButtonTapped()
     {
-        // SetAllButtons(true);
-        // SetDarkPanel(isTurnOn: false);
-        // main.Game.IsPaused = false;
+        isPanelPopOver = false;
         codexPanel.gameObject.SetActive(false);
     }
 

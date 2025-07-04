@@ -5,6 +5,7 @@
 
 using UnityEngine;
 using System.Collections.Generic;
+using System.Collections;
 public class ForcedMove : SlimeActionBase
 {
     // 필드    
@@ -65,5 +66,11 @@ public class ForcedMove : SlimeActionBase
     {
         GameManager.Instance.forcedDirection = ForcedMovedir.None;
         base.Execute();
+    }
+
+    public override IEnumerator DestroySelf()
+    {
+        GameManager.Instance.forcedDirection = ForcedMovedir.None;
+        return base.DestroySelf();
     }
 }

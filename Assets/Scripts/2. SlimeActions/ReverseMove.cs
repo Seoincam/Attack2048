@@ -3,6 +3,7 @@
 //  - 상하좌우반전 클래스.
 // - - - - - - - - - - - - - - - - - -
 
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 public class ReverseMove : SlimeActionBase, IShowLife
@@ -37,6 +38,12 @@ public class ReverseMove : SlimeActionBase, IShowLife
     {
         GameManager.Instance.IsReversed = false;
         base.Execute();
+    }
+
+    public override IEnumerator DestroySelf()
+    {
+        GameManager.Instance.IsReversed = false;
+        return base.DestroySelf();
     }
 
 

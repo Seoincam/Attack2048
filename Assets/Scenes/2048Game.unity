@@ -278,17 +278,17 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 72245830}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: -0.0006704214}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1464030483}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 1}
-  m_AnchorMax: {x: 0.5, y: 1}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 0, y: -50}
   m_SizeDelta: {x: 400, y: 200}
-  m_Pivot: {x: 0.5, y: 1}
+  m_Pivot: {x: 0, y: 1}
 --- !u!114 &72245832
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -801,10 +801,10 @@ RectTransform:
   m_Father: {fileID: 1928851129}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 1, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 0, y: -50}
-  m_SizeDelta: {x: 0, y: 200}
-  m_Pivot: {x: 0.5, y: 1}
+  m_SizeDelta: {x: 800, y: 200}
+  m_Pivot: {x: 0, y: 1}
 --- !u!114 &271756176
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -832,7 +832,7 @@ MonoBehaviour:
     m_BestFit: 0
     m_MinSize: 0
     m_MaxSize: 150
-    m_Alignment: 1
+    m_Alignment: 2
     m_AlignByGeometry: 0
     m_RichText: 1
     m_HorizontalOverflow: 0
@@ -1560,7 +1560,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 95.643265, y: -62.5}
+  m_AnchoredPosition: {x: 95.64331, y: -62.5}
   m_SizeDelta: {x: 191.28653, y: 125}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &447772677
@@ -3247,7 +3247,6 @@ MonoBehaviour:
   - {fileID: 2783905767982787501, guid: bfc7ac41847f2416191b876009236e09, type: 3}
   - {fileID: 72323390830630359, guid: b30fc5131fc8a4c9e86db2a81071791b, type: 3}
   - {fileID: 3445808771769029929, guid: 554366196dd324ed7b546e945c139e0f, type: 3}
-  TestStartIndex: 0
 --- !u!114 &1024858055
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4572,7 +4571,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 372.9081, y: -100}
+  m_AnchoredPosition: {x: 372.9082, y: -100}
   m_SizeDelta: {x: 319.3299, y: 40}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1303763577
@@ -4850,7 +4849,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 2
-  m_BackGroundColor: {r: 0.7254902, g: 0.78039217, b: 0.62352943, a: 1}
+  m_BackGroundColor: {r: 0.7921569, g: 0.92941177, b: 0.9843137, a: 1}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
