@@ -1,13 +1,10 @@
 fileFormatVersion: 2
-guid: 2998edbfa076a45a49959ae3bca15f4a
+guid: ff5a51f0ce1d14a85b1c0970ca9c073f
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -3635838840894485798
-    second: Slime1_0
-  - first:
-      213: 6337278258928162847
-    second: Slime1_1
+      213: 3836954968553550457
+    second: sky_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -129,13 +126,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Slime1_0
+      name: sky_0
       rect:
         serializedVersion: 2
-        x: 1440
-        y: 1024
-        width: 52
-        height: 26
+        x: 0
+        y: 0
+        width: 1080
+        height: 2400
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -144,30 +141,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: ada8ae376d7ea8dc0800000000000000
-      internalID: -3635838840894485798
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Slime1_1
-      rect:
-        serializedVersion: 2
-        x: 713
-        y: 41
-        width: 1207
-        height: 970
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: f18183a000982f750800000000000000
-      internalID: 6337278258928162847
+      spriteID: 972fdcff63a9f3530800000000000000
+      internalID: 3836954968553550457
       vertices: []
       indices: 
       edges: []

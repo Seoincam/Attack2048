@@ -1,7 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
-using TMPro;
 using System;
 
 public class InGameUiMnanager : MonoBehaviour, INewTurnListener
@@ -10,9 +9,16 @@ public class InGameUiMnanager : MonoBehaviour, INewTurnListener
     // - - - - - - - - -
     [SerializeField] private LoadingSO loadingSO;
 
-    [Space, SerializeField] private TextMeshProUGUI remainingTurnsText;
-    [SerializeField] private TextMeshProUGUI stageText;
-    [SerializeField] private TextMeshProUGUI clearValueText;
+    [Header("Text")]
+    [SerializeField] private Image stageText;
+    [SerializeField] private Sprite[] stageTextSprites;
+    [SerializeField] private Text remainingTurnsText;
+    [SerializeField] private Text clearValueText;
+    [SerializeField] private Text pointsText;
+
+    [Header("Slime")]
+    [SerializeField] private Image slime;
+    [SerializeField] private Sprite[] slimeSprites;
 
     [Header("Setting")]
     [SerializeField] private Button settingButton;
@@ -24,22 +30,24 @@ public class InGameUiMnanager : MonoBehaviour, INewTurnListener
     [SerializeField] private CodexSO[] codexSO;
     private int currentCodexIndex;
 
-    [Space, SerializeField] private Button informationButton;
+    [Header("Store")]
+    [SerializeField] private Button informationButton;
     [SerializeField] private GameObject informationPanel;
-    [SerializeField] private TextMeshProUGUI pointsText;
     [SerializeField] private Button preventDestroyButton;
     [SerializeField] private Button addTurnButton;
     [SerializeField] private Button destroyTileButton;
 
-    [Space, SerializeField] private GameObject nextStagePanel;
+    [Header("Clear & Fail")]
+    [SerializeField] private GameObject nextStagePanel;
     [SerializeField] private GameObject failPanel;
 
-    [Space, SerializeField] private Canvas darkCanvas;
+    [Header("Dark Background")]
+    [SerializeField] private Canvas darkCanvas;
     [SerializeField] private GameObject darkPanel;
     [SerializeField] private GameObject darkPanelText;
 
     private Main main;
-    private event Action OnEscapeButtonTapped;
+    private Action OnEscapeButtonTapped;
 
 
     // 뒤로가기 감지
@@ -47,12 +55,8 @@ public class InGameUiMnanager : MonoBehaviour, INewTurnListener
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            var current = OnEscapeButtonTapped;
+            OnEscapeButtonTapped = OnEscapeButtonTapped != null ? OnEscapeButtonTapped : OnOpenSettingButtonTapped;
             OnEscapeButtonTapped?.Invoke();
-
-            // 기존에 설정이 열려있었다면 설정을 닫기만 함.
-            if (current != OnCloseSettingButtonTapped)
-                OnOpenSettingButtonTapped();
         }
     }
 
@@ -116,9 +120,9 @@ public class InGameUiMnanager : MonoBehaviour, INewTurnListener
         addTurnButton.onClick.AddListener(main.Store.AddTurnBtn);
         destroyTileButton.onClick.AddListener(DestroyTile);
 
-        preventDestroyButton.GetComponentInChildren<Text>().text = $"파괴 방지\n{main.Store.PreventDestroyCost}pt";
-        addTurnButton.GetComponentInChildren<Text>().text = $"턴 추가\n{main.Store.AddTurnCost}pt";
-        destroyTileButton.GetComponentInChildren<Text>().text = $"타일 파괴\n{main.Store.DestroyTileCost}pt";
+        // preventDestroyButton.GetComponentInChildren<Text>().text = $"파괴 방지\n{main.Store.PreventDestroyCost}pt";
+        // addTurnButton.GetComponentInChildren<Text>().text = $"턴 추가\n{main.Store.AddTurnCost}pt";
+        // destroyTileButton.GetComponentInChildren<Text>().text = $"타일 파괴\n{main.Store.DestroyTileCost}pt";
     }
 
 
@@ -148,14 +152,15 @@ public class InGameUiMnanager : MonoBehaviour, INewTurnListener
     // - - - - - - - - -
     private void OnRemainingTurnChanged()
     {
-        remainingTurnsText.text = $"Remaining Turns: {GameManager.Instance.CurTurns}";
+        var currentColor = GameManager.Instance.CurTurns > 5 ? "#6c6ca8" : "#ff4d4d";
+        remainingTurnsText.text = $"<color={currentColor}>{GameManager.Instance.CurTurns}</color>/<color=#6c6ca8>{main.Stage.maxTurn}</color>";
     }
 
     private void OnPointChanged()
     {
         var point = main.Point.Points;
 
-        pointsText.text = $"{point}pt";
+        pointsText.text = $"{point}";
 
         if (nextStagePanel.activeSelf)
             return;
@@ -174,8 +179,10 @@ public class InGameUiMnanager : MonoBehaviour, INewTurnListener
 
     private void OnSlimeChanged(object _, StageManager.SlimeInfo slimeInfo)
     {
-        stageText.text = $"Stage {slimeInfo.stageIndex}";
-        clearValueText.text = $"Clear: {slimeInfo.clearValue}";
+        slime.sprite = slimeSprites[slimeInfo.stageIndex];
+        slime.SetNativeSize();
+        stageText.sprite = stageTextSprites[slimeInfo.stageIndex];
+        clearValueText.text = $"{slimeInfo.clearValue} 블럭 생성하기";
     }
 
 
@@ -187,6 +194,7 @@ public class InGameUiMnanager : MonoBehaviour, INewTurnListener
             return;
 
         OnEscapeButtonTapped = OnCloseSettingButtonTapped;
+
         SetAllButtons(false);
         SetDarkPanel(isTurnOn: true);
         main.Game.IsPaused = true;
@@ -196,6 +204,7 @@ public class InGameUiMnanager : MonoBehaviour, INewTurnListener
     private void OnCloseSettingButtonTapped()
     {
         OnEscapeButtonTapped = null;
+
         SetAllButtons(true);
         SetDarkPanel(isTurnOn: false);
         main.Game.IsPaused = false;
@@ -230,6 +239,7 @@ public class InGameUiMnanager : MonoBehaviour, INewTurnListener
             return;
 
         OnEscapeButtonTapped = OnCloseCodexButtonTapped;
+
         SetAllButtons(false);
         SetDarkPanel(isTurnOn: true);
         main.Game.IsPaused = true;
@@ -239,6 +249,7 @@ public class InGameUiMnanager : MonoBehaviour, INewTurnListener
     private void OnCloseCodexButtonTapped()
     {
         OnEscapeButtonTapped = null;
+
         SetAllButtons(true);
         SetDarkPanel(isTurnOn: false);
         main.Game.IsPaused = false;
@@ -266,6 +277,9 @@ public class InGameUiMnanager : MonoBehaviour, INewTurnListener
         codexPanel.Find("Index Text").GetComponent<Text>().text = $"{currentCodexIndex + 1} / {codexSO.Length}";
 
         codexPanel.Find("Stage Codex/Name Text").GetComponent<Text>().text = codexSO[currentCodexIndex].slimeName ?? "이름이 없음";
+        var slimeImage = codexPanel.Find("Stage Codex/Slime Image").GetComponent<Image>();
+        slimeImage.sprite = slimeSprites[currentCodexIndex];
+        slimeImage.SetNativeSize();
         codexPanel.Find("Stage Codex/Description Text").GetComponent<Text>().text = codexSO[currentCodexIndex].slimeDescription ?? "설명이 없음";
     }
 
@@ -278,7 +292,6 @@ public class InGameUiMnanager : MonoBehaviour, INewTurnListener
         main.Store.PreventDestroyBtn();
     }
 
-    //todo
     private void DestroyTile()
     {
         GameManager gamemanager = GameManager.Instance;
@@ -360,9 +373,12 @@ public class InGameUiMnanager : MonoBehaviour, INewTurnListener
     }
 
 
-    // Bottom Buttons
+    // Information Buttons
+    // - - - - - - - - -
     private void OpenInformation()
     {
+        OnEscapeButtonTapped += CloseInformation;
+
         GameManager.Instance.IsPaused = true;
         SetAllButtons(false);
         SetDarkPanel(true);
@@ -371,6 +387,8 @@ public class InGameUiMnanager : MonoBehaviour, INewTurnListener
 
     private void CloseInformation()
     {
+        OnEscapeButtonTapped = null;
+
         GameManager.Instance.IsPaused = false;
         SetAllButtons(true);
         SetDarkPanel(false);

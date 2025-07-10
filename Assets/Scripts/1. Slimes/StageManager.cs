@@ -8,6 +8,7 @@ public class StageManager : MonoBehaviour
     public event Action OnGameFail;
 
     private SlimeBase _currentSlime;
+    public int maxTurn { get => _currentSlime.DefaltTurns; }
 
     [Space, Header("Setting")]
     [SerializeField, Tooltip("슬라임들의 순서를 결정")]
@@ -50,7 +51,7 @@ public class StageManager : MonoBehaviour
         GameManager.Instance.ClearValue = _currentSlime.ClearValue;
         
         OnSlimeChanged?.Invoke(this,
-            new SlimeInfo(clearValue: _currentSlime.ClearValue, stageIndex: index + 1));
+            new SlimeInfo(clearValue: _currentSlime.ClearValue, stageIndex: index));
     }
 
     public bool ChangeStage(int stageIndex, bool isRetry)

@@ -53,7 +53,8 @@ public class Tile : MonoBehaviour
 
     void Update()
     {
-        if (move) Move(_x2, _y2, _combine);
+        if (move)
+            Move(_x2, _y2, _combine);
     }
 
     public void Init(int x, int y)
@@ -79,7 +80,7 @@ public class Tile : MonoBehaviour
 
     private void Move(int x2, int y2, bool combine)
     {
-        transform.position = Vector3.MoveTowards(transform.position, targetPos, 0.4f);
+        transform.position = Vector3.MoveTowards(transform.position, targetPos, 0.35f);
 
         if (Vector3.Distance(transform.position, targetPos) < 0.01f)
         {

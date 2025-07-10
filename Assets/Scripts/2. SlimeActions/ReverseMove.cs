@@ -20,8 +20,8 @@ public class ReverseMove : SlimeActionBase, IShowLife
         base.Init();
         UpdateLifeText();
 
-        Vector3 position = new Vector3(2, 2, 0);
-        transform.position = position;
+        // Vector3 position = new Vector3(2, 2, 0);
+        // transform.position = position;
         GameManager.Instance.IsReversed = true;
     }
 

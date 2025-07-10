@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 4fa5a8eedfee3441ca32223b25a0db81
+guid: db955f9955d4148a983d84e67aeb30d7
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 5431731695996620653
-    second: Slime6_0
+      213: 1766323589166174454
+    second: block_4_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -126,13 +126,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Slime6_0
+      name: block_4_0
       rect:
         serializedVersion: 2
-        x: 0
-        y: 321
-        width: 1080
-        height: 1163
+        x: 3
+        y: 2
+        width: 168
+        height: 174
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -141,8 +141,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: d6fcb1fe233616b40800000000000000
-      internalID: 5431731695996620653
+      spriteID: 6f094aa22fd338810800000000000000
+      internalID: 1766323589166174454
       vertices: []
       indices: 
       edges: []

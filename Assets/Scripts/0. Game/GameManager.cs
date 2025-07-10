@@ -56,10 +56,10 @@ public class GameManager : MonoBehaviour, INewTurnListener
 
     public int ClearValue { get; set; }
 
-    private const float xStart = -2.12f; //[0,0]의 x좌표와 y좌표, 그후 증가할때마다의 좌표 차이
-    private const float yStart = -3.71f;
-    private const float xOffset = 1.06f;
-    private const float yOffset = 1.05f;
+    private const float xStart = -1.85f; //[0,0]의 x좌표와 y좌표, 그후 증가할때마다의 좌표 차이
+    private const float yStart = -1.85f;
+    private const float xOffset = 0.925f;
+    private const float yOffset = 0.925f;
 
 
     [Header("Setting")]
