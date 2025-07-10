@@ -46,6 +46,9 @@ public class InGameUiMnanager : MonoBehaviour, INewTurnListener
     [SerializeField] private GameObject darkPanel;
     [SerializeField] private GameObject darkPanelText;
 
+    [Header("UI Position")]
+    [SerializeField] private RectTransform storeButtonGroup;
+
     private Main main;
     private Action OnEscapeButtonTapped;
 
@@ -67,6 +70,7 @@ public class InGameUiMnanager : MonoBehaviour, INewTurnListener
     {
         this.main = main;
 
+        InitUIPosition();
         InitDelegate();
         InitSetting();
         InitCodex();
@@ -77,6 +81,12 @@ public class InGameUiMnanager : MonoBehaviour, INewTurnListener
 
         this.Subscribe_NewTurn();
         OnPointChanged();
+    }
+
+    void InitUIPosition()
+    {
+        var newY = 0.10417f * Screen.height - 806.67f;
+        storeButtonGroup.anchoredPosition = new Vector2(storeButtonGroup.anchoredPosition.x, newY);
     }
 
     void InitDelegate()

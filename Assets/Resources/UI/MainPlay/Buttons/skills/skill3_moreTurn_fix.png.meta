@@ -1,13 +1,13 @@
 fileFormatVersion: 2
-guid: a8f0f49a410f84321bd4456366973bbd
+guid: 131ebff31a89041e6b533cf974516f93
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 6846097349737008533
-    second: skill3_moreTurn_0
+      213: -8140062889203717052
+    second: skill3_moreTurn_fix_0
   - first:
-      213: -3102424504944279781
-    second: skill3_moreTurn_1
+      213: 1214864814416058819
+    second: skill3_moreTurn_fix_1
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -40,7 +40,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 0
+    filterMode: 1
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -49,7 +49,7 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 1
+  spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -129,7 +129,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: skill3_moreTurn_0
+      name: skill3_moreTurn_fix_0
       rect:
         serializedVersion: 2
         x: 0
@@ -144,14 +144,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 59d41d47449320f50800000000000000
-      internalID: 6846097349737008533
+      spriteID: 44c2caf1eefa80f80800000000000000
+      internalID: -8140062889203717052
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: skill3_moreTurn_1
+      name: skill3_moreTurn_fix_1
       rect:
         serializedVersion: 2
         x: 590
@@ -166,8 +166,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: b1f3450a959f1f4d0800000000000000
-      internalID: -3102424504944279781
+      spriteID: 3c9d361bc111cd010800000000000000
+      internalID: 1214864814416058819
       vertices: []
       indices: 
       edges: []
@@ -176,7 +176,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 5e97eb03825dee720800000000000000
+    spriteID: 
     internalID: 0
     vertices: []
     indices: 
@@ -185,9 +185,7 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable:
-      skill3_moreTurn_0: 6846097349737008533
-      skill3_moreTurn_1: -3102424504944279781
+    nameFileIdTable: {}
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
