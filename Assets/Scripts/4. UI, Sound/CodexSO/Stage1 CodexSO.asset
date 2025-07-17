@@ -13,8 +13,7 @@ MonoBehaviour:
   m_Name: Stage1 CodexSO
   m_EditorClassIdentifier: 
   slimeName: "\uCD08\uB85D \uC2AC\uB77C\uC784"
-  slimeDescription: "\uCD08\uB85D \uC2AC\uB77C\uC784\uC785\uB2C8\uB2E4. \uCD08\uB85D\uCD08\uB85D 
-    \uD328\uD134\uD328\uD134.\n\uCCAB\uBC88\uC9F8 \uD328\uD134\uC740 . . . \n\uB450\uBC88\uC9F8
-    \uD328\uD134\uC740 . . .\n\n\uC774 \uC2AC\uB77C\uC784\uC740 \uCD08\uB85D\uCD08\uB85D
-    \uCD08\uB85D\uCD08\uB85D \uCD08\uB85D.\n\n* \uB3C4\uAC10 \uC124\uBA85 \uC218\uC815:
-    Project - Assests - Scripts - 4. UI, Sound - CodexSO"
+  slimeDescription: "\uCD08\uB85D \uC2AC\uB77C\uC784\uC740 \uADC0\uC5FD\uC2B5\uB2C8\uB2E4.
+    \uADF8\uAC8C \uC804\uBD80\uC8E0. \uAC00\uC7A5 \uBB34\uD574\uD55C \uC2AC\uB77C\uC784
+    \uC785\uB2C8\uB2E4. \n* \uB3C4\uAC10 \uC124\uBA85 \uC218\uC815: Project - Assests
+    - Scripts - 4. UI, Sound - CodexSO"
