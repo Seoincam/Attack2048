@@ -18,6 +18,10 @@ public class SoundManager : SingleTone<SoundManager>
 
     [Header("Audio Clip")]
     public AudioClip LobbyBGM;
+    [Header("Button Clip")]
+    public AudioClip ButtonSFX;
+    [Header("Codex Clip")]
+    public AudioClip CodexSFX;
 
     private string _saveFileName = "soundSettings.json";
     private SoundSetting _soundSetting;
@@ -27,6 +31,11 @@ public class SoundManager : SingleTone<SoundManager>
         base.Awake();
         _soundSetting = LoadSetting();
         // Debug.Log(Application.persistentDataPath);
+        if(SFX == null)
+        {
+            SFX = gameObject.AddComponent<AudioSource>();
+            SFX.loop = false;
+        }
     }
 
 
@@ -64,6 +73,24 @@ public class SoundManager : SingleTone<SoundManager>
         BGM.clip = bgmClip;
         BGM.volume = _soundSetting.BgmVolume;
         BGM.Play();
+    }
+
+    public void PlaySFX(AudioClip sfxClip)
+    {
+        if (sfxClip == null) return;
+
+        SFX.volume = _soundSetting.SfxVolume;
+        SFX.PlayOneShot(sfxClip);
+    }
+
+    public void PlayButtonClick()
+    {
+        PlaySFX(ButtonSFX);
+    }
+
+    public void PlayCodexClick()
+    {
+        PlaySFX(CodexSFX);
     }
 
 
