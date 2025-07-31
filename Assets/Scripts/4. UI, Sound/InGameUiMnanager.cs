@@ -192,6 +192,7 @@ public class InGameUiMnanager : MonoBehaviour, INewTurnListener
         slime.sprite = slimeSprites[slimeInfo.stageIndex];
         slime.SetNativeSize();
         stageText.sprite = stageTextSprites[slimeInfo.stageIndex];
+        stageText.SetNativeSize();
         clearValueText.text = $"{slimeInfo.clearValue} 블럭 생성하기";
     }
 
