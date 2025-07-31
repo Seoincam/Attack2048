@@ -41,6 +41,7 @@ public abstract class SlimeBase : MonoBehaviour, INewTurnListener
 
         EventManager.Unsubscribe(GamePhase.NewTurnPhase, OnEnter_NewTurn);
         gameObject.SetActive(false);
+        SoundManager.Instance.PlayStageClearSFX();
     }
 
     // - - - - - - - - - - 

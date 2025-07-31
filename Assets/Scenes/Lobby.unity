@@ -3345,6 +3345,10 @@ MonoBehaviour:
   LobbyBGM: {fileID: 8300000, guid: 36263a0ad52b94f03acd6c0f711e7cb1, type: 3}
   ButtonSFX: {fileID: 8300000, guid: 3e839d2317757424099bc9549206b9d0, type: 3}
   CodexSFX: {fileID: 8300000, guid: 31ee9412843f62c4c89ca3accf91dc8c, type: 3}
+  BreakBlockSFX: {fileID: 8300000, guid: 45640769668d517439a6cded7043eb4c, type: 3}
+  AddTurnSFX: {fileID: 8300000, guid: 12d670fd44fc2ea4581ea545010a7e76, type: 3}
+  PreventDestroySFX: {fileID: 8300000, guid: 719ae06a8bd309e42976394eb27c07f9, type: 3}
+  StageClearSFX: {fileID: 8300000, guid: 959cead6f5d56b943b170f08083df6ee, type: 3}
 --- !u!4 &981790741
 Transform:
   m_ObjectHideFlags: 0

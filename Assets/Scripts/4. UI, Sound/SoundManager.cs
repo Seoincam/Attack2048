@@ -22,6 +22,14 @@ public class SoundManager : SingleTone<SoundManager>
     public AudioClip ButtonSFX;
     [Header("Codex Clip")]
     public AudioClip CodexSFX;
+    [Header("블록 파괴")]
+    public AudioClip BreakBlockSFX;
+    [Header("추가 턴")]
+    public AudioClip AddTurnSFX;
+    [Header("블록파괴 방어")]
+    public AudioClip PreventDestroySFX;
+    [Header("스테이지 클리어")]
+    public AudioClip StageClearSFX;
 
     private string _saveFileName = "soundSettings.json";
     private SoundSetting _soundSetting;
@@ -31,11 +39,21 @@ public class SoundManager : SingleTone<SoundManager>
         base.Awake();
         _soundSetting = LoadSetting();
         // Debug.Log(Application.persistentDataPath);
-        if(SFX == null)
+        if(SFX == null || !SFX.gameObject.scene.IsValid())
         {
+            Debug.Log("SFX AudioSource가 없거나 유효하지 않습니다. 새로 생성합니다.");
             SFX = gameObject.AddComponent<AudioSource>();
             SFX.loop = false;
         }
+
+        if ((BGM == null) || !BGM.gameObject.scene.IsValid())
+        {
+            Debug.Log("BGM AudioSource가 없거나 유요하지 않습니다. 새로 생성합니다.");
+            BGM = gameObject.AddComponent<AudioSource>();
+            BGM.loop = true;
+        }
+        SFX.volume = _soundSetting.SfxVolume;
+        BGM.volume = _soundSetting.BgmVolume;
     }
 
 
@@ -92,8 +110,23 @@ public class SoundManager : SingleTone<SoundManager>
     {
         PlaySFX(CodexSFX);
     }
+    public void PlayBreakBlockSFX()
+    {
+        PlaySFX(BreakBlockSFX);
+    }
 
-
+    public void PlayAddTurnSFX()
+    {
+        PlaySFX(AddTurnSFX);
+    }
+    public void PlayPreventDestroySFX()
+    {
+        PlaySFX(PreventDestroySFX);
+    }
+    public void PlayStageClearSFX()
+    {
+        PlaySFX(StageClearSFX);
+    }
     // 저장 
     public void SaveSetting()
     {

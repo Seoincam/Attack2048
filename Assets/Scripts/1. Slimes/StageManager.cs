@@ -15,6 +15,8 @@ public class StageManager : MonoBehaviour
     private GameObject[] _slimes;
 
     public int StageIndex { get; private set; }
+    //스테이지 클리어 중복 방지
+    public bool _isStageClear = false;
 
 
     public void Init()
@@ -25,6 +27,9 @@ public class StageManager : MonoBehaviour
 
     public void GameClear()
     {
+        if(_isStageClear)
+            return;
+        _isStageClear = true;
         GameManager.Instance.IsPaused = true;
         OnGameClear?.Invoke();
     }
@@ -59,6 +64,7 @@ public class StageManager : MonoBehaviour
         if (stageIndex < _slimes.Length)
         {
             StageIndex = stageIndex;
+            _isStageClear = false;
             SpawnSlime(stageIndex, isRetry);
             return true;
         }
