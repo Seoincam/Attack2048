@@ -51,6 +51,8 @@ public class InGameUiMnanager : MonoBehaviour, INewTurnListener
 
     private Main main;
     private Action OnEscapeButtonTapped;
+    //클리어 효과음 중복 방지
+    public bool isSFXPlayed = false;
 
 
     // 뒤로가기 감지
@@ -319,6 +321,11 @@ public class InGameUiMnanager : MonoBehaviour, INewTurnListener
     // - - - - - - - - -
     private void OnGameClear()
     {
+        if(!isSFXPlayed)
+        {
+            SoundManager.Instance.PlayStageClearSFX();
+            isSFXPlayed = true;
+        }
         SetAllButtons(false);
         SetDarkPanel(isTurnOn: true);
         nextStagePanel.GetComponentInChildren<Button>().onClick.AddListener(NextStageButton);
