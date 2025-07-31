@@ -236,7 +236,7 @@ public class InGameUiMnanager : MonoBehaviour, INewTurnListener
         GameManager.Instance.ResetObstacleArray();
         main.Point.ResetPoint();
 
-        main.Stage.ChangeStage(0, isRetry: true);
+        main.Stage.ChangeStage(main.Stage.StageIndex, isRetry: true);
         OnCloseSettingButtonTapped();
     }
 
