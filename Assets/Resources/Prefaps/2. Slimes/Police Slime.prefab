@@ -102,7 +102,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DefaltTurns: 80
   ClearValue: 128
-  slimeBgm: {fileID: 8300000, guid: 36263a0ad52b94f03acd6c0f711e7cb1, type: 3}
+  slimeBgm: {fileID: 8300000, guid: 115c6035244354c25a21c33a724ed065, type: 3}
   ImprisionInterval: 3
   _imprisionCounter: 0
   ForcedMoveInterval: 7
