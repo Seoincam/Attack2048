@@ -2747,6 +2747,7 @@ MonoBehaviour:
   darkPanel: {fileID: 1208836823}
   darkPanelText: {fileID: 1079577544}
   storeButtonGroup: {fileID: 1151523030}
+  isSFXPlayed: 0
 --- !u!4 &818720928
 Transform:
   m_ObjectHideFlags: 0

@@ -37,6 +37,7 @@ public class GameManager : MonoBehaviour, INewTurnListener
     public static GameManager Instance;
 
     private CountDownManager _countManager;
+    private PointManager _pointManager;
     private ObjectPoolManager _pooler;
 
     public event Action OnRemainingTurnChanged;
@@ -113,7 +114,7 @@ public int CountTile()
         if (Instance == null) Instance = this;
         else Destroy(gameObject);
 
-        // _pointManager = GetComponent<PointManager>();
+        _pointManager = GetComponent<PointManager>();
         _countManager = GetComponent<CountDownManager>();
         _pooler = ObjectPoolManager.Instance;
 
@@ -126,13 +127,25 @@ public int CountTile()
 
     public void StartGame()
     {
+        // 슬라임 액션 비활성화
+        foreach (Transform action in ObjectPoolManager.Instance.SlimeActionGroup)
+        {
+            if (!action.gameObject.activeSelf)
+                continue;
+            var slimeAction = action.GetComponent<SlimeActionBase>();
+            slimeAction.StartCoroutine(slimeAction.DestroySelf());
+        }
+
+        ResetTileArray();
+        ResetObstacleArray();
+        _pointManager.ResetPoint();
+
         Subscribe_NewTurn();
 
         Debug.Log("게임 시작!");
 
-        Spawn();
-        Spawn();
         _canGetInput = true;
+        IsPaused = false;
     }
 
     void FixedUpdate()
@@ -476,7 +489,11 @@ public int CountTile()
 
             // 클리어
             if (TileArray[x2, y2].GetComponent<Tile>().value >= ClearValue)
+            {
                 GetComponent<StageManager>().GameClear();
+                EventManager.Unsubscribe(GamePhase.NewTurnPhase, OnEnter_NewTurn);
+                CurTurns--;
+            }
         }
     }
 

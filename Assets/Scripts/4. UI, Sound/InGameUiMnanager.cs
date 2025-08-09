@@ -339,21 +339,9 @@ public class InGameUiMnanager : MonoBehaviour, INewTurnListener
             nextStagePanel.GetComponentInChildren<Button>().onClick.RemoveAllListeners();
             nextStagePanel.SetActive(false);
 
-            // 슬라임 액션 비활성화
-            foreach (Transform action in ObjectPoolManager.Instance.SlimeActionGroup)
-            {
-                if (!action.gameObject.activeSelf)
-                    continue;
-                var slimeAction = action.GetComponent<SlimeActionBase>();
-                slimeAction.StartCoroutine(slimeAction.DestroySelf());
-            }
-
-            GameManager.Instance.ResetTileArray();
-            GameManager.Instance.ResetObstacleArray();
-            main.Point.ResetPoint();
             SetAllButtons(true);
             SetDarkPanel(isTurnOn: false);
-            GameManager.Instance.IsPaused = false;
+            main.Game.StartGame();
         }
 
         else
