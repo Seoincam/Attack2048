@@ -417,7 +417,7 @@ public class InGameUiMnanager : MonoBehaviour, INewTurnListener
         informationButton.interactable = value;
     }
 
-    private void SetDarkPanel(bool isTurnOn, bool isStoreButton = false, string layerName = "DefaultUI")
+    private void SetDarkPanel(bool isTurnOn, bool isStoreButton = false, string layerName = "AboveUI")
     {
         darkCanvas.sortingLayerName = layerName;
         darkPanelText.SetActive(isStoreButton);
