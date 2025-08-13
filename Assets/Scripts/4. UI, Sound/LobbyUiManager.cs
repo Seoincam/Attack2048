@@ -166,7 +166,7 @@ public class LobbyUiManager : MonoBehaviour
 
     private void OnCloseCreditButtonTapped()
     {
-        OnEscapeButtonTapped = null;
+        OnEscapeButtonTapped = OnCloseSettingButtonTapped;
 
         SetAllButton(canInteractive: true);
         creditPanel.gameObject.SetActive(false);
@@ -242,7 +242,7 @@ public class LobbyUiManager : MonoBehaviour
     private void SetAllButton(bool canInteractive)
     {
         startButton.interactable = canInteractive;
-        creditButton.interactable = canInteractive;
+        // creditButton.interactable = canInteractive;
         escapeButton.interactable = canInteractive;
 
         settingButton.interactable = canInteractive;
