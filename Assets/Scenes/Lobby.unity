@@ -3423,6 +3423,17 @@ MonoBehaviour:
   AddTurnSFX: {fileID: 8300000, guid: 12d670fd44fc2ea4581ea545010a7e76, type: 3}
   PreventDestroySFX: {fileID: 8300000, guid: 719ae06a8bd309e42976394eb27c07f9, type: 3}
   StageClearSFX: {fileID: 8300000, guid: 959cead6f5d56b943b170f08083df6ee, type: 3}
+  ArcherActiveSFX: {fileID: 8300000, guid: 0017f045804018f4fb16f4a22738b735, type: 3}
+  ArcherBreakTileSFX: {fileID: 8300000, guid: 690c674157a7381488530b783479a951, type: 3}
+  RockBreakTileSFX: {fileID: 8300000, guid: 8a634c94f4cde3c4ba17b6df65ab39c2, type: 3}
+  RockCreateWallSFX: {fileID: 8300000, guid: 02ce0155f519c54458624f742e5bb3d8, type: 3}
+  PierrotChangeNumberSFX: {fileID: 8300000, guid: 166aeef572da0e747a3c8a60cd234362, type: 3}
+  GuardForcedSlideSFX: {fileID: 8300000, guid: 8440abeabdf519148bb7115e3ee2870e, type: 3}
+  WizardMoveNumberSFX: {fileID: 8300000, guid: 3b950d45e981be641ba01b4aed2fe499, type: 3}
+  WizardFlipSFX: {fileID: 8300000, guid: bb5a59dafd4624b4dab2ba95455547e7, type: 3}
+  WizardSwapTwoRowsSFX: {fileID: 8300000, guid: 70e384884ef80864a8c46144a2a415c3, type: 3}
+  WizardBlindSFX: {fileID: 8300000, guid: 83b2e92ed62cda24cb9bd30c384e7a89, type: 3}
+  ShieldCreateWallSFX: {fileID: 8300000, guid: 152c1afdc7f690d4dbf36ea9082ec753, type: 3}
 --- !u!4 &981790741
 Transform:
   m_ObjectHideFlags: 0

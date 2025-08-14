@@ -30,6 +30,24 @@ public class SoundManager : SingleTone<SoundManager>
     public AudioClip PreventDestroySFX;
     [Header("스테이지 클리어")]
     public AudioClip StageClearSFX;
+    [Header("아처 슬라임")]
+    public AudioClip ArcherActiveSFX;
+    public AudioClip ArcherBreakTileSFX;
+    [Header("바위 슬라임")]
+    public AudioClip RockBreakTileSFX;
+    public AudioClip RockCreateWallSFX;
+    [Header("삐에로 슬라임")]
+    public AudioClip PierrotChangeNumberSFX;
+    [Header("병정 슬라임")]
+    public AudioClip GuardForcedSlideSFX;
+    [Header("마법사 슬라임")]
+    public AudioClip WizardMoveNumberSFX;
+    public AudioClip WizardFlipSFX;
+    public AudioClip WizardSwapTwoRowsSFX;
+    public AudioClip WizardBlindSFX;
+    [Header("방패슬라임")]
+    public AudioClip ShieldCreateWallSFX; // 방패 슬라임 벽생성 겸 병정 감옥 패턴
+
 
     private string _saveFileName = "soundSettings.json";
     private SoundSetting _soundSetting;
@@ -126,6 +144,56 @@ public class SoundManager : SingleTone<SoundManager>
     public void PlayStageClearSFX()
     {
         PlaySFX(StageClearSFX);
+    }
+    //마법사 슬라임 효과음
+    public void PlayWizardMoveNumberSFX()
+    {
+        PlaySFX(WizardMoveNumberSFX);
+    }
+    public void PlayWizardFlipSFX()
+    {
+        PlaySFX(WizardFlipSFX);
+    }
+    public void PlayWizardSwapTwoRowsSFX()
+    {
+        PlaySFX(WizardSwapTwoRowsSFX);
+    }
+    public void PlayWizardBlindSFX()
+    {
+        PlaySFX(WizardBlindSFX);
+    }
+    //아처 슬라임 효과음
+    public void PlayArcherActiveSFX()
+    {
+        PlaySFX(ArcherActiveSFX);
+    }
+    public void PlayArcherBreakTileSFX()
+    {
+        PlaySFX(ArcherBreakTileSFX);
+    }
+    //바위 슬라임 효과음
+    public void PlayRockBreakTileSFX()
+    {
+        PlaySFX(RockBreakTileSFX);
+    }
+    public void PlayRockCreateWallSFX()
+    {
+        PlaySFX(RockCreateWallSFX);
+    }
+    //삐에로 슬라임 효과음
+    public void PlayPierrotChangeNumberSFX()
+    {
+        PlaySFX(PierrotChangeNumberSFX);
+    }
+    //병정 슬라임 효과음
+    public void PlayGuardForcedSlideSFX()
+    {
+        PlaySFX(GuardForcedSlideSFX);
+    }
+    //방패 슬라임 효과음
+    public void PlayShieldCreateWallSFX()
+    {
+        PlaySFX(ShieldCreateWallSFX);
     }
     // 저장 
     public void SaveSetting()

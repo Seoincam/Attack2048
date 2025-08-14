@@ -59,6 +59,7 @@ public class PoliceSlime : SlimeBase
         {
             _forcedMoveCounter = ForcedMoveInterval;
             SlimeActionManager.Instance.ForcedMove();
+            SoundManager.Instance.PlayGuardForcedSlideSFX();
         }
     }
 }

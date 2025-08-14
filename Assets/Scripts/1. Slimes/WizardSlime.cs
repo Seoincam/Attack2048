@@ -18,7 +18,6 @@ public class WizardSlime : SlimeBase
 
 
     // FixMe: 다시하기 눌렀을 때 상하좌우반전 패턴이었다면 상하좌우반전 유지됨.
-
     // - - - - - - - - - - 
     // Unity 콜백
     // - - - - - - - - - - 
@@ -56,6 +55,7 @@ public class WizardSlime : SlimeBase
         {
             _reverseMoveCounter = ReverseMoveInterval;
             SlimeActionManager.Instance.ReverseMove();
+            SoundManager.Instance.PlayWizardFlipSFX();
         }
     }
 
@@ -68,6 +68,7 @@ public class WizardSlime : SlimeBase
         {
             _translocateCounter = TranslocateInterval;
             SlimeActionManager.Instance.Translocate7();
+            SoundManager.Instance.PlayWizardMoveNumberSFX();
         }
     }
 
@@ -81,6 +82,7 @@ public class WizardSlime : SlimeBase
             _blindCounter = BlindInterval;
             for (int i = 0; i < blindCount; i++)
                 SlimeActionManager.Instance.Blind();
+            SoundManager.Instance.PlayWizardBlindSFX();
         }
     }
 }

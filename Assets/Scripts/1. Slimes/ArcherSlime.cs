@@ -46,6 +46,7 @@ public class ArcherSlime : SlimeBase
             _deleteCounter = DeleteInterval;
             // EventManager.Publish(GameEvent.Delete);
             SlimeActionManager.Instance.Delete();
+            SoundManager.Instance.PlayArcherActiveSFX();
         }
     }
 
@@ -59,6 +60,7 @@ public class ArcherSlime : SlimeBase
             _delete6Counter = Delete6Interval;
             // EventManager.Publish(GameEvent.Delete6);
             SlimeActionManager.Instance.Delete6();
+            SoundManager.Instance.PlayArcherActiveSFX();
         }
     }
 }

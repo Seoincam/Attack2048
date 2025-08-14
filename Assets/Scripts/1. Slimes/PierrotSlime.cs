@@ -45,6 +45,7 @@ public class PierrotSlime : SlimeBase
         {
             _changeCounter = ChangeInterval;
             SlimeActionManager.Instance.Change();
+            SoundManager.Instance.PlayPierrotChangeNumberSFX();
         }
     }
 
