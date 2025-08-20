@@ -20,6 +20,7 @@ public class Delete : SlimeActionBase, IShowLife, IMakeWarningEffect, IMakeDelet
     private int _x, _y; // Square 배열 상의 현재 위치
 
     private SpriteRenderer _renderer;
+    private Main _main;
 
 
     // Unity 콜백
@@ -27,6 +28,8 @@ public class Delete : SlimeActionBase, IShowLife, IMakeWarningEffect, IMakeDelet
     void Awake()
     {
         GetRenderer();
+        if(_main == null)
+            _main = Object.FindFirstObjectByType<Main>();
     }
     void Update()
     {
@@ -67,9 +70,28 @@ public class Delete : SlimeActionBase, IShowLife, IMakeWarningEffect, IMakeDelet
         GameManager.Instance.ObstacleArray[_x, _y].RemoveDelete();
 
         MakeDeleteEffect();
+        PlayDeleteSFX();
         base.Execute();
     }
+    private void PlayDeleteSFX()
+    {
+        var currentSlime = _main?.Stage?.CurrentSlime;
+        if(currentSlime == null)
+        {
+            Debug.Log("현재 슬라임을 찾을 수 없음");
+        }
+        if(currentSlime.CompareTag("Shield Slime"))
+        {
+            SoundManager.Instance.PlayShieldDeleteSFX();
+            Debug.Log("방패 슬라임 삭제 사운드 재생");
+        }
+        else if(currentSlime.CompareTag("Archer Slime"))
+        {
+            SoundManager.Instance.PlayArcherBreakTileSFX();
+            Debug.Log("아처 슬라임 삭제 사운드 재생");
+        }
 
+    }
 
     // Interfaces
     // - - - - - - - - - - 

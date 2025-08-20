@@ -61,6 +61,7 @@ public class GameManager : MonoBehaviour, INewTurnListener
     private const float yStart = -1.85f;
     private const float xOffset = 0.925f;
     private const float yOffset = 0.925f;
+    private bool IsCombining = false; // 타일 병합을 했나?
 
 
     [Header("Setting")]
@@ -387,7 +388,12 @@ public int CountTile()
                 }
             }
         }
-
+        //병합이 발생했으면 처리
+        if (IsCombining)
+        {
+            SoundManager.Instance.PlayCombineSFX();
+            IsCombining = false;
+        }
         // 이동이 발생했으면 처리
         if (move)
         {
@@ -460,6 +466,7 @@ public int CountTile()
             TileArray[x2, y2].tag != "Combine"
         )
         {
+            IsCombining = true; // 병합을 했으면 true로 설정
             move = true;
 
             // 데미지 계산

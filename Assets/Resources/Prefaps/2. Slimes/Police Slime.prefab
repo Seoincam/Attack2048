@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 1433800881508117687}
   m_Layer: 0
   m_Name: Police Slime
-  m_TagString: Untagged
+  m_TagString: Police Slime
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

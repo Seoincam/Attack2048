@@ -22,6 +22,10 @@ public class SoundManager : SingleTone<SoundManager>
     public AudioClip ButtonSFX;
     [Header("Codex Clip")]
     public AudioClip CodexSFX;
+    [Header("Shop Clip")]
+    public AudioClip ShopSFX;
+    [Header("Combine Clip")]
+    public AudioClip CombineSFX;
     [Header("블록 파괴")]
     public AudioClip BreakBlockSFX;
     [Header("추가 턴")]
@@ -47,6 +51,7 @@ public class SoundManager : SingleTone<SoundManager>
     public AudioClip WizardBlindSFX;
     [Header("방패슬라임")]
     public AudioClip ShieldCreateWallSFX; // 방패 슬라임 벽생성 겸 병정 감옥 패턴
+    public AudioClip ShieldDeleteSFX;
 
 
     private string _saveFileName = "soundSettings.json";
@@ -145,6 +150,14 @@ public class SoundManager : SingleTone<SoundManager>
     {
         PlaySFX(StageClearSFX);
     }
+    public void PlayShopClick()
+    {
+        PlaySFX(ShopSFX);
+    }
+    public void PlayCombineSFX()
+    {
+        PlaySFX(CombineSFX);
+    }
     //마법사 슬라임 효과음
     public void PlayWizardMoveNumberSFX()
     {
@@ -194,6 +207,10 @@ public class SoundManager : SingleTone<SoundManager>
     public void PlayShieldCreateWallSFX()
     {
         PlaySFX(ShieldCreateWallSFX);
+    }
+    public void PlayShieldDeleteSFX()
+    {
+        PlaySFX(ShieldDeleteSFX);
     }
     // 저장 
     public void SaveSetting()

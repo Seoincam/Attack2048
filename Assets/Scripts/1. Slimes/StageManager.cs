@@ -13,7 +13,7 @@ public class StageManager : MonoBehaviour
     [Space, Header("Setting")]
     [SerializeField, Tooltip("슬라임들의 순서를 결정")]
     private GameObject[] _slimes;
-
+    public SlimeBase CurrentSlime => _currentSlime; // 외부 참조용 현재 슬라임
     public int StageIndex { get; private set; }
 
     public void Init()

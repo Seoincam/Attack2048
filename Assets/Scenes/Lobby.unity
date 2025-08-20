@@ -3419,6 +3419,8 @@ MonoBehaviour:
   LobbyBGM: {fileID: 8300000, guid: 36263a0ad52b94f03acd6c0f711e7cb1, type: 3}
   ButtonSFX: {fileID: 8300000, guid: 8b86a8cedeb90024dbe927090f172d2b, type: 3}
   CodexSFX: {fileID: 8300000, guid: 31ee9412843f62c4c89ca3accf91dc8c, type: 3}
+  ShopSFX: {fileID: 8300000, guid: 18352c72bce73e44a840b7930eaef332, type: 3}
+  CombineSFX: {fileID: 8300000, guid: 7abdf11e7a886cd4683d69384bd39adc, type: 3}
   BreakBlockSFX: {fileID: 8300000, guid: 45640769668d517439a6cded7043eb4c, type: 3}
   AddTurnSFX: {fileID: 8300000, guid: 12d670fd44fc2ea4581ea545010a7e76, type: 3}
   PreventDestroySFX: {fileID: 8300000, guid: 719ae06a8bd309e42976394eb27c07f9, type: 3}
@@ -3434,6 +3436,7 @@ MonoBehaviour:
   WizardSwapTwoRowsSFX: {fileID: 8300000, guid: 70e384884ef80864a8c46144a2a415c3, type: 3}
   WizardBlindSFX: {fileID: 8300000, guid: 83b2e92ed62cda24cb9bd30c384e7a89, type: 3}
   ShieldCreateWallSFX: {fileID: 8300000, guid: 152c1afdc7f690d4dbf36ea9082ec753, type: 3}
+  ShieldDeleteSFX: {fileID: 8300000, guid: 33b11704349b64c44943872bc85a3a3c, type: 3}
 --- !u!4 &981790741
 Transform:
   m_ObjectHideFlags: 0

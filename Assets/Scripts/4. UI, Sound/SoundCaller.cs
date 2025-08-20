@@ -8,6 +8,7 @@ public class SoundCaller : MonoBehaviour
     {
         Button,
         Codex,
+        Shop,
     }
     [Header("효과음 설정")]
     public SoundType SFXType;
@@ -26,6 +27,9 @@ public class SoundCaller : MonoBehaviour
                 break;
             case SoundType.Codex:
                 SoundManager.Instance.PlayCodexClick();
+                break;
+            case SoundType.Shop:
+                SoundManager.Instance.PlayShopClick();
                 break;
             default:
                 Debug.LogWarning("사운드타입이 설정 안됨");
