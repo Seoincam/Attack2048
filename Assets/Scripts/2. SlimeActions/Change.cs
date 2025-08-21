@@ -1,11 +1,11 @@
 using UnityEngine;
-using UnityEngine.UI;
 
 public class Change : SlimeActionBase, IShowLife, IMakeWarningEffect, IMakeDeleteEffect
 {
     // - - - - - - - - - - 
     // 필드
-    [SerializeField] private Text lifeText;
+    [SerializeField] private Sprite life2;
+    [SerializeField] private Sprite life1;
 
     [System.Serializable] struct ChangeRule
     {
@@ -84,7 +84,9 @@ public class Change : SlimeActionBase, IShowLife, IMakeWarningEffect, IMakeDelet
     // Interfaces
     public void UpdateLifeText()
     {
-        lifeText.text = _lifeCounter.ToString();
+        if (_lifeCounter == 0)
+            return;
+        _renderer.sprite = _lifeCounter == 2 ? life2 : life1;
     }
 
     public void GetRenderer()
@@ -94,7 +96,7 @@ public class Change : SlimeActionBase, IShowLife, IMakeWarningEffect, IMakeDelet
 
     public void UpdateWarningEffect()
     {
-        float alpha = Mathf.PingPong(Time.time * 0.45f, 0.5f);
+        float alpha = Mathf.PingPong(Time.time * 0.4f, 1f);
         _renderer.color = new Color(_renderer.color.r, _renderer.color.g, _renderer.color.b, alpha);
     }
     

@@ -4,13 +4,24 @@
 // - - - - - - - - - - - - - - - - - -
 
 using UnityEngine;
-using UnityEngine.UI;
 
 public class Delete : SlimeActionBase, IShowLife, IMakeWarningEffect, IMakeDeleteEffect
 {
     // 필드    
     // - - - - - - - - - - 
-    [SerializeField] private Text lifeText;
+    public enum Type { Shield, Archer, LineDelete, LineDeleteVisual }
+    private Type type = Type.Archer;
+
+    [SerializeField] private Sprite shieldLife3;
+    [SerializeField] private Sprite shieldLife2;
+    [SerializeField] private Sprite shieldLife1;
+
+    [Space, SerializeField] private Sprite archerLife2;
+    [SerializeField] private Sprite archerLife1;
+
+    [Space, SerializeField] private Sprite lineLife3;
+    [SerializeField] private Sprite lineLife2;
+    [SerializeField] private Sprite lineLife1;
 
     [Space, SerializeField, Header("기본 한 칸 삭제 수명")]
     private int DefaultLife;
@@ -29,7 +40,7 @@ public class Delete : SlimeActionBase, IShowLife, IMakeWarningEffect, IMakeDelet
     {
         GetRenderer();
         if(_main == null)
-            _main = Object.FindFirstObjectByType<Main>();
+            _main = FindFirstObjectByType<Main>();
     }
     void Update()
     {
@@ -39,9 +50,15 @@ public class Delete : SlimeActionBase, IShowLife, IMakeWarningEffect, IMakeDelet
 
     // 초기화
     // - - - - - - - - - - 
-    public void Init(int x, int y, bool isLineDelete)
+    public void Init(int x, int y, Type type)
     {
-        Life = isLineDelete ? LineDeleteLife : DefaultLife;
+        this.type = type;
+        if (type == Type.LineDelete)
+            _renderer.sprite = null;
+
+        transform.localScale = type == Type.LineDeleteVisual ? new Vector3(.5f, .5f, 1f) : new Vector3(.1f, .1f, 1f);
+        Life = (type == Type.LineDelete || type == Type.LineDeleteVisual) ? LineDeleteLife : DefaultLife;
+
 
         base.Init(x, y);
         UpdateLifeText();
@@ -97,7 +114,31 @@ public class Delete : SlimeActionBase, IShowLife, IMakeWarningEffect, IMakeDelet
     // - - - - - - - - - - 
     public void UpdateLifeText()
     {
-        lifeText.text = _lifeCounter.ToString();
+        if (_lifeCounter == 0)
+            return;
+
+        if (type == Type.Shield)
+            switch (_lifeCounter)
+            {
+                case 3: _renderer.sprite = shieldLife3; break;
+                case 2: _renderer.sprite = shieldLife2; break;
+                case 1: _renderer.sprite = shieldLife1; break;
+            }
+
+        else if (type == Type.Archer)
+            switch (_lifeCounter)
+            {
+                case 2: _renderer.sprite = archerLife2; break;
+                case 1: _renderer.sprite = archerLife1; break;
+            }
+
+        else if (type == Type.LineDeleteVisual)
+            switch (_lifeCounter)
+            {
+                case 3: _renderer.sprite = lineLife3; break;
+                case 2: _renderer.sprite = lineLife2; break;
+                case 1: _renderer.sprite = lineLife1; break;
+            }
     }
     
     public void GetRenderer()
@@ -107,7 +148,7 @@ public class Delete : SlimeActionBase, IShowLife, IMakeWarningEffect, IMakeDelet
 
     public void UpdateWarningEffect()
     {
-        float alpha = Mathf.PingPong(Time.time * 0.45f, 0.5f);
+        float alpha = Mathf.PingPong(Time.time * 0.45f, .95f);
         _renderer.color = new Color(_renderer.color.r, _renderer.color.g, _renderer.color.b, alpha);
     }
 

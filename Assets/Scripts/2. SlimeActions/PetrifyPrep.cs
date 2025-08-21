@@ -4,13 +4,15 @@
 // - - - - - - - - - - - - - - - - - -
 
 using UnityEngine;
-using UnityEngine.UI;
 
 public class PetrifyPrep : SlimeActionBase, IShowLife, IMakeWarningEffect
 {
     // 필드    
     // - - - - - - - - - - 
-    [SerializeField] private Text lifeText;
+    [SerializeField] private Sprite life3;
+    [SerializeField] private Sprite life2;
+    [SerializeField] private Sprite life1;
+
 
     private int _x, _y; // Square 배열 상의 현재 위치
     
@@ -74,7 +76,15 @@ public class PetrifyPrep : SlimeActionBase, IShowLife, IMakeWarningEffect
     // - - - - - - - - - - 
     public void UpdateLifeText()
     {
-        lifeText.text = _lifeCounter.ToString();
+        if (_lifeCounter == 0)
+            return;
+
+        switch (_lifeCounter)
+        {
+            case 3: _renderer.sprite = life3; break;
+            case 2: _renderer.sprite = life2; break;
+            case 1: _renderer.sprite = life1; break;
+        }
     }
     
     public void GetRenderer()
@@ -84,7 +94,7 @@ public class PetrifyPrep : SlimeActionBase, IShowLife, IMakeWarningEffect
     
     public void UpdateWarningEffect()
     {
-        float alpha = Mathf.PingPong(Time.time * 0.45f, 0.5f);
+        float alpha = Mathf.PingPong(Time.time * 0.45f, .95f);
         _renderer.color = new Color(_renderer.color.r, _renderer.color.g, _renderer.color.b, alpha);
     }
 }

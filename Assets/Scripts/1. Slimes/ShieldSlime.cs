@@ -72,7 +72,7 @@ public class ShieldSlime : SlimeBase
         if (_deleteCounter == 0)
         {
             _deleteCounter = DeleteInterval;
-            SlimeActionManager.Instance.Delete();
+            SlimeActionManager.Instance.DeleteShield();
         }
     }
 }

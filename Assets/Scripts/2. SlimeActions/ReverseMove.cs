@@ -5,14 +5,28 @@
 
 using System.Collections;
 using UnityEngine;
-using UnityEngine.UI;
-public class ReverseMove : SlimeActionBase, IShowLife
+public class ReverseMove : SlimeActionBase, IShowLife, IMakeWarningEffect
 {
     // 필드
     // - - - - - - - - - - 
-    [SerializeField] private Text lifeText;
+    [SerializeField] private Sprite life3;
+    [SerializeField] private Sprite life2;
+    [SerializeField] private Sprite life1;
 
+    private SpriteRenderer _renderer;
 
+    // Unity 콜백
+    // - - - - - - - - - -
+    void Awake()
+    {
+        GetRenderer();
+    }
+
+    void Update()
+    {
+        UpdateWarningEffect();
+    }
+    
     // 초기화
     // - - - - - - - - - - 
     public override void Init()
@@ -20,8 +34,6 @@ public class ReverseMove : SlimeActionBase, IShowLife
         base.Init();
         UpdateLifeText();
 
-        // Vector3 position = new Vector3(2, 2, 0);
-        // transform.position = position;
         GameManager.Instance.IsReversed = true;
     }
 
@@ -51,6 +63,25 @@ public class ReverseMove : SlimeActionBase, IShowLife
     // - - - - - - - - - - 
     public void UpdateLifeText()
     {
-        lifeText.text = _lifeCounter.ToString();
+        if (_lifeCounter == 0)
+            return;
+
+        switch (_lifeCounter)
+        {
+            case 3: _renderer.sprite = life3; break;
+            case 2: _renderer.sprite = life2; break;
+            case 1: _renderer.sprite = life1; break;
+        }
+    }
+
+    public void GetRenderer()
+    {
+        _renderer = GetComponent<SpriteRenderer>();
+    }
+    
+    public void UpdateWarningEffect()
+    {
+        float alpha = Mathf.PingPong(Time.time * 0.45f, .95f);
+        _renderer.color = new Color(_renderer.color.r, _renderer.color.g, _renderer.color.b, alpha);
     }
 }

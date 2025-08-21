@@ -4,13 +4,13 @@
 // - - - - - - - - - - - - - - - - - -
 
 using UnityEngine;
-using UnityEngine.UI;
 
 public class ImprisonPrep : SlimeActionBase, IShowLife, IMakeWarningEffect
 {
     // 필드    
     // - - - - - - - - - - 
-    [SerializeField] private Text lifeText;
+    [SerializeField] private Sprite life2;
+    [SerializeField] private Sprite life1;
 
     private int _x, _y; // Square 배열 상의 현재 위치
     private SpriteRenderer _renderer;
@@ -65,7 +65,14 @@ public class ImprisonPrep : SlimeActionBase, IShowLife, IMakeWarningEffect
     // - - - - - - - - - - 
     public void UpdateLifeText()
     {
-        lifeText.text = _lifeCounter.ToString();
+        if (_lifeCounter == 0)
+            return;
+
+        switch (_lifeCounter)
+        {
+            case 2: _renderer.sprite = life2; break;
+            case 1: _renderer.sprite = life1; break;
+        }
     }
     
     public void GetRenderer()

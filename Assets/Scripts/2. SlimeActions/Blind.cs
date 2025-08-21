@@ -3,20 +3,27 @@
 //  - 블라인드 클래스.
 // - - - - - - - - - - - - - - - - - -
 
-using Unity.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class Blind : SlimeActionBase, IShowLife, IMakeDeleteEffect
 {
-    // - - - - - - - - - - 
     // 필드
-    [SerializeField] private Text lifeText;
+    // - - - - - - - - - - 
+    [SerializeField] private Sprite life2;
+    [SerializeField] private Sprite life1;
+
     private int _x, _y;
 
+    private SpriteRenderer _renderer;
 
-    // - - - - - - - - - - 
     // 초기화
+    // - - - - - - - - - - 
+    void Awake()
+    {
+        GetRenderer();
+    }
+    
     public override void Init(int x, int y)
     {
         base.Init(x, y);
@@ -47,7 +54,14 @@ public class Blind : SlimeActionBase, IShowLife, IMakeDeleteEffect
     // Interfaces
     public void UpdateLifeText()
     {
-        lifeText.text = _lifeCounter.ToString();
+        if (_lifeCounter == 0)
+            return;
+
+        switch (_lifeCounter)
+        {
+            case 2: _renderer.sprite = life2; break;
+            case 1: _renderer.sprite = life1; break;
+        }
     }
 
     public void MakeDeleteEffect()
@@ -55,5 +69,10 @@ public class Blind : SlimeActionBase, IShowLife, IMakeDeleteEffect
         ParticleSystem particle = ObjectPoolManager.Instance.GetObject(27, Group.Effect).GetComponent<ParticleSystem>();
         particle.transform.position = transform.position;
         particle.Play();
+    }
+
+    public void GetRenderer()
+    {
+        _renderer = GetComponent<SpriteRenderer>();
     }
 }

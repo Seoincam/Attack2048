@@ -36,14 +36,25 @@ public class SlimeActionManager: MonoBehaviour
     // - - - - - - - - - - - - - - - - - - - - -
 
     // 삭제
-    public void Delete()
+    public void DeleteShield()
+    {
+        // 위치 설정
+        Vector2Int selected = GetRandomPosition();
+        Delete().Init(selected.x, selected.y, global::Delete.Type.Shield);
+    }
+
+    public void DeleteArcher()
+    {
+        // 위치 설정
+        Vector2Int selected = GetRandomPosition();
+        Delete().Init(selected.x, selected.y, global::Delete.Type.Archer);
+    }
+
+    private Delete Delete()
     {
         GameObject obj = _pooler.GetObject(18, Group.SlimeAction);
         Delete delete = obj.GetComponent<Delete>();
-
-        // 위치 설정
-        Vector2Int selected = GetRandomPosition();
-        delete.Init(selected.x, selected.y, false);
+        return delete;
     }
 
     // 삭제 (6스테이지 한줄 삭제)
@@ -78,7 +89,10 @@ public class SlimeActionManager: MonoBehaviour
         {
             GameObject obj = _pooler.GetObject(18, Group.SlimeAction);
             Delete delete = obj.GetComponent<Delete>();
-            delete.Init(randomLineX, y, true);
+            if (y == 2)
+                delete.Init(randomLineX, y, global::Delete.Type.LineDeleteVisual);
+            else
+                delete.Init(randomLineX, y, global::Delete.Type.LineDelete);
         }
     }
 

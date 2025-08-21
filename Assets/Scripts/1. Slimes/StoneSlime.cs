@@ -79,7 +79,7 @@ public class StoneSlime : SlimeBase
         if (_deleteCounter == 0)
         {
             _deleteCounter = DeleteInterval;
-            SlimeActionManager.Instance.Delete();
+            // SlimeActionManager.Instance.Delete();
             SoundManager.Instance.PlayRockBreakTileSFX();
         }
     }
