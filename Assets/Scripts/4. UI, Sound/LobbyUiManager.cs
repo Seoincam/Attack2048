@@ -8,28 +8,34 @@ public class LobbyUiManager : MonoBehaviour
 {
     [SerializeField] private LoadingSO loadingSO;
 
+    [SerializeField] private GameObject[] hideObjects;
+
     [Header("Default Buttons")]
     [SerializeField] private Button startButton;
-    [SerializeField] private Button creditButton;
 
     [Header("Setting")]
     [SerializeField] private Button settingButton;
     [SerializeField] private Transform settingPanel;
+    [SerializeField] private Button closeSettingButton;
+    [SerializeField] private Slider bgmSlider;
+    [SerializeField] private Slider sfxSlider;
+
+    [Header("Credit")]
+    [SerializeField] private Button creditButton;
+    [SerializeField] private Transform creditPanel;
+    [SerializeField] private Button creditCloseButton;
 
     [Header("Codex")]
     [SerializeField] private Button codexButton;
     [SerializeField] private Transform codexPanel;
-    [SerializeField] private CodexSO[] codexSO;
-    [SerializeField] private Sprite[] slimeSprites;
-    private int currentCodexIndex;
+    [SerializeField] private Button codexCloseButton;
 
     [Header("Exit")]
     [SerializeField] private Button escapeButton;
     [SerializeField] private Transform escapePanel;
     private bool isEscapePopUp = false;
 
-    [Header("etc")]
-    [SerializeField] private Transform creditPanel;
+    [Header("Test")]
     [SerializeField] private InputField testStartIndexInputFied;
 
     private Action OnEscapeButtonTapped;
@@ -68,24 +74,14 @@ public class LobbyUiManager : MonoBehaviour
     void InitSetting()
     {
         settingButton.onClick.AddListener(OnOpenSettingButtonTapped);
-        settingPanel.Find("Close Button").GetComponent<Button>().onClick.AddListener(OnCloseSettingButtonTapped);
-
-        SoundManager.Instance.SetPanel
-        (
-            settingPanel.Find("BGM Layout Group/BGM Slider").GetComponent<Slider>(),
-            settingPanel.Find("SFX Layout Group/SFX Slider").GetComponent<Slider>()
-        );
+        closeSettingButton.onClick.AddListener(OnCloseSettingButtonTapped);
+        SoundManager.Instance.InitPanel(bgmSlider, sfxSlider);
     }
 
     void InitCodex()
     {
         codexButton.onClick.AddListener(OnOpenCodexButtonTapped);
-        codexPanel.Find("Close Button").GetComponent<Button>().onClick.AddListener(OnCloseCodexButtonTapped);
-        codexPanel.Find("Prev Button").GetComponent<Button>().onClick.AddListener(OnPreviousCodexButtonTapped);
-        codexPanel.Find("Next Button").GetComponent<Button>().onClick.AddListener(OnNextCodexButtonTapped);
-        currentCodexIndex = 0;
-
-        UpdateCodexUI();
+        codexCloseButton.onClick.AddListener(OnCloseCodexButtonTapped);
     }
 
     void InitCredit()
@@ -161,6 +157,7 @@ public class LobbyUiManager : MonoBehaviour
         OnEscapeButtonTapped = OnCloseCreditButtonTapped;
 
         SetAllButton(canInteractive: false);
+        SetActiveHideObjects(false);
         creditPanel.gameObject.SetActive(true);
     }
 
@@ -169,6 +166,7 @@ public class LobbyUiManager : MonoBehaviour
         OnEscapeButtonTapped = OnCloseSettingButtonTapped;
 
         SetAllButton(canInteractive: true);
+        SetActiveHideObjects(true);
         creditPanel.gameObject.SetActive(false);
     }
 
@@ -181,6 +179,7 @@ public class LobbyUiManager : MonoBehaviour
 
         SetAllButton(canInteractive: false);
         settingPanel.gameObject.SetActive(true);
+        SetActiveHideObjects(false);
     }
 
     public void OnCloseSettingButtonTapped()
@@ -189,6 +188,7 @@ public class LobbyUiManager : MonoBehaviour
 
         SetAllButton(canInteractive: true);
         settingPanel.gameObject.SetActive(false);
+        SetActiveHideObjects(true);
     }
 
 
@@ -199,6 +199,7 @@ public class LobbyUiManager : MonoBehaviour
         OnEscapeButtonTapped = OnCloseCodexButtonTapped;
 
         SetAllButton(canInteractive: false);
+        SetActiveHideObjects(false);
         codexPanel.gameObject.SetActive(true);
     }
 
@@ -207,34 +208,8 @@ public class LobbyUiManager : MonoBehaviour
         OnEscapeButtonTapped = null;
 
         SetAllButton(canInteractive: true);
+        SetActiveHideObjects(true);
         codexPanel.gameObject.SetActive(false);
-    }
-
-    private void OnPreviousCodexButtonTapped()
-    {
-        currentCodexIndex--;
-        Mathf.Clamp(currentCodexIndex, min: 0, max: codexSO.Length - 1);
-        UpdateCodexUI();
-    }
-
-    private void OnNextCodexButtonTapped()
-    {
-        currentCodexIndex++;
-        Mathf.Clamp(currentCodexIndex, min: 0, max: codexSO.Length - 1);
-        UpdateCodexUI();
-    }
-
-    void UpdateCodexUI()
-    {
-        codexPanel.Find("Prev Button").GetComponent<Button>().interactable = currentCodexIndex > 0;
-        codexPanel.Find("Next Button").GetComponent<Button>().interactable = currentCodexIndex < codexSO.Length - 1;
-        codexPanel.Find("Index Text").GetComponent<Text>().text = $"{currentCodexIndex + 1} / {codexSO.Length}";
-
-        codexPanel.Find("Stage Codex/Name Text").GetComponent<Text>().text = codexSO[currentCodexIndex].slimeName ?? "이름이 없음";
-                var slimeImage = codexPanel.Find("Stage Codex/Slime Image").GetComponent<Image>();
-        slimeImage.sprite = slimeSprites[currentCodexIndex];
-        slimeImage.SetNativeSize();
-        codexPanel.Find("Stage Codex/Description Text").GetComponent<Text>().text = codexSO[currentCodexIndex].slimeDescription ?? "설명이 없음";
     }
 
 
@@ -247,5 +222,11 @@ public class LobbyUiManager : MonoBehaviour
 
         settingButton.interactable = canInteractive;
         codexButton.interactable = canInteractive;
+    }
+
+    private void SetActiveHideObjects(bool value)
+    {
+        foreach (var obj in hideObjects)
+            obj.SetActive(value);
     }
 }

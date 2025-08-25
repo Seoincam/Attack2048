@@ -15,22 +15,20 @@ public class ObjectPoolManager : SingleTone<ObjectPoolManager>
     private List<List<GameObject>> pools;
     private Dictionary<Group, Transform> _groupMap = new();
 
-    [SerializeField] private Transform TileGroup;
+    [SerializeField] private Transform tileGroup;
     [SerializeField] private Transform EffectGroup;
-    public Transform SlimeActionGroup;
+    public Transform slimeActionGroup;
 
     public bool IsInitialized { get; private set; }
     [HideInInspector] public float _initProgress = 0; // 로딩바 반영
 
     public void Init()
     {
-        DontDestroyOnLoad(TileGroup);
         DontDestroyOnLoad(EffectGroup);
-        DontDestroyOnLoad(SlimeActionGroup);
 
-        _groupMap[Group.Tile] = TileGroup;
+        _groupMap[Group.Tile] = TileGroup.Instance == null ? tileGroup : TileGroup.Instance.transform;
         _groupMap[Group.Effect] = EffectGroup;
-        _groupMap[Group.SlimeAction] = SlimeActionGroup;
+        _groupMap[Group.SlimeAction] = SlimeActionGroup.Instance == null ? slimeActionGroup : SlimeActionGroup.Instance.transform;
 
         StartCoroutine(InitAsync());
     }

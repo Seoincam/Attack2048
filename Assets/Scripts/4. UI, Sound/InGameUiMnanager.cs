@@ -2,11 +2,14 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using System;
+using System.Collections.Generic;
 
 public class InGameUiMnanager : MonoBehaviour, INewTurnListener
 {
     // 필드
     // - - - - - - - - -
+    public static InGameUiMnanager Instance { get; private set; }
+
     [SerializeField] private LoadingSO loadingSO;
 
     [Header("Text")]
@@ -23,28 +26,32 @@ public class InGameUiMnanager : MonoBehaviour, INewTurnListener
     [Header("Setting")]
     [SerializeField] private Button settingButton;
     [SerializeField] private Transform settingPanel;
+    [SerializeField] private Button closeSettingButton;
+    [SerializeField] private Button retryButton;
+    [SerializeField] private Button lobbyButton;
+    [SerializeField] private Slider bgmSlider;
+    [SerializeField] private Slider sfxSlider;
+    [Header("설정창 열릴 때 가려질 것")] public List<GameObject> hideObjects = new();
     
     [Header("Codex")]
     [SerializeField] private Button codexButton;
     [SerializeField] private Transform codexPanel;
-    [SerializeField] private CodexSO[] codexSO;
-    private int currentCodexIndex;
+    [SerializeField] private Button codexCloseButton;
 
     [Header("Store")]
-    [SerializeField] private Button informationButton;
-    [SerializeField] private GameObject informationPanel;
     [SerializeField] private Button preventDestroyButton;
     [SerializeField] private Button addTurnButton;
     [SerializeField] private Button destroyTileButton;
 
+    [Header("Point")]
+    [SerializeField] private Button pointHintToggleButton;
+    [SerializeField] private GameObject pointHintPanel;
+    [SerializeField] private Sprite openEye;
+    [SerializeField] private Sprite closeEye;
+
     [Header("Clear & Fail")]
     [SerializeField] private GameObject nextStagePanel;
     [SerializeField] private GameObject failPanel;
-
-    [Header("Dark Background")]
-    [SerializeField] private Canvas darkCanvas;
-    [SerializeField] private GameObject darkPanel;
-    [SerializeField] private GameObject darkPanelText;
 
     [Header("UI Position")]
     [SerializeField] private RectTransform storeButtonGroup;
@@ -53,6 +60,8 @@ public class InGameUiMnanager : MonoBehaviour, INewTurnListener
     private Action OnEscapeButtonTapped;
     //클리어 효과음 중복 방지
     public bool isSFXPlayed = false;
+
+    private bool isPointHint = false;
 
 
     // 뒤로가기 감지
@@ -68,6 +77,11 @@ public class InGameUiMnanager : MonoBehaviour, INewTurnListener
 
     // 초기화
     // - - - - - - - - -
+    void Awake()
+    {
+        Instance = this;    
+    }
+
     public void Init(Main main)
     {
         this.main = main;
@@ -78,11 +92,11 @@ public class InGameUiMnanager : MonoBehaviour, INewTurnListener
         InitCodex();
         InitStore();
 
-        informationButton.onClick.AddListener(OpenInformation);
-        informationPanel.GetComponentInChildren<Button>().onClick.AddListener(CloseInformation);
+        pointHintToggleButton.onClick.AddListener(TogglePointHint);
 
         this.Subscribe_NewTurn();
         OnPointChanged();
+        SetActiveHideObjects(true);
     }
 
     void InitUIPosition()
@@ -104,26 +118,16 @@ public class InGameUiMnanager : MonoBehaviour, INewTurnListener
     void InitSetting()
     {
         settingButton.onClick.AddListener(OnOpenSettingButtonTapped);
-        settingPanel.Find("Close Button").GetComponent<Button>().onClick.AddListener(OnCloseSettingButtonTapped);
-        settingPanel.Find("Button Layout Group/Retry Button").GetComponent<Button>().onClick.AddListener(Retry);
-        settingPanel.Find("Button Layout Group/Lobby Button").GetComponent<Button>().onClick.AddListener(GoLobbyButton);
-
-        SoundManager.Instance.SetPanel
-        (
-            settingPanel.Find("BGM Layout Group/BGM Slider").GetComponent<Slider>(),
-            settingPanel.Find("SFX Layout Group/SFX Slider").GetComponent<Slider>()
-        );
+        closeSettingButton.GetComponent<Button>().onClick.AddListener(OnCloseSettingButtonTapped);
+        retryButton.onClick.AddListener(Retry);
+        lobbyButton.onClick.AddListener(GoLobbyButton);
+        SoundManager.Instance.InitPanel(bgmSlider, sfxSlider);
     }
 
     void InitCodex()
     {
         codexButton.onClick.AddListener(OnOpenCodexButtonTapped);
-        codexPanel.Find("Close Button").GetComponent<Button>().onClick.AddListener(OnCloseCodexButtonTapped);
-        codexPanel.Find("Prev Button").GetComponent<Button>().onClick.AddListener(OnPreviousCodexButtonTapped);
-        codexPanel.Find("Next Button").GetComponent<Button>().onClick.AddListener(OnNextCodexButtonTapped);
-        currentCodexIndex = 0;
-
-        UpdateCodexUI();
+        codexCloseButton.GetComponent<Button>().onClick.AddListener(OnCloseCodexButtonTapped);
     }
 
     void InitStore()
@@ -185,8 +189,6 @@ public class InGameUiMnanager : MonoBehaviour, INewTurnListener
     private void OnClickStoreButton(object _, StoreManager.ClickInfo clickInfo)
     {
         SetAllButtons(!clickInfo.isSelecting);
-        if (!clickInfo.isSelecting)
-            SetDarkPanel(false);
     }
 
     private void OnSlimeChanged(object _, StageManager.SlimeInfo slimeInfo)
@@ -209,8 +211,9 @@ public class InGameUiMnanager : MonoBehaviour, INewTurnListener
         OnEscapeButtonTapped = OnCloseSettingButtonTapped;
 
         SetAllButtons(false);
-        SetDarkPanel(isTurnOn: true);
         main.Game.IsPaused = true;
+        SetActiveHideObjects(false);
+
         settingPanel.gameObject.SetActive(true);
     }
 
@@ -219,15 +222,16 @@ public class InGameUiMnanager : MonoBehaviour, INewTurnListener
         OnEscapeButtonTapped = null;
 
         SetAllButtons(true);
-        SetDarkPanel(isTurnOn: false);
         main.Game.IsPaused = false;
+        SetActiveHideObjects(true);
+
         settingPanel.gameObject.SetActive(false);
     }
 
     private void Retry()
     {
         // 슬라임 액션 비활성화
-        foreach (Transform action in ObjectPoolManager.Instance.SlimeActionGroup)
+        foreach (Transform action in SlimeActionGroup.Instance.transform)
         {
             if (!action.gameObject.activeSelf)
                 continue;
@@ -254,8 +258,8 @@ public class InGameUiMnanager : MonoBehaviour, INewTurnListener
         OnEscapeButtonTapped = OnCloseCodexButtonTapped;
 
         SetAllButtons(false);
-        SetDarkPanel(isTurnOn: true);
         main.Game.IsPaused = true;
+        SetActiveHideObjects(false);
         codexPanel.gameObject.SetActive(true);
     }
 
@@ -264,44 +268,15 @@ public class InGameUiMnanager : MonoBehaviour, INewTurnListener
         OnEscapeButtonTapped = null;
 
         SetAllButtons(true);
-        SetDarkPanel(isTurnOn: false);
         main.Game.IsPaused = false;
+        SetActiveHideObjects(true);
         codexPanel.gameObject.SetActive(false);
     }
-
-    private void OnPreviousCodexButtonTapped()
-    {
-        currentCodexIndex--;
-        Mathf.Clamp(currentCodexIndex, min: 0, max: codexSO.Length - 1);
-        UpdateCodexUI();
-    }
-
-    private void OnNextCodexButtonTapped()
-    {
-        currentCodexIndex++;
-        Mathf.Clamp(currentCodexIndex, min: 0, max: codexSO.Length - 1);
-        UpdateCodexUI();
-    }
-
-    void UpdateCodexUI()
-    {
-        codexPanel.Find("Prev Button").GetComponent<Button>().interactable = currentCodexIndex > 0;
-        codexPanel.Find("Next Button").GetComponent<Button>().interactable = currentCodexIndex < codexSO.Length - 1;
-        codexPanel.Find("Index Text").GetComponent<Text>().text = $"{currentCodexIndex + 1} / {codexSO.Length}";
-
-        codexPanel.Find("Stage Codex/Name Text").GetComponent<Text>().text = codexSO[currentCodexIndex].slimeName ?? "이름이 없음";
-        var slimeImage = codexPanel.Find("Stage Codex/Slime Image").GetComponent<Image>();
-        slimeImage.sprite = slimeSprites[currentCodexIndex];
-        slimeImage.SetNativeSize();
-        codexPanel.Find("Stage Codex/Description Text").GetComponent<Text>().text = codexSO[currentCodexIndex].slimeDescription ?? "설명이 없음";
-    }
-
 
     // Store Button
     // - - - - - - - - -
     private void PreventDestroy()
     {
-        SetDarkPanel(true, isStoreButton: true, layerName: "Defalut");
         main.Store.PreventDestroyBtn();
     }
 
@@ -310,7 +285,6 @@ public class InGameUiMnanager : MonoBehaviour, INewTurnListener
         GameManager gamemanager = GameManager.Instance;
         if (gamemanager.CountTile() > 1)
         {
-            SetDarkPanel(true, isStoreButton: true, layerName: "Defalut");
             main.Store.DestoryTileBtn();
         }
         else Debug.Log("파괴 불가");
@@ -327,7 +301,6 @@ public class InGameUiMnanager : MonoBehaviour, INewTurnListener
             isSFXPlayed = true;
         }
         SetAllButtons(false);
-        SetDarkPanel(isTurnOn: true);
         nextStagePanel.GetComponentInChildren<Button>().onClick.AddListener(NextStageButton);
         nextStagePanel.SetActive(true);
     }
@@ -340,7 +313,6 @@ public class InGameUiMnanager : MonoBehaviour, INewTurnListener
             nextStagePanel.SetActive(false);
 
             SetAllButtons(true);
-            SetDarkPanel(isTurnOn: false);
             main.Game.StartGame();
         }
 
@@ -355,14 +327,15 @@ public class InGameUiMnanager : MonoBehaviour, INewTurnListener
         failPanel.GetComponentInChildren<Button>().onClick.AddListener(GoLobbyButton);
         failPanel.SetActive(true);
         SetAllButtons(false);
-        SetDarkPanel(isTurnOn: true);
         GameManager.Instance.IsPaused = true;
     }
 
     private void GoLobbyButton()
     {
+        hideObjects.Clear();
+
         // 슬라임 액션 비활성화
-        foreach (Transform action in ObjectPoolManager.Instance.SlimeActionGroup)
+        foreach (Transform action in SlimeActionGroup.Instance.transform)
         {
             if (!action.gameObject.activeSelf)
                 continue;
@@ -379,31 +352,35 @@ public class InGameUiMnanager : MonoBehaviour, INewTurnListener
     }
 
 
-    // Information Buttons
+    // Point Hint
     // - - - - - - - - -
-    private void OpenInformation()
+    private void TogglePointHint()
     {
-        OnEscapeButtonTapped += CloseInformation;
+        isPointHint = !isPointHint;
 
-        GameManager.Instance.IsPaused = true;
-        SetAllButtons(false);
-        SetDarkPanel(true);
-        informationPanel.SetActive(true);
-    }
+        pointHintPanel.SetActive(isPointHint);
+        pointHintToggleButton.image.sprite = isPointHint ? closeEye : openEye;
 
-    private void CloseInformation()
-    {
-        OnEscapeButtonTapped = null;
-
-        GameManager.Instance.IsPaused = false;
-        SetAllButtons(true);
-        SetDarkPanel(false);
-        informationPanel.SetActive(false);
+        preventDestroyButton.gameObject.SetActive(!isPointHint);
+        addTurnButton.gameObject.SetActive(!isPointHint);
+        destroyTileButton.gameObject.SetActive(!isPointHint);     
     }
 
 
     // etc
     // - - - - - - - - -
+    private void SetActiveHideObjects(bool value)
+    {
+        foreach (var obj in hideObjects)
+        {
+            obj.SetActive(value);
+            if (value && obj.name == "Point Hint Panel" && !isPointHint)
+                obj.SetActive(false);
+        }
+
+        SlimeActionGroup.Instance.gameObject.SetActive(value);
+        TileGroup.Instance.gameObject.SetActive(value);
+    }
     private void SetAllButtons(bool value)
     {
         var point = main.Point.Points;
@@ -414,14 +391,7 @@ public class InGameUiMnanager : MonoBehaviour, INewTurnListener
 
         settingButton.interactable = value;
         codexButton.interactable = value;
-        informationButton.interactable = value;
-    }
-
-    private void SetDarkPanel(bool isTurnOn, bool isStoreButton = false, string layerName = "AboveUI")
-    {
-        darkCanvas.sortingLayerName = layerName;
-        darkPanelText.SetActive(isStoreButton);
-        darkPanel.SetActive(isTurnOn);
+        pointHintToggleButton.interactable = value;
     }
     
     public void RefreshAllUi()

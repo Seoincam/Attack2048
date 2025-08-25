@@ -129,7 +129,7 @@ public int CountTile()
     public void StartGame()
     {
         // 슬라임 액션 비활성화
-        foreach (Transform action in ObjectPoolManager.Instance.SlimeActionGroup)
+        foreach (Transform action in SlimeActionGroup.Instance.transform)
         {
             if (!action.gameObject.activeSelf)
                 continue;

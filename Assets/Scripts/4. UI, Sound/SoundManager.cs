@@ -82,10 +82,10 @@ public class SoundManager : SingleTone<SoundManager>
 
     // 설정
     // - - - - - - - - - -
-    public void SetPanel(Slider bgmSlider, Slider sfxSlider)
+    public void InitPanel(Slider bgmSlider, Slider sfxSlider)
     {
-        bgmSlider.value = _soundSetting.BgmVolume;
-        sfxSlider.value = _soundSetting.SfxVolume;
+        bgmSlider.value = 1 - _soundSetting.BgmVolume;
+        sfxSlider.value = 1 - _soundSetting.SfxVolume;
 
         bgmSlider.onValueChanged.AddListener(OnBgmSliderChanged);
         sfxSlider.onValueChanged.AddListener(OnSfxSliderChanged);
@@ -94,15 +94,15 @@ public class SoundManager : SingleTone<SoundManager>
     private void OnBgmSliderChanged(float volume)
     {
         volume = Mathf.Clamp(volume, 0, 1);
-        _soundSetting.BgmVolume = volume;
-        BGM.volume = volume;
+        _soundSetting.BgmVolume = 1 - volume;
+        BGM.volume = 1 - volume;
     }
 
     private void OnSfxSliderChanged(float volume)
     {
         volume = Mathf.Clamp(volume, 0, 1);
-        _soundSetting.SfxVolume = volume;
-        // SFX.volume = volume;
+        _soundSetting.SfxVolume = 1 - volume;
+        SFX.volume = 1 - volume;
     }
 
 
@@ -120,7 +120,6 @@ public class SoundManager : SingleTone<SoundManager>
     {
         if (sfxClip == null) return;
 
-        SFX.volume = _soundSetting.SfxVolume;
         SFX.PlayOneShot(sfxClip);
     }
 
