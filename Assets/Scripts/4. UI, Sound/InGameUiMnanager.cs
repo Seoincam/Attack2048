@@ -51,6 +51,7 @@ public class InGameUiMnanager : MonoBehaviour, INewTurnListener
 
     [Header("Clear & Fail")]
     [SerializeField] private GameObject nextStagePanel;
+    [SerializeField] private GameObject finalStagePanel;
     [SerializeField] private GameObject failPanel;
 
     [Header("UI Position")]
@@ -300,9 +301,19 @@ public class InGameUiMnanager : MonoBehaviour, INewTurnListener
             SoundManager.Instance.PlayStageClearSFX();
             isSFXPlayed = true;
         }
+
         SetAllButtons(false);
-        nextStagePanel.GetComponentInChildren<Button>().onClick.AddListener(NextStageButton);
-        nextStagePanel.SetActive(true);
+        if (main.Stage.StageIndex == 6)
+        {
+            finalStagePanel.GetComponentInChildren<Button>().onClick.AddListener(GoLobbyButton);
+            finalStagePanel.SetActive(true);
+        }
+        else
+        {
+            nextStagePanel.GetComponentInChildren<Button>().onClick.AddListener(NextStageButton);
+            nextStagePanel.SetActive(true);
+        }
+
     }
 
     private void NextStageButton()
@@ -314,11 +325,6 @@ public class InGameUiMnanager : MonoBehaviour, INewTurnListener
 
             SetAllButtons(true);
             main.Game.StartGame();
-        }
-
-        else
-        {
-            Debug.Log("클리어!");
         }
     }
 
