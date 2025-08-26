@@ -534,7 +534,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 0, y: 175}
+  m_AnchoredPosition: {x: 0, y: 150}
   m_SizeDelta: {x: 1080, y: 100}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!114 &452172752
@@ -570,7 +570,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "Tip. \uC5EC\uAE30\uC5D0 \uD301\uC744 \uAE30\uC7AC\uD560 \uC218 \uC788\uC5B4\uC694"
+  m_Text: "Tip! \uC2A4\uD0AC\uC744 \uC801\uC808\uD788 \uC798 \uC0AC\uC6A9\uD574\uBCF4\uC138\uC694"
 --- !u!222 &452172753
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -927,9 +927,9 @@ MonoBehaviour:
   - {fileID: 617496380150377004, guid: 43938d92f73704ad8895ad801fe2523a, type: 3}
   - {fileID: 1811434947358909584, guid: aa2a6893ea7f545caa122dd812b54b1b, type: 3}
   - {fileID: 617496380150377004, guid: 9037c0fb38f13454f9984123d820720f, type: 3}
-  TileGroup: {fileID: 2097360736}
+  tileGroup: {fileID: 0}
   EffectGroup: {fileID: 1647613193}
-  SlimeActionGroup: {fileID: 13232674}
+  slimeActionGroup: {fileID: 0}
   _initProgress: 0
 --- !u!1 &1647613192
 GameObject:
