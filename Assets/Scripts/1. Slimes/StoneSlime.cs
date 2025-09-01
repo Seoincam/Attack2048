@@ -66,7 +66,7 @@ public class StoneSlime : SlimeBase
         if (_wallCounter == 0)
         {
             _wallCounter = WallInterval;
-            SlimeActionManager.Instance.Wall();
+            SlimeActionManager.Instance.Wall(Wall.Type.Stone);
             SoundManager.Instance.PlayRockCreateWallSFX();
         }
     }

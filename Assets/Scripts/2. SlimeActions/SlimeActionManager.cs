@@ -97,7 +97,7 @@ public class SlimeActionManager: MonoBehaviour
     }
 
     // 벽
-    public void Wall()
+    public void Wall(Wall.Type type)
     {
         GameObject obj = _pooler.GetObject(25, Group.SlimeAction);
         Wall wall = obj.GetComponent<Wall>();
@@ -125,7 +125,7 @@ public class SlimeActionManager: MonoBehaviour
         int x2 = x1 + dir.x;
         int y2 = y1 + dir.y;
 
-        wall.Init(x1, y1, x2, y2);
+        wall.Init(x1, y1, x2, y2, type);
     }
 
     // 석화 대기

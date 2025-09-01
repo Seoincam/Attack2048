@@ -6,21 +6,40 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Wall : SlimeActionBase, IShowLife, IMakeDeleteEffect
+public class Wall : SlimeActionBase, IShowLife, IMakeDeleteEffect, IMakeWarningEffect
 {
+    public enum Type { Shield, Stone }
+    private Type type;
+
+    [SerializeField] private Sprite shield;
+    [SerializeField] private Sprite stone;
+
     private int x1, y1, x2, y2;
-    [SerializeField] private Text lifeText;
+
+    private SpriteRenderer _renderer;
+
+    void Awake()
+    {
+        GetRenderer();
+    }
 
     // Wall의 실제 위치를 지정하고 gamemanager에 알림
-    public void Init(int x1, int y1, int x2, int y2)
+    public void Init(int x1, int y1, int x2, int y2, Type type)
     {
         base.Init();
+        this.type = type;
         UpdateLifeText();
 
         this.x1 = x1;
         this.y1 = y1;
         this.x2 = x2;
         this.y2 = y2;
+
+        switch (type)
+        {
+            case Type.Shield: _renderer.sprite = shield; break;
+            case Type.Stone: _renderer.sprite = stone; break;
+        }
 
         // 위치 계산
         transform.position = (GameManager.Instance.LocateTile(x1, y1) + GameManager.Instance.LocateTile(x2, y2)) / 2;
@@ -29,7 +48,6 @@ public class Wall : SlimeActionBase, IShowLife, IMakeDeleteEffect
         if (x1 == x2)
         {
             transform.rotation = Quaternion.Euler(0, 0, 90);
-            lifeText.rectTransform.rotation = Quaternion.Euler(0, 0, 0);
         }
         else
             transform.rotation = Quaternion.identity;
@@ -55,7 +73,6 @@ public class Wall : SlimeActionBase, IShowLife, IMakeDeleteEffect
     // Interfaces
     public void UpdateLifeText()
     {
-        lifeText.text = _lifeCounter.ToString();
     }
 
     public void MakeDeleteEffect()
@@ -133,5 +150,15 @@ public class Wall : SlimeActionBase, IShowLife, IMakeDeleteEffect
                 GameManager.Instance.ObstacleArray[x2, y2].RemoveWall(3);
             }
         }
+    }
+
+    public void GetRenderer()
+    {
+        _renderer = GetComponent<SpriteRenderer>();
+    }
+
+    public void UpdateWarningEffect()
+    {
+        throw new System.NotImplementedException();
     }
 }

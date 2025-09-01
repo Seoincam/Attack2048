@@ -14,6 +14,8 @@ public abstract class SlimeActionBase : MonoBehaviour, ICountDownListener
     [Tooltip("수명"), SerializeField] protected int Life; // Inspector에서 설정
     [Tooltip("남은 수명"), SerializeField] protected int _lifeCounter;
 
+    private bool isDestroyed;
+
 
     // 초기화
     // - - - - - - - - - - 
@@ -21,6 +23,7 @@ public abstract class SlimeActionBase : MonoBehaviour, ICountDownListener
     {
         Subscribe_CountDown();
         _lifeCounter = Life;
+        isDestroyed = false;
     }
 
     public virtual void Init(int x, int y)
@@ -57,9 +60,20 @@ public abstract class SlimeActionBase : MonoBehaviour, ICountDownListener
 
     public virtual IEnumerator DestroySelf()
     {
+        isDestroyed = true;
         yield return new WaitForSeconds(0.05f);
         EventManager.Unsubscribe(GamePhase.CountDownPhase, OnEnter_CountDownPhase);
         EventManager.Unsubscribe(GamePhase.ExecutePhase, Execute);
         gameObject.SetActive(false);
+    }
+
+    void OnDisable()
+    {
+        if (isDestroyed)
+            return;
+            
+        EventManager.Unsubscribe(GamePhase.CountDownPhase, OnEnter_CountDownPhase);
+        EventManager.Unsubscribe(GamePhase.ExecutePhase, Execute);
+        StopAllCoroutines();
     }
 }

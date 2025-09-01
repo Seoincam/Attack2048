@@ -57,7 +57,7 @@ public class ShieldSlime : SlimeBase
         if (_wallCounter == 0)
         {
             for (int i = 0; i < WallCount; i++)
-                SlimeActionManager.Instance.Wall();
+                SlimeActionManager.Instance.Wall(Wall.Type.Shield);
 
             _wallCounter = WallInterval;
             SoundManager.Instance.PlayShieldCreateWallSFX();
