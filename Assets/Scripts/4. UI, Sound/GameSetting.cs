@@ -14,7 +14,6 @@ public class GameSetting : SingleTone<GameSetting>
     protected override void Awake()
     {
         base.Awake();
-
         SetUp();
     }
 
