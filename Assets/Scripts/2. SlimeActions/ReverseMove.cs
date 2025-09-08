@@ -52,10 +52,10 @@ public class ReverseMove : SlimeActionBase, IShowLife, IMakeWarningEffect
         base.Execute();
     }
 
-    public override IEnumerator DestroySelf()
+    public override void Destroy()
     {
         GameManager.Instance.IsReversed = false;
-        return base.DestroySelf();
+        base.Destroy();
     }
 
 

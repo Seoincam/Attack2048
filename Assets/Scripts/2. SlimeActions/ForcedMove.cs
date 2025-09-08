@@ -68,9 +68,9 @@ public class ForcedMove : SlimeActionBase
         base.Execute();
     }
 
-    public override IEnumerator DestroySelf()
+    public override void Destroy()
     {
         GameManager.Instance.forcedDirection = ForcedMovedir.None;
-        return base.DestroySelf();
+        base.Destroy();
     }
 }

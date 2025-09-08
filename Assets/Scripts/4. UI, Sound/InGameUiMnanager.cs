@@ -237,7 +237,7 @@ public class InGameUiMnanager : MonoBehaviour, INewTurnListener
             if (!action.gameObject.activeSelf)
                 continue;
             var slimeAction = action.GetComponent<SlimeActionBase>();
-            slimeAction.StartCoroutine(slimeAction.DestroySelf());
+            slimeAction.Destroy();
         }
 
         GameManager.Instance.ResetTileArray();
@@ -347,7 +347,7 @@ public class InGameUiMnanager : MonoBehaviour, INewTurnListener
                 continue;
 
             var slimeAction = action.GetComponent<SlimeActionBase>();
-            slimeAction.StartCoroutine(slimeAction.DestroySelf());
+            slimeAction.Destroy();
         }
 
         GameManager.Instance.ClearTileArray();

@@ -134,7 +134,7 @@ public int CountTile()
             if (!action.gameObject.activeSelf)
                 continue;
             var slimeAction = action.GetComponent<SlimeActionBase>();
-            slimeAction.StartCoroutine(slimeAction.DestroySelf());
+            slimeAction.Destroy();
         }
 
         ResetTileArray();
