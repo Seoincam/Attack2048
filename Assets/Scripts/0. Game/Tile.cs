@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using DG.Tweening;
 using Unity.VisualScripting;
+using UnityEditor.VisionOS;
 using UnityEngine;
 
 // 연출 전담 클래스
@@ -20,10 +21,39 @@ public class Tile : MonoBehaviour
 
     private Tween moveTween;
 
+    //렌더 순서 관리
+    private SpriteRenderer _sr;
+    private int _baseOrder;
+    private const int OrderOffset = 1000; // 이동 중 위로 올라가게 할 오프셋
+
+    private void Awake()
+    {
+        _sr = GetComponent<SpriteRenderer>();
+    }
+    // 좌표 기반으로 기본 order 계산
+    // 겹칠경우 프레임마다 랜덤으로 렌더 순서 겹치는경우 방지용
+    public static int ComputeBaseOrder(int x, int y) => (y * 10) + x;
+
+    public void RecomputeBaseOrder()
+    {
+        _baseOrder = ComputeBaseOrder(x, y);
+        if (_sr != null) _sr.sortingOrder = _baseOrder;
+    }
+    // 이동 시작/ 끝 order 제어 위함
+    private void BeginMoveVisual()
+    {
+        if (_sr != null) _sr.sortingOrder = _baseOrder + OrderOffset;
+    }
+
+    private void EndMoveVisual()
+    {
+        RecomputeBaseOrder();
+    }
     public void Init(int x, int y)
     {
         IsMoving = false;
         this.x = x; this.y = y;
+        RecomputeBaseOrder();
     }
     /* 타일을 주어진 좌표로 이동시킴
      * 이동중 : IsMoving = true -> 이동 완료 후 좌표 최신위치로 갱신 -> IsMoving = false
@@ -34,11 +64,17 @@ public class Tile : MonoBehaviour
         IsMoving = true;
         var targetPos = GameManager.Instance.LocateTile(x2, y2);
 
+        // 트윈 시작 시 Order 최상단으로
+        BeginMoveVisual();
+
         moveTween?.Kill();
         moveTween = transform.DOMove(targetPos, MoveDuration).SetEase(Ease.OutQuad).OnComplete(() =>
         {
             x = x2; y = y2;
             IsMoving = false;
+
+            // 트윈 끝나면 Order 원래대로
+            EndMoveVisual();
             onArrived?.Invoke();
         });
     }
@@ -47,6 +83,10 @@ public class Tile : MonoBehaviour
     {
         moveTween?.Kill();
         IsMoving = false;
+
+        // 비활성화 되기 직전에도 원래대로
+        if(_sr != null) _sr.sortingOrder = _baseOrder;
+
         if (IsProtected)
         {
             if (protectText != null) protectText.SetActive(false);
