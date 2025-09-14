@@ -55,25 +55,14 @@ public abstract class SlimeActionBase : MonoBehaviour, ICountDownListener
     protected virtual void Execute()
     {
         // 자식 클래스가 이곳에 override로 로직 추가
-        StartCoroutine(DestroySelf());
+        Destroy();
     }
 
-    public virtual IEnumerator DestroySelf()
+    public virtual void Destroy()
     {
         isDestroyed = true;
-        yield return new WaitForSeconds(0.05f);
         EventManager.Unsubscribe(GamePhase.CountDownPhase, OnEnter_CountDownPhase);
         EventManager.Unsubscribe(GamePhase.ExecutePhase, Execute);
         gameObject.SetActive(false);
-    }
-
-    void OnDisable()
-    {
-        if (isDestroyed)
-            return;
-            
-        EventManager.Unsubscribe(GamePhase.CountDownPhase, OnEnter_CountDownPhase);
-        EventManager.Unsubscribe(GamePhase.ExecutePhase, Execute);
-        StopAllCoroutines();
     }
 }

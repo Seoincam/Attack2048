@@ -90,24 +90,23 @@ public class Delete : SlimeActionBase, IShowLife, IMakeWarningEffect, IMakeDelet
         PlayDeleteSFX();
         base.Execute();
     }
+    
     private void PlayDeleteSFX()
     {
-        var currentSlime = _main?.Stage?.CurrentSlime;
-        if(currentSlime == null)
-        {
-            Debug.Log("현재 슬라임을 찾을 수 없음");
-        }
-        if(currentSlime.CompareTag("Shield Slime"))
+        if (type == Type.Shield)
         {
             SoundManager.Instance.PlayShieldDeleteSFX();
             Debug.Log("방패 슬라임 삭제 사운드 재생");
         }
-        else if(currentSlime.CompareTag("Archer Slime"))
+        else if (type == Type.Archer || type == Type.LineDelete || type == Type.LineDeleteVisual)
         {
             SoundManager.Instance.PlayArcherBreakTileSFX();
             Debug.Log("아처 슬라임 삭제 사운드 재생");
         }
-
+        else
+        {
+            Debug.Log("현재 슬라임을 찾을 수 없음");
+        }
     }
 
     // Interfaces
