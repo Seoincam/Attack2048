@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
+using DG.Tweening;
+using UnityEngine.Analytics;
 
 /*
     흐름 :
@@ -12,11 +14,12 @@ using Random = UnityEngine.Random;
     1. 입력 감지                 
         (GameManger.GetMouseOrTouch)
 
-    2. 입력 처리               
-        (GameManger.ExecuteInput -> GameManger.MoveOrCombine)
+    2. 입력 처리(방향 판정) -> 계산만 먼저               
+        (GameManger.ExecuteInput -> BoardPlanner.ComputePlan
+         : 타일 이동/병합 계획(MovePlan) 계산만 수행 (GameObject 건들X))
 
-    3. 이동이 발생했다면, 모든 타일 이동 끝날 때까지 대기 
-        (GameManger.CheckIsMoveEnd)
+    3. 트윈으로 연출 후 타일 배열 갱신
+        (GameManager.ApplyPlan -> GamaManager.OnAllMovesCompleted)
 
     4. 카운트 다운 페이즈
         (CountDownManager)
@@ -55,13 +58,18 @@ public class GameManager : MonoBehaviour, INewTurnListener
 
     private int _curTurns;
 
+    private int pendingMoves = 0; // 현재 진행중인 트윈 수
+    private readonly List<GameObject> mergeVictims = new(); // 병합으로 사라질 도착지점 타일들
+    private readonly List<(int x, int y, int newVal)> mergesToApply = new(); // 완료 후 타일 교체 정보
+    private bool anyMergeThisTurn = false; // 이번 턴에 병합 여부
+    private int ValueToIndex(int v) => Mathf.Max(0, (int)Mathf.Log(v, 2) - 1);
+
     public int ClearValue { get; set; }
 
     private const float xStart = -1.85f; //[0,0]의 x좌표와 y좌표, 그후 증가할때마다의 좌표 차이
     private const float yStart = -1.85f;
     private const float xOffset = 0.925f;
     private const float yOffset = 0.925f;
-    private bool IsCombining = false; // 타일 병합을 했나?
 
 
     [Header("Setting")]
@@ -72,13 +80,10 @@ public class GameManager : MonoBehaviour, INewTurnListener
 
 
     private int x, y, i, j;
-    private bool wait, move;
+    private bool wait;
     private Vector3 firstPos, secondPos, gap;
     [HideInInspector]
     public ForcedMovedir forcedDirection = ForcedMovedir.None; //  강제 이동 방향
-
-    private HashSet<Tile> _movingTiles; // 매턴마다 이동하는 타일 저장
-    private bool _isChecking; // 타일 이동 체크 중인가?
 
     public int CurTurns
     {
@@ -151,9 +156,7 @@ public int CountTile()
 
     void FixedUpdate()
     {
-        if (_isChecking) CheckIsMoveEnd();
-
-        if (!_isChecking && CanGetInput) GetInput();
+        if (CanGetInput) GetInput();
     }
 
 
@@ -290,220 +293,168 @@ public int CountTile()
 
     private void ExecuteInput()
     {
-        if (wait)
-        {
-            wait = false;
+        if (!wait) return;
+        wait = false;
 
-            _movingTiles = new HashSet<Tile>();
-            _canGetInput = false;
-            // 강제 이동이 설정된 경우 그 방향 외에는 입력을 받지 않음
-            if (forcedDirection != ForcedMovedir.None)
-            {
-                bool isValid = false;
-                switch (forcedDirection)
-                {
-                    case ForcedMovedir.Up:
-                        isValid = gap.y > 0 && Mathf.Abs(gap.x) < 0.5f;
-                        break;
-                    case ForcedMovedir.Down:
-                        isValid = gap.y < 0 && Mathf.Abs(gap.x) < 0.5f;
-                        break;
-                    case ForcedMovedir.Left:
-                        isValid = gap.x < 0 && Mathf.Abs(gap.y) < 0.5f;
-                        break;
-                    case ForcedMovedir.Right:
-                        isValid = gap.x > 0 && Mathf.Abs(gap.y) < 0.5f;
-                        break;
-                }
-                if (!isValid)
-                {
-                    Debug.Log("이동 불가! 화살표 방향으로 이동하세요");
-                    _canGetInput = true;
-                    return;
-                }
-            }
+        _canGetInput = false;
 
-            // 방향 판별 후 MoveOrCombine 호출 , 반전 아닐 때
-            if (!IsReversed)
-            {
-                if (gap.y > 0 && Mathf.Abs(gap.x) < 0.5f) // 위
-                {
-                    for (x = 0; x < 5; x++)
-                        for (y = 0; y < 4; y++)
-                            for (i = 4; i > y; i--)
-                                MoveOrCombine(x, i - 1, x, i);
-                }
-                else if (gap.y < 0 && Mathf.Abs(gap.x) < 0.5f) // 아래
-                {
-                    for (x = 0; x < 5; x++)
-                        for (y = 4; y > 0; y--)
-                            for (i = 0; i < y; i++)
-                                MoveOrCombine(x, i + 1, x, i);
-                }
-                else if (gap.x > 0 && Mathf.Abs(gap.y) < 0.5f) // 오른쪽
-                {
-                    for (y = 0; y < 5; y++)
-                        for (x = 0; x < 4; x++)
-                            for (i = 4; i > x; i--)
-                                MoveOrCombine(i - 1, y, i, y);
-                }
-                else if (gap.x < 0 && Mathf.Abs(gap.y) < 0.5f) // 왼쪽
-                {
-                    for (y = 0; y < 5; y++)
-                        for (x = 4; x > 0; x--)
-                            for (i = 0; i < x; i++)
-                                MoveOrCombine(i + 1, y, i, y);
-                }
-            }
-            //반전일 때 
-            else if (IsReversed)
-            {
-                if (gap.y > 0 && Mathf.Abs(gap.x) < 0.5f) // 위 -> 아래로 반전됨
-                {
-                    for (x = 0; x < 5; x++)
-                        for (y = 4; y > 0; y--)
-                            for (i = 0; i < y; i++)
-                                MoveOrCombine(x, i + 1, x, i);
-                }
-                else if (gap.y < 0 && Mathf.Abs(gap.x) < 0.5f) // 아래 -> 위로 반전됨
-                {
-                    for (x = 0; x < 5; x++)
-                        for (y = 0; y < 4; y++)
-                            for (i = 4; i > y; i--)
-                                MoveOrCombine(x, i - 1, x, i);
-                }
-                else if (gap.x > 0 && Mathf.Abs(gap.y) < 0.5f) // 오른쪽 -> 왼쪽으로 반전됨
-                {
-                    for (y = 0; y < 5; y++)
-                        for (x = 4; x > 0; x--)
-                            for (i = 0; i < x; i++)
-                                MoveOrCombine(i + 1, y, i, y);
-                }
-                else if (gap.x < 0 && Mathf.Abs(gap.y) < 0.5f) // 왼쪽 -> 오른쪽으로 반전됨
-                {
-                    for (y = 0; y < 5; y++)
-                        for (x = 0; x < 4; x++)
-                            for (i = 4; i > x; i--)
-                                MoveOrCombine(i - 1, y, i, y);
-                }
-            }
-        }
-        //병합이 발생했으면 처리
-        if (IsCombining)
+        //강제 방향 체크
+        if (forcedDirection != ForcedMovedir.None)
         {
-            SoundManager.Instance.PlayCombineSFX();
-            IsCombining = false;
+            bool isValid = false;
+            switch (forcedDirection)
+            {
+                case ForcedMovedir.Up:
+                    isValid = gap.y > 0 && Mathf.Abs(gap.x) < 0.5f; break;
+                case ForcedMovedir.Down:
+                    isValid = gap.y < 0 && Mathf.Abs(gap.x) < 0.5f; break;
+                case ForcedMovedir.Left:
+                    isValid = gap.x < 0 && Mathf.Abs(gap.y) < 0.5f; break;
+                case ForcedMovedir.Right:
+                    isValid = gap.x > 0 && Mathf.Abs(gap.y) < 0.5f; break;
+            }
+            if (!isValid) { _canGetInput = true; return; }
         }
-        // 이동이 발생했으면 처리
-        if (move)
+
+        //방향 벡터 산출(반전 포함)
+        Vector2Int dir = Vector2Int.zero;
+        if (!IsReversed)
         {
-            move = false;
-            _isChecking = true;
+            if (gap.y > 0 && Mathf.Abs(gap.x) < 0.5f) dir = Vector2Int.up;          // 위
+            else if (gap.y < 0 && Mathf.Abs(gap.x) < 0.5f) dir = Vector2Int.down;   // 아래
+            else if (gap.x > 0 && Mathf.Abs(gap.y) < 0.5f) dir = Vector2Int.right;  // 오른쪽
+            else if (gap.x < 0 && Mathf.Abs(gap.y) < 0.5f) dir = Vector2Int.left;   // 왼쪽
         }
         else
         {
-            _canGetInput = true;
-            gap = firstPos;
-        }
-    }
+            if (gap.y > 0 && Mathf.Abs(gap.x) < 0.5f) dir = Vector2Int.down;        // 위 -> 아래로 반전
+            else if (gap.y < 0 && Mathf.Abs(gap.x) < 0.5f) dir = Vector2Int.up;     // 위
+            else if (gap.x > 0 && Mathf.Abs(gap.y) < 0.5f) dir = Vector2Int.left;   // 왼쪽
+            else if (gap.x < 0 && Mathf.Abs(gap.y) < 0.5f) dir = Vector2Int.right;  // 오른쪽
 
-    private void CheckIsMoveEnd()
+        }
+
+        if (dir == Vector2Int.zero) { _canGetInput = true; return; } // 유효하지 않은 입력
+
+        //계산만
+        var plan = BoardPlanner.ComputePlan(dir, TileArray, ObstacleArray);
+        if (!plan.HasEffect) { _canGetInput = true; return; } // 이동 불가
+
+        //연출
+        ApplyPlan(plan);
+    }
+    /* MovePlan에 따라 실제 보드 옮기고 비주얼은 트윈으로
+     * 병합 예정 타일은 victim에 기록
+     * 트윈이 하나도 없으면 즉시 완료 처리
+     */
+    private void ApplyPlan(MovePlan plan)
     {
-        if (_movingTiles.Count != 0)
+        if (!plan.HasEffect) return;
+        pendingMoves = 0;
+        anyMergeThisTurn = false;
+        mergeVictims.Clear();
+        mergesToApply.Clear();
+
+        foreach (var step in plan.steps)
         {
-            foreach (Tile tile in _movingTiles)
+            var mover = TileArray[step.x1, step.y1];
+            if (mover == null) continue;
+
+            //병합 대상 타일 기록
+            if (step.willMerge && step.victimX >= 0 && step.victimY >= 0)
             {
-                if (tile == null) continue;
-                if (!tile.gameObject.activeSelf) continue;
-                if (tile.IsMoving) return;
+                var victim = TileArray[step.victimX, step.victimY];
+                if (victim != null) mergeVictims.Add(victim);
+                anyMergeThisTurn = true;
+
+                //최종 도착지에서 적용할 새 값(= mover의 값 * 2)
+                int curVal = mover.GetComponent<Tile>().value;
+                mergesToApply.Add((step.x2, step.y2, curVal * 2));
+            }
+            //실제로 좌표가 바뀌는지 체크
+            bool moved = (step.x1 != step.x2) || (step.y1 != step.y2);
+
+            if(moved)
+            {
+                //논리 보드 갱신, 비주얼은 트윈으로 이동
+                TileArray[step.x2, step.y2] = mover;
+                TileArray[step.x1, step.y1] = null;
+
+                var tile = mover.GetComponent<Tile>();
+                pendingMoves++;
+                tile.TweenMoveTo(step.x2, step.y2, () =>
+                {
+                    pendingMoves--;
+                    if (pendingMoves == 0) OnAllMovesCompleted(plan);
+                });
             }
         }
 
-        // 모든 타일의 움직임이 끝났다면
-        _isChecking = false;
-        _movingTiles.Clear();
+        if (anyMergeThisTurn)
+            SoundManager.Instance.PlayCombineSFX();
+        //트윈이 하나도 없으면 즉시 완료 처리
+        if (pendingMoves == 0)
+            OnAllMovesCompleted(plan);
+    }
+    /* 모든 트윈이 끝난 후 실행
+     * 병합, 점수 계산, 클리어 체크
+     * */
+    private void OnAllMovesCompleted(MovePlan plan)
+    {
+        //병합 처리, 도착지 타일 비활성화
+        foreach (var victim in mergeVictims)
+        {
+            if (victim == null) continue;
+            var vt = victim.GetComponent<Tile>();
+            if(vt != null)
+            {
+                if (TileArray[vt.x, vt.y] == victim)
+                    TileArray[vt.x, vt.y] = null;
+            }
+
+            victim.SetActive(false);
+        }
+        mergeVictims.Clear();
+
+        //이동 시킨 타일을 상위 타일로 교체
+        foreach (var (x, y, newVal) in mergesToApply)
+        {
+            var moverGo = TileArray[x, y];
+            if (moverGo == null) continue;
+
+            //기존 이동 타일 풀에 반납
+            moverGo.SetActive(false);
+
+            //상위 타일로 교체
+            int newIndex = ValueToIndex(newVal);
+            var newGo = ObjectPoolManager.Instance.GetObject(newIndex, Group.Tile);
+            newGo.transform.position = LocateTile(x, y);
+
+            var newTile = newGo.GetComponent<Tile>();
+            newTile.value = newVal;
+            newTile.Init(x, y);
+
+            TileArray[x, y] = newGo;
+
+            //점수/ 클리어 계산
+            if (newVal >= 4)
+                OnGetPoint?.Invoke(this, new PointManager.PointGetInfo(newVal));
+            if (newVal >= ClearValue)
+            {
+                GetComponent<StageManager>().GameClear();
+                EventManager.Unsubscribe(GamePhase.NewTurnPhase, OnEnter_NewTurn);
+            }
+        }
+        mergesToApply.Clear();
         CountDownPhase();
+        _canGetInput = true;
+        
     }
 
     private void CountDownPhase()
     {
         _countManager.CountDown();
     }
-
-
-
-
-
-
-
-    // - - - - - - - - - - - - - - - - - - - - -
-    // 2048 로직
-    // - - - - - - - - - - - - - - - - - - - - -
-    void MoveOrCombine(int x1, int y1, int x2, int y2)
-    {
-        // 이동 가능한지 확인
-        if (!ObstacleArray[x2, y2].CanMove(x1, y1)) return; // 추후 막히는 애니메이션 추가
-        // 해당 칸이 감금되어있는지 확인
-        if (ObstacleArray[x1, y1].HasImprison()) return;
-
-        // 이동
-        if (TileArray[x2, y2] == null && TileArray[x1, y1] != null)
-        {
-            move = true;
-
-            _movingTiles.Add(TileArray[x1, y1].GetComponent<Tile>());
-
-            TileArray[x1, y1].GetComponent<Tile>().StartMove(x2, y2, false);
-            TileArray[x2, y2] = TileArray[x1, y1];
-            TileArray[x1, y1] = null;
-        }
-        // 병합
-        if (
-            TileArray[x1, y1] != null &&
-            TileArray[x2, y2] != null &&
-            TileArray[x1, y1].name == TileArray[x2, y2].name &&
-            TileArray[x1, y1].tag != "Combine" &&
-            TileArray[x2, y2].tag != "Combine"
-        )
-        {
-            IsCombining = true; // 병합을 했으면 true로 설정
-            move = true;
-
-            // 데미지 계산
-            int value = TileArray[x2, y2].GetComponent<Tile>().value;
-
-            for (j = 0; j < TilePrefabs.Length; j++)
-            {
-                if (TileArray[x2, y2].name == TilePrefabs[j].name + "(Clone)") break;
-            }
-
-            TileArray[x1, y1].GetComponent<Tile>().StartMove(x2, y2, true);
-            DeleteTile(x2, y2);
-            TileArray[x1, y1] = null;
-
-            TileArray[x2, y2] = _pooler.GetObject(j + 1, Group.Tile);
-            TileArray[x2, y2].transform.position = LocateTile(x2, y2);
-
-            TileArray[x2, y2].GetComponent<Tile>().value = value * 2;
-            //결합시에도 위치 전달
-            TileArray[x2, y2].GetComponent<Tile>().x = x2;
-            TileArray[x2, y2].GetComponent<Tile>().y = y2;
-            TileArray[x2, y2].tag = "Combine";
-
-            // 포인트 획득
-            if (TileArray[x2, y2].GetComponent<Tile>().value >= 4)
-                OnGetPoint?.Invoke(this, new PointManager.PointGetInfo(TileArray[x2, y2].GetComponent<Tile>().value));
-
-            // 클리어
-            if (TileArray[x2, y2].GetComponent<Tile>().value >= ClearValue)
-            {
-                GetComponent<StageManager>().GameClear();
-                EventManager.Unsubscribe(GamePhase.NewTurnPhase, OnEnter_NewTurn);
-                CurTurns--;
-            }
-        }
-    }
-
 
     // 랜덤 스폰 (2, 4)
     void Spawn()
@@ -622,15 +573,11 @@ public int CountTile()
     // 타일 삭제
     public bool DeleteTile(int x, int y)
     {
-        if (TileArray[x, y] != null)
-        {
-            TileArray[x, y].SetActive(false);
-            TileArray[x, y].GetComponent<Tile>().move = false;
-            TileArray[x, y] = null;
-            return true;
-        }
-
-        return false;
+        var go = TileArray[x, y];
+        if (go == null) return false;
+        go.SetActive(false);
+        TileArray[x, y] = null;
+        return true;
     }
 
     public void SetTurn(int amount)
