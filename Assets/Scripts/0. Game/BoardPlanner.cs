@@ -14,6 +14,14 @@ public sealed class MovePlan
 {
     public readonly List<MoveStep> steps = new();
     public bool Any => steps.Count > 0;
+    //이번 입력이 실제로 보드에 변화를 주는가?
+    public bool HasEffect { get; private set; }
+    public void AddStep(MoveStep s)
+    {
+        steps.Add(s);
+        if (s.willMerge || s.x1 != s.x2 || s.y1 != s.y2)
+            HasEffect = true;
+    }
 }
 
 /* 계산 전용 로직
@@ -96,7 +104,7 @@ public static class BoardPlanner
             if (shadow[cx, cy].value == 0)
                 shadow[cx, cy] = (curVal, shadow[cx, cy].merged || mergedOnce);
 
-            plan.steps.Add(new MoveStep
+            plan.AddStep(new MoveStep
             {
                 x1 = sx,
                 y1 = sy,

@@ -338,7 +338,7 @@ public int CountTile()
 
         //계산만
         var plan = BoardPlanner.ComputePlan(dir, TileArray, ObstacleArray);
-        if (!plan.Any) { _canGetInput = true; return; } // 이동 불가
+        if (!plan.HasEffect) { _canGetInput = true; return; } // 이동 불가
 
         //연출
         ApplyPlan(plan);
@@ -349,6 +349,7 @@ public int CountTile()
      */
     private void ApplyPlan(MovePlan plan)
     {
+        if (!plan.HasEffect) return;
         pendingMoves = 0;
         anyMergeThisTurn = false;
         mergeVictims.Clear();
@@ -442,7 +443,6 @@ public int CountTile()
             {
                 GetComponent<StageManager>().GameClear();
                 EventManager.Unsubscribe(GamePhase.NewTurnPhase, OnEnter_NewTurn);
-                CurTurns--;
             }
         }
         mergesToApply.Clear();
