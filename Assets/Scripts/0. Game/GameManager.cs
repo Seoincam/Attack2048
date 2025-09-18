@@ -2,8 +2,6 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
-using DG.Tweening;
-using UnityEngine.Analytics;
 
 /*
     흐름 :
@@ -66,10 +64,10 @@ public class GameManager : MonoBehaviour, INewTurnListener
 
     public int ClearValue { get; set; }
 
-    private const float xStart = -1.85f; //[0,0]의 x좌표와 y좌표, 그후 증가할때마다의 좌표 차이
-    private const float yStart = -1.85f;
-    private const float xOffset = 0.925f;
-    private const float yOffset = 0.925f;
+    private const float xStart = -1.5f; //[0,0]의 x좌표와 y좌표, 그후 증가할때마다의 좌표 차이
+    private const float yStart = -1.5f;
+    private const float xOffset = .75f;
+    private const float yOffset = .75f;
 
 
     [Header("Setting")]
@@ -94,27 +92,48 @@ public class GameManager : MonoBehaviour, INewTurnListener
             OnRemainingTurnChanged?.Invoke();
         }
     }
-// 타일 개수 확인 함수
-public int CountTile()
-{
-    int count = 0;
-
-    if (TileArray == null)
+    // 타일 개수 확인 함수
+    public int CountTile()
     {
-        return 0;
+        int count = 0;
+
+        if (TileArray == null)
+        {
+            return 0;
+        }
+
+        for (int x = 0; x < 5; x++)
+            for (int y = 0; y < 5; y++)
+                if (TileArray[x, y] != null) count++;
+
+        return count;
     }
 
-    for (int x = 0; x < 5; x++)
-        for (int y = 0; y < 5; y++)
-            if (TileArray[x, y] != null) count++;
 
-    return count;
-}
+
+
+    public void OnEnterStage()
+    {
+        // 슬라임 액션 비활성화
+        // foreach (Transform action in SlimeActionGroup.Instance.transform)
+        // {
+        //     if (!action.gameObject.activeSelf)
+        //         continue;
+        //     var slimeAction = action.GetComponent<SlimeActionBase>();
+        //     slimeAction.Destroy();
+        // }
+
+        ResetTileArray();
+        ResetObstacleArray();
+        _pointManager.ResetPoint();
+    } 
+
+
 
     // - - - - - - - - - - - - - - - - - - - - -
     // Unity 콜백
     // - - - - - - - - - - - - - - - - - - - - -
-    public void Init()
+    public void Init(ObjectPoolManager pooler)
     {
         // 싱글턴
         if (Instance == null) Instance = this;
@@ -122,7 +141,7 @@ public int CountTile()
 
         _pointManager = GetComponent<PointManager>();
         _countManager = GetComponent<CountDownManager>();
-        _pooler = ObjectPoolManager.Instance;
+        _pooler = pooler;
 
         // Obstacle Array 초기화
         for (int x = 0; x < 5; x++) for (int y = 0; y < 5; y++)
@@ -133,19 +152,6 @@ public int CountTile()
 
     public void StartGame()
     {
-        // 슬라임 액션 비활성화
-        foreach (Transform action in SlimeActionGroup.Instance.transform)
-        {
-            if (!action.gameObject.activeSelf)
-                continue;
-            var slimeAction = action.GetComponent<SlimeActionBase>();
-            slimeAction.Destroy();
-        }
-
-        ResetTileArray();
-        ResetObstacleArray();
-        _pointManager.ResetPoint();
-
         Subscribe_NewTurn();
 
         Debug.Log("게임 시작!");
@@ -391,8 +397,8 @@ public int CountTile()
         }
 
         if (anyMergeThisTurn)
-            SoundManager.Instance.PlayCombineSFX();
-        //트윈이 하나도 없으면 즉시 완료 처리
+            // SoundManager.Instance.PlayCombineSFX();
+        //트윈이 하나도 없으면 즉시 완료 처리s
         if (pendingMoves == 0)
             OnAllMovesCompleted(plan);
     }
@@ -427,7 +433,7 @@ public int CountTile()
 
             //상위 타일로 교체
             int newIndex = ValueToIndex(newVal);
-            var newGo = ObjectPoolManager.Instance.GetObject(newIndex, Group.Tile);
+            var newGo = _pooler.GetObject(newIndex, Group.Tile);
             newGo.transform.position = LocateTile(x, y);
 
             var newTile = newGo.GetComponent<Tile>();

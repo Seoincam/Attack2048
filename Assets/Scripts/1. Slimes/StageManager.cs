@@ -18,7 +18,7 @@ public class StageManager : MonoBehaviour
 
     public void Init()
     {
-        StageIndex = GameSetting.Instance.testStartIndex;
+        // StageIndex = GameSetting.Instance.testStartIndex;
         SpawnSlime(StageIndex, isRetry: false);
     }
 

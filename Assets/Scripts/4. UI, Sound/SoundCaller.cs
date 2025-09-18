@@ -10,14 +10,15 @@ public class SoundCaller : MonoBehaviour
         Codex,
         Shop,
     }
-    [Header("È¿°úÀ½ ¼³Á¤")]
+    [Header("È¿ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½")]
     public SoundType SFXType;
 
     public void PlaySFX()
     {
+        /*
         if (SoundManager.Instance == null)
         {
-            Debug.LogWarning("»ç¿îµå¸Å´ÏÀú°¡ ¾Èº¸ÀÓ");
+            Debug.LogWarning("ï¿½ï¿½ï¿½ï¿½Å´ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Èºï¿½ï¿½ï¿½");
             return;
         }
         switch(SFXType)
@@ -32,9 +33,10 @@ public class SoundCaller : MonoBehaviour
                 SoundManager.Instance.PlayShopClick();
                 break;
             default:
-                Debug.LogWarning("»ç¿îµåÅ¸ÀÔÀÌ ¼³Á¤ ¾ÈµÊ");
+                Debug.LogWarning("ï¿½ï¿½ï¿½ï¿½Å¸ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Èµï¿½");
                 break;
         }
+        */
     }
 }
 

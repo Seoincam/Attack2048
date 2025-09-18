@@ -64,5 +64,26 @@ TagManager:
   - name: AboveUI
     uniqueID: 708302001
     locked: 0
+  - name: Background
+    uniqueID: 1926546277
+    locked: 0
+  - name: Lobby_Default
+    uniqueID: 3420920351
+    locked: 0
+  - name: Lobby_Above
+    uniqueID: 2010291721
+    locked: 0
+  - name: Stage_Background
+    uniqueID: 3505337123
+    locked: 0
+  - name: Stage_Default
+    uniqueID: 297389545
+    locked: 0
+  - name: Stage_Above
+    uniqueID: 750779747
+    locked: 0
+  - name: All_Above
+    uniqueID: 2352644483
+    locked: 0
   m_RenderingLayers:
   - Default

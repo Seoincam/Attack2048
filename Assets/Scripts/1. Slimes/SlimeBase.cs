@@ -21,8 +21,8 @@ public abstract class SlimeBase : MonoBehaviour, INewTurnListener
     protected virtual void Start()
     {
         Subscribe_NewTurn();
-        if (SoundManager.Instance != null)
-            SoundManager.Instance.PlayBGM(slimeBgm);
+        // if (SoundManager.Instance != null)
+        //     SoundManager.Instance.PlayBGM(slimeBgm);
     }
 
     public void Init(StageManager slimeManager)

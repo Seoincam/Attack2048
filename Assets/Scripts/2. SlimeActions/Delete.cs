@@ -95,12 +95,12 @@ public class Delete : SlimeActionBase, IShowLife, IMakeWarningEffect, IMakeDelet
     {
         if (type == Type.Shield)
         {
-            SoundManager.Instance.PlayShieldDeleteSFX();
+            // SoundManager.Instance.PlayShieldDeleteSFX();
             Debug.Log("방패 슬라임 삭제 사운드 재생");
         }
         else if (type == Type.Archer || type == Type.LineDelete || type == Type.LineDeleteVisual)
         {
-            SoundManager.Instance.PlayArcherBreakTileSFX();
+            // SoundManager.Instance.PlayArcherBreakTileSFX();
             Debug.Log("아처 슬라임 삭제 사운드 재생");
         }
         else

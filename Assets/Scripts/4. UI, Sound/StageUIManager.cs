@@ -1,16 +1,16 @@
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.SceneManagement;
 using System;
 using System.Collections.Generic;
 
-public class InGameUiMnanager : MonoBehaviour, INewTurnListener
+public class StageUIManager : MonoBehaviour, INewTurnListener
 {
     // 필드
     // - - - - - - - - -
-    public static InGameUiMnanager Instance { get; private set; }
+    public static StageUIManager Instance { get; private set; }
 
-    [SerializeField] private LoadingSO loadingSO;
+    [SerializeField] private Canvas defaultCanvas;
+    [SerializeField] private Canvas aboveCanvas;
 
     [Header("Text")]
     [SerializeField] private Image stageText;
@@ -83,27 +83,26 @@ public class InGameUiMnanager : MonoBehaviour, INewTurnListener
         Instance = this;    
     }
 
+    public void OnEnterStage()
+    {
+        defaultCanvas.gameObject.SetActive(true);
+        aboveCanvas.gameObject.SetActive(true);
+    }
+
     public void Init(Main main)
     {
         this.main = main;
 
-        InitUIPosition();
-        InitDelegate();
-        InitSetting();
-        InitCodex();
-        InitStore();
+        // InitDelegate();
+        // InitSetting();
+        // InitCodex();
+        // InitStore();
 
-        pointHintToggleButton.onClick.AddListener(TogglePointHint);
+        // pointHintToggleButton.onClick.AddListener(TogglePointHint);
 
-        this.Subscribe_NewTurn();
-        OnPointChanged();
-        SetActiveHideObjects(true);
-    }
-
-    void InitUIPosition()
-    {
-        var newY = 0.10417f * Screen.height - 806.67f;
-        storeButtonGroup.anchoredPosition = new Vector2(storeButtonGroup.anchoredPosition.x, newY);
+        // this.Subscribe_NewTurn();
+        // OnPointChanged();
+        // SetActiveHideObjects(true);
     }
 
     void InitDelegate()
@@ -122,7 +121,7 @@ public class InGameUiMnanager : MonoBehaviour, INewTurnListener
         closeSettingButton.GetComponent<Button>().onClick.AddListener(OnCloseSettingButtonTapped);
         retryButton.onClick.AddListener(Retry);
         lobbyButton.onClick.AddListener(GoLobbyButton);
-        SoundManager.Instance.InitPanel(bgmSlider, sfxSlider);
+        // SoundManager.Instance.InitPanel(bgmSlider, sfxSlider);
     }
 
     void InitCodex()
@@ -232,13 +231,13 @@ public class InGameUiMnanager : MonoBehaviour, INewTurnListener
     private void Retry()
     {
         // 슬라임 액션 비활성화
-        foreach (Transform action in SlimeActionGroup.Instance.transform)
-        {
-            if (!action.gameObject.activeSelf)
-                continue;
-            var slimeAction = action.GetComponent<SlimeActionBase>();
-            slimeAction.Destroy();
-        }
+        // foreach (Transform action in SlimeActionGroup.Instance.transform)
+        // {
+        //     if (!action.gameObject.activeSelf)
+        //         continue;
+        //     var slimeAction = action.GetComponent<SlimeActionBase>();
+        //     slimeAction.Destroy();
+        // }
 
         GameManager.Instance.ResetTileArray();
         GameManager.Instance.ResetObstacleArray();
@@ -298,7 +297,7 @@ public class InGameUiMnanager : MonoBehaviour, INewTurnListener
     {
         if(!isSFXPlayed)
         {
-            SoundManager.Instance.PlayStageClearSFX();
+            // SoundManager.Instance.PlayStageClearSFX();
             isSFXPlayed = true;
         }
 
@@ -341,20 +340,19 @@ public class InGameUiMnanager : MonoBehaviour, INewTurnListener
         hideObjects.Clear();
 
         // 슬라임 액션 비활성화
-        foreach (Transform action in SlimeActionGroup.Instance.transform)
-        {
-            if (!action.gameObject.activeSelf)
-                continue;
+        // foreach (Transform action in SlimeActionGroup.Instance.transform)
+        // {
+        //     if (!action.gameObject.activeSelf)
+        //         continue;
 
-            var slimeAction = action.GetComponent<SlimeActionBase>();
-            slimeAction.Destroy();
-        }
+        //     var slimeAction = action.GetComponent<SlimeActionBase>();
+        //     slimeAction.Destroy();
+        // }
 
         GameManager.Instance.ClearTileArray();
         GameManager.Instance.ResetObstacleArray();
 
-        loadingSO.SceneName = "Lobby";
-        SceneManager.LoadScene("Loading");
+        // SceneManager.LoadScene("Loading");
     }
 
 
@@ -384,8 +382,8 @@ public class InGameUiMnanager : MonoBehaviour, INewTurnListener
                 obj.SetActive(false);
         }
 
-        SlimeActionGroup.Instance.gameObject.SetActive(value);
-        TileGroup.Instance.gameObject.SetActive(value);
+        // SlimeActionGroup.Instance.gameObject.SetActive(value);
+        // TileGroup.Instance.gameObject.SetActive(value);
     }
     private void SetAllButtons(bool value)
     {

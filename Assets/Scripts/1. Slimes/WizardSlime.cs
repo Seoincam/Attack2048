@@ -55,7 +55,7 @@ public class WizardSlime : SlimeBase
         {
             _reverseMoveCounter = ReverseMoveInterval;
             SlimeActionManager.Instance.ReverseMove();
-            SoundManager.Instance.PlayWizardFlipSFX();
+            // SoundManager.Instance.PlayWizardFlipSFX();
         }
     }
 
@@ -68,7 +68,7 @@ public class WizardSlime : SlimeBase
         {
             _translocateCounter = TranslocateInterval;
             SlimeActionManager.Instance.Translocate7();
-            SoundManager.Instance.PlayWizardMoveNumberSFX();
+            // SoundManager.Instance.PlayWizardMoveNumberSFX();
         }
     }
 
@@ -82,7 +82,7 @@ public class WizardSlime : SlimeBase
             _blindCounter = BlindInterval;
             for (int i = 0; i < blindCount; i++)
                 SlimeActionManager.Instance.Blind();
-            SoundManager.Instance.PlayWizardBlindSFX();
+            // SoundManager.Instance.PlayWizardBlindSFX();
         }
     }
 }
