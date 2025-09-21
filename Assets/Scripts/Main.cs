@@ -7,7 +7,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum GameState { Lobby, LoadingToInGame, LoadingToLobby, InGame }
+public enum GameState { Lobby, Stage }
 public class Main : SingleTone<Main>
 {
     [SerializeField] private LobbyUiManager _lobbyUIManager;
@@ -80,12 +80,14 @@ public class Main : SingleTone<Main>
 
     public void LoadToStage(int stageIndex)
     {
+        _state = GameState.Stage;
         _currentStageIndex = stageIndex;
         transition.TransitToStage(stageInfos[stageIndex]);
     }
 
     public void LoadToLobby(bool isWin = true)
     {
+        _state = GameState.Lobby;
         transition.TransitToLobby(isWin);
     }    
 }

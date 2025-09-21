@@ -7,6 +7,7 @@ using DG.Tweening;
 public class LobbyUiManager : MonoBehaviour
 {
     private Main main;
+    private RectTransform codexRect; 
 
     [Header("Tween Setting")]
     public float creditDuration = 0.4f;
@@ -57,6 +58,9 @@ public class LobbyUiManager : MonoBehaviour
     // 뒤로가기 감지
     void Update()
     {
+        if (main.State != GameState.Lobby)
+            return;
+
         MoveImage();
 
         if (Input.GetKeyDown(KeyCode.Escape))
@@ -72,8 +76,9 @@ public class LobbyUiManager : MonoBehaviour
     {
         this.main = main;
 
+        codexRect = codexButton.GetComponent<RectTransform>();
         InitSetting();
-        InitCodex();
+        // InitCodex();
         InitCredit();
         InitEscape();
 
@@ -283,15 +288,18 @@ public class LobbyUiManager : MonoBehaviour
 
     private void MoveImage()
     {
+        if (codexRect == null)
+            return;
+            
         var tiltSpeed = 7;
-        float lerpX = Mathf.LerpAngle(codexButton.GetComponent<RectTransform>().eulerAngles.x, Mathf.Sin(Time.time) * 6, tiltSpeed * Time.deltaTime);
-        float lerpY = Mathf.LerpAngle(codexButton.GetComponent<RectTransform>().eulerAngles.y, Mathf.Cos(Time.time) * 6, tiltSpeed * Time.deltaTime);
-        float y = Mathf.Lerp(codexButton.GetComponent<RectTransform>().anchoredPosition.y, 600 + Mathf.Sin(Time.time) * 10, Time.deltaTime);
-        codexButton.GetComponent<RectTransform>().eulerAngles = new Vector3(lerpX, lerpY, 0);
-        codexButton.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, y);
+        float lerpX = Mathf.LerpAngle(codexRect.eulerAngles.x, Mathf.Sin(Time.time) * 6, tiltSpeed * Time.deltaTime);
+        float lerpY = Mathf.LerpAngle(codexRect.eulerAngles.y, Mathf.Cos(Time.time) * 6, tiltSpeed * Time.deltaTime);
+        float y = Mathf.Lerp(codexRect.anchoredPosition.y, 600 + Mathf.Sin(Time.time) * 15, Time.deltaTime);
+        codexRect.eulerAngles = new Vector3(lerpX, lerpY, 0);
+        codexRect.anchoredPosition = new Vector2(0, y);
 
-        var skyLerpX = Mathf.LerpAngle(codexButton.GetComponent<RectTransform>().eulerAngles.x, Mathf.Sin(Time.time) * 10, tiltSpeed * Time.deltaTime);
-        var skyLerpY = Mathf.LerpAngle(codexButton.GetComponent<RectTransform>().eulerAngles.y, Mathf.Cos(Time.time) * 10, tiltSpeed * Time.deltaTime);
+        var skyLerpX = Mathf.LerpAngle(codexRect.eulerAngles.x, Mathf.Sin(Time.time) * 10, tiltSpeed * Time.deltaTime);
+        var skyLerpY = Mathf.LerpAngle(codexRect.eulerAngles.y, Mathf.Cos(Time.time) * 10, tiltSpeed * Time.deltaTime);
         sky.eulerAngles = new Vector3(skyLerpX, skyLerpY, 0);
     }
 

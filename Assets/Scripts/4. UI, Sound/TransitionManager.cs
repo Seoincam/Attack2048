@@ -46,12 +46,7 @@ public class TransitionManager : MonoBehaviour
         });
 
         sequence.AppendInterval(2.5f);
-
-        sequence.AppendCallback(() =>
-        {
-            main.StageUI.OnEnterStage();
-        });
-        sequence.Join(circleB.DOScale(Vector3.zero, .5f)
+        sequence.Append(circleB.DOScale(Vector3.zero, .5f)
             .SetEase(Ease.InBack));
         sequence.Join(circleA.DOScale(Vector3.zero, .7f)
             .SetEase(Ease.InBack));
@@ -62,7 +57,7 @@ public class TransitionManager : MonoBehaviour
 
         sequence.OnComplete(() =>
         {
-            main.Game.StartGame();
+            main.StageUI.OnEnterStage();
         });
     }
 

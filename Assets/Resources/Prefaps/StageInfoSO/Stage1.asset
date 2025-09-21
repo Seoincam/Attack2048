@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a3ac8c1a0c7a54b8693dccc645c67c27, type: 3}
   m_Name: Stage1
   m_EditorClassIdentifier: 
+  _stageIndex: 1
   _slimeSprite: {fileID: 6337278258928162847, guid: 2998edbfa076a45a49959ae3bca15f4a, type: 3}
   _stageTextSprite: {fileID: 21300000, guid: efca2f8d2d1ab499aa6063a251028f48, type: 3}
   _targetTileSprite: {fileID: 21300000, guid: 8d15a82709d3c4c4e8e30100fdc45169, type: 3}

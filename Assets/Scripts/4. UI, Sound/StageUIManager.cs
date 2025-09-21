@@ -349,7 +349,7 @@ public class StageUIManager : MonoBehaviour, INewTurnListener
         //     slimeAction.Destroy();
         // }
 
-        GameManager.Instance.ClearTileArray();
+        GameManager.Instance.ResetTileArray();
         GameManager.Instance.ResetObstacleArray();
 
         // SceneManager.LoadScene("Loading");

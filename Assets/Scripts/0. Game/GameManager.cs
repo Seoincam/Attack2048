@@ -114,14 +114,6 @@ public class GameManager : MonoBehaviour, INewTurnListener
 
     public void OnEnterStage()
     {
-        // 슬라임 액션 비활성화
-        // foreach (Transform action in SlimeActionGroup.Instance.transform)
-        // {
-        //     if (!action.gameObject.activeSelf)
-        //         continue;
-        //     var slimeAction = action.GetComponent<SlimeActionBase>();
-        //     slimeAction.Destroy();
-        // }
         _pooler.ResetObstacles();
 
         ResetTileArray();
@@ -172,6 +164,7 @@ public class GameManager : MonoBehaviour, INewTurnListener
 
     public void Subscribe_NewTurn()
     {
+        EventManager.Unsubscribe(GamePhase.NewTurnPhase, OnEnter_NewTurn);
         EventManager.Subscribe(GamePhase.NewTurnPhase, OnEnter_NewTurn);
     }
 
@@ -531,15 +524,6 @@ public class GameManager : MonoBehaviour, INewTurnListener
     // - - - - - - - - - - - - - - - - - - - - -
     // 기존 타일 삭제, 두 개 스폰
     public void ResetTileArray()
-    {
-        for (int x = 0; x < 5; x++)
-            for (int y = 0; y < 5; y++)
-            {
-                DeleteTile(x, y);
-            }
-    }
-
-    public void ClearTileArray()
     {
         for (int x = 0; x < 5; x++)
             for (int y = 0; y < 5; y++)
