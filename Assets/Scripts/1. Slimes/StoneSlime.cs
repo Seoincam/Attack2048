@@ -67,7 +67,7 @@ public class StoneSlime : SlimeBase
         {
             _wallCounter = WallInterval;
             SlimeActionManager.Instance.Wall(Wall.Type.Stone);
-            // SoundManager.Instance.PlayRockCreateWallSFX();
+            Main.Instance.Sound.PlayRockCreateWallSFX();
         }
     }
     
@@ -80,7 +80,7 @@ public class StoneSlime : SlimeBase
         {
             _deleteCounter = DeleteInterval;
             // SlimeActionManager.Instance.Delete();
-            // SoundManager.Instance.PlayRockBreakTileSFX();
+            Main.Instance.Sound.PlayRockBreakTileSFX();
         }
     }
 }

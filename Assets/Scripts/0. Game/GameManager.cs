@@ -122,6 +122,7 @@ public class GameManager : MonoBehaviour, INewTurnListener
         //     var slimeAction = action.GetComponent<SlimeActionBase>();
         //     slimeAction.Destroy();
         // }
+        _pooler.ResetObstacles();
 
         ResetTileArray();
         ResetObstacleArray();
@@ -158,6 +159,9 @@ public class GameManager : MonoBehaviour, INewTurnListener
 
         _canGetInput = true;
         IsPaused = false;
+
+        Spawn();
+        Spawn();
     }
 
     void FixedUpdate()
@@ -447,7 +451,7 @@ public class GameManager : MonoBehaviour, INewTurnListener
                 OnGetPoint?.Invoke(this, new PointManager.PointGetInfo(newVal));
             if (newVal >= ClearValue)
             {
-                GetComponent<StageManager>().GameClear();
+                GetComponent<StageManager>().GameClear(newTile.transform);
                 EventManager.Unsubscribe(GamePhase.NewTurnPhase, OnEnter_NewTurn);
             }
         }
@@ -533,9 +537,6 @@ public class GameManager : MonoBehaviour, INewTurnListener
             {
                 DeleteTile(x, y);
             }
-
-        Spawn();
-        Spawn();
     }
 
     public void ClearTileArray()

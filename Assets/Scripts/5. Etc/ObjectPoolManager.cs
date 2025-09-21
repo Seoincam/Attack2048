@@ -65,6 +65,9 @@ public class ObjectPoolManager : SingleTone<ObjectPoolManager>
         // 없으면 새로 생성 후 return
         GameObject newObject = Instantiate(_prefabs[index], _groupMap[group]);
         pools[index].Add(newObject);
+
+        if (index == 27)
+            newObject.transform.localScale = Vector3.one;
         return newObject;
     }
 
@@ -74,5 +77,16 @@ public class ObjectPoolManager : SingleTone<ObjectPoolManager>
         GameObject newObject = Instantiate(_prefabs[index], _groupMap[group]);
         newObject.SetActive(false);
         pools[index].Add(newObject);
+    }
+
+    public void ResetObstacles()
+    {
+        foreach (Transform action in slimeActionGroup)
+        {
+            if (!action.gameObject.activeSelf)
+                continue;
+            var slimeAction = action.GetComponent<SlimeActionBase>();
+            slimeAction.Destroy();
+        }
     }
 }

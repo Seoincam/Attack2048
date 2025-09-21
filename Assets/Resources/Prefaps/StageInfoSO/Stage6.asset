@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a3ac8c1a0c7a54b8693dccc645c67c27, type: 3}
+  m_Name: Stage6
+  m_EditorClassIdentifier: 
+  _slimeSprite: {fileID: 5431731695996620653, guid: 4fa5a8eedfee3441ca32223b25a0db81, type: 3}
+  _stageTextSprite: {fileID: 21300000, guid: 6b9bc0ac7f2e44f9b9c414cc215ebf92, type: 3}
+  _targetTileSprite: {fileID: 21300000, guid: a66126182bc3046ae8a9d2c11b03d09c, type: 3}
+  _targetTile: 128
+  _maxTurn: 80

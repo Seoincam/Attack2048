@@ -18,6 +18,8 @@ public class SoundManager : MonoBehaviour
 
     [Header("Audio Clip")]
     public AudioClip LobbyBGM;
+    public AudioClip stageBGM;
+    
     [Header("Button Clip")]
     public AudioClip ButtonSFX;
     [Header("Codex Clip")]

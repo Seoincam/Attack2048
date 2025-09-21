@@ -6,14 +6,13 @@ public class SingleTone<T> : MonoBehaviour where T : MonoBehaviour
     
     protected virtual void Awake()
     {
-        // if (Instance == null)
-        // {
-        //     Instance = this as T;
-        //     DontDestroyOnLoad(Instance);
-        // }
-        // else if (Instance != this)
-        // {
-        //     Destroy(gameObject);
-        // }
+        if (Instance == null)
+        {
+            Instance = this as T;
+        }
+        else if (Instance != this)
+        {
+            Destroy(gameObject);
+        }
     }
 }

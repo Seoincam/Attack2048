@@ -70,7 +70,7 @@ public class StageUIManager : MonoBehaviour, INewTurnListener
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            OnEscapeButtonTapped = OnEscapeButtonTapped != null ? OnEscapeButtonTapped : OnOpenSettingButtonTapped;
+            OnEscapeButtonTapped ??= OnOpenSettingButtonTapped;
             OnEscapeButtonTapped?.Invoke();
         }
     }
@@ -111,7 +111,7 @@ public class StageUIManager : MonoBehaviour, INewTurnListener
         main.Point.OnPointChanged += OnPointChanged;
         main.Store.OnClickButton += OnClickStoreButton;
         main.Stage.OnSlimeChanged += OnSlimeChanged;
-        main.Stage.OnGameClear += OnGameClear;
+        // main.Stage.OnGameClear += OnGameClear;
         main.Stage.OnGameFail += OnGameFail;
     }
 
@@ -169,7 +169,7 @@ public class StageUIManager : MonoBehaviour, INewTurnListener
     private void OnRemainingTurnChanged()
     {
         var currentColor = GameManager.Instance.CurTurns > 5 ? "#6c6ca8" : "#ff4d4d";
-        remainingTurnsText.text = $"<color={currentColor}>{GameManager.Instance.CurTurns}</color>/<color=#6c6ca8>{main.Stage.maxTurn}</color>";
+        remainingTurnsText.text = $"<color={currentColor}>{GameManager.Instance.CurTurns}</color>/<color=#6c6ca8>{main.Stage.MaxTurn}</color>";
     }
 
     private void OnPointChanged()

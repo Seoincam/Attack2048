@@ -3,12 +3,14 @@ using UnityEngine;
 
 public class StageManager : MonoBehaviour
 {
+    private Main main;
+
     public event EventHandler<SlimeInfo> OnSlimeChanged;
-    public event Action OnGameClear;
+    public event Action<Transform> OnGameClear;
     public event Action OnGameFail;
 
     private SlimeBase _currentSlime;
-    public int maxTurn { get => _currentSlime.DefaltTurns; }
+    public int MaxTurn { get => _currentSlime.DefaltTurns; }
 
     [Space, Header("Setting")]
     [SerializeField, Tooltip("슬라임들의 순서를 결정")]
@@ -16,16 +18,15 @@ public class StageManager : MonoBehaviour
     public SlimeBase CurrentSlime => _currentSlime; // 외부 참조용 현재 슬라임
     public int StageIndex { get; private set; }
 
-    public void Init()
+    public void Init(Main main)
     {
-        // StageIndex = GameSetting.Instance.testStartIndex;
-        SpawnSlime(StageIndex, isRetry: false);
+        this.main = main;
     }
 
-    public void GameClear()
+    public void GameClear(Transform clearTile)
     {
-        GameManager.Instance.IsPaused = true;
-        OnGameClear?.Invoke();
+        main.Game.IsPaused = true;
+        OnGameClear?.Invoke(clearTile);
     }
 
     public bool StageManagerAlive()
@@ -38,7 +39,7 @@ public class StageManager : MonoBehaviour
         OnGameFail?.Invoke();
     }
 
-    private void SpawnSlime(int index, bool isRetry)
+    public void SpawnSlime(int index, bool isRetry = false)
     {
         if (_currentSlime != null)
             _currentSlime.Die(isRetry);
@@ -46,8 +47,8 @@ public class StageManager : MonoBehaviour
         _currentSlime = Instantiate(_slimes[index]).GetComponent<SlimeBase>();
         _currentSlime.Init(this);
 
-        GameManager.Instance.SetTurn(_currentSlime.DefaltTurns);
-        GameManager.Instance.ClearValue = _currentSlime.ClearValue;
+        main.Game.SetTurn(_currentSlime.DefaltTurns);
+        main.Game.ClearValue = _currentSlime.ClearValue;
         
         OnSlimeChanged?.Invoke(this,
             new SlimeInfo(clearValue: _currentSlime.ClearValue, stageIndex: index));

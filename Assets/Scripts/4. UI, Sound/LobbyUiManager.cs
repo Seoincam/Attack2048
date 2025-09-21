@@ -9,11 +9,11 @@ public class LobbyUiManager : MonoBehaviour
     private Main main;
 
     [Header("Tween Setting")]
-    [SerializeField] float creditDuration = 0.4f;
-    [SerializeField] float logoDuration = 0.4f;
-    [SerializeField] float buttonsDuration = 0.25f;
-    [SerializeField] Ease buttonsEase = Ease.OutBack;
-    [SerializeField] float panelDuration = 0.4f;
+    public float creditDuration = 0.4f;
+    public float logoDuration = 0.4f;
+    public float buttonsDuration = 0.25f;
+    public Ease buttonsEase = Ease.OutBack;
+    public float panelDuration = 1.2f;
 
     [Header("Canvas")]
     [SerializeField] private Canvas defaultCanvas;
@@ -71,30 +71,39 @@ public class LobbyUiManager : MonoBehaviour
     public void Init(Main main)
     {
         this.main = main;
-        
+
         InitSetting();
         InitCodex();
         InitCredit();
         InitEscape();
 
         startButton.onClick.AddListener(OnStartButtonTapped);
+        main.Sound.PlayBGM(main.Sound.LobbyBGM);
     }
 
-    public void OnEnterLobby()
+    public void OnEnterLobby(bool isFirst = false)
     {
-        main.Sound.PlayBGM(main.Sound.LobbyBGM);
+        defaultCanvas.gameObject.SetActive(true);
+        aboveCanvas.gameObject.SetActive(true);
+        codexButton.gameObject.SetActive(true);
+        logo.gameObject.SetActive(true);
+        main.Sound.InitPanel(bgmSlider, sfxSlider);
+        
 
-        SetAllButton(false);
+        if (isFirst)
+        {
+            SetAllButton(false);
 
-        var sequence = DOTween.Sequence();
-        sequence.Append(creditButton.GetComponent<RectTransform>().DOAnchorPosX(0, creditDuration).SetEase(Ease.OutCubic));
-        sequence.Append(logo.DOColor(Color.white, logoDuration).SetEase(Ease.OutCubic));
+            var sequence = DOTween.Sequence();
+            sequence.Append(creditButton.GetComponent<RectTransform>().DOAnchorPosX(0, creditDuration).SetEase(Ease.OutCubic));
+            sequence.Append(logo.DOColor(Color.white, logoDuration).SetEase(Ease.OutCubic));
 
-        FadeInButton(sequence, startButton, 550);
-        FadeInButton(sequence, settingButton, 350);
-        FadeInButton(sequence, escapeButton, 150);
+            FadeInButton(sequence, startButton, 550);
+            FadeInButton(sequence, settingButton, 350);
+            FadeInButton(sequence, escapeButton, 150);
 
-        sequence.OnComplete(() => SetAllButton(true));
+            sequence.OnComplete(() => SetAllButton(true));
+        }
     }
 
     void InitSetting()
@@ -129,17 +138,17 @@ public class LobbyUiManager : MonoBehaviour
     private void OnStartButtonTapped()
     {
         var testStartIndex = int.TryParse(testStartIndexInputFied.text, out int inputIndex) ? inputIndex : 0;
-        main.StageIndex = Mathf.Clamp(testStartIndex, 0, 6);
+        var stageIndex = Mathf.Clamp(testStartIndex, 0, 6);
 
-        main.LoadToInGame();
+        main.LoadToStage(stageIndex);
     }
 
-    public void TurnOffLobby()
+    public void TurnOff()
     {
         defaultCanvas.gameObject.SetActive(false);
         aboveCanvas.gameObject.SetActive(false);
+        codexButton.gameObject.SetActive(false);
         logo.gameObject.SetActive(false);
-
     }
     // Exit Panel
     // - - - - - - - - 
@@ -312,9 +321,9 @@ public class LobbyUiManager : MonoBehaviour
         panel.gameObject.SetActive(true);
 
         sequence.Append(rect.DOAnchorPosY(-155, panelDuration)
-            .SetEase(Ease.OutQuart));
+            .SetEase(Ease.OutBack));
         sequence.Join(rect.DOScale(Vector3.one, panelDuration)
-            .SetEase(Ease.OutQuart));
+            .SetEase(Ease.OutBack));
 
         sequence.Join(startButton.GetComponent<Image>().DOColor(Transparent, panelDuration)
             .SetEase(Ease.OutQuart));
@@ -333,9 +342,9 @@ public class LobbyUiManager : MonoBehaviour
         if (rect == null) return;
 
         sequence.Append(rect.DOAnchorPosY(-1500, panelDuration)
-            .SetEase(Ease.InQuart));
+            .SetEase(Ease.InBack));
         sequence.Join(rect.DOScale(Vector3.zero, panelDuration)
-            .SetEase(Ease.InQuart));
+            .SetEase(Ease.InBack));
 
 
         sequence.Join(startButton.GetComponent<Image>().DOColor(Color.white, panelDuration).SetEase(Ease.InQuart));

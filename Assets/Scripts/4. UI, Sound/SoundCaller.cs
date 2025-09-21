@@ -1,5 +1,3 @@
-using System.Collections;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class SoundCaller : MonoBehaviour
@@ -15,28 +13,26 @@ public class SoundCaller : MonoBehaviour
 
     public void PlaySFX()
     {
-        /*
-        if (SoundManager.Instance == null)
+        if (Main.Instance.Sound == null)
         {
-            Debug.LogWarning("����Ŵ����� �Ⱥ���");
+            Debug.LogWarning("sound가 null입니다.");
             return;
         }
         switch(SFXType)
         {
             case SoundType.Button:
-                SoundManager.Instance.PlayButtonClick();
+                Main.Instance.Sound.PlayButtonClick();
                 break;
             case SoundType.Codex:
-                SoundManager.Instance.PlayCodexClick();
+                Main.Instance.Sound.PlayCodexClick();
                 break;
             case SoundType.Shop:
-                SoundManager.Instance.PlayShopClick();
+                Main.Instance.Sound.PlayShopClick();
                 break;
             default:
                 Debug.LogWarning("����Ÿ���� ���� �ȵ�");
                 break;
         }
-        */
     }
 }
 
