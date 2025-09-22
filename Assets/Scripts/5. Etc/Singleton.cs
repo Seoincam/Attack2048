@@ -9,7 +9,6 @@ public class SingleTone<T> : MonoBehaviour where T : MonoBehaviour
         if (Instance == null)
         {
             Instance = this as T;
-            DontDestroyOnLoad(Instance);
         }
         else if (Instance != this)
         {

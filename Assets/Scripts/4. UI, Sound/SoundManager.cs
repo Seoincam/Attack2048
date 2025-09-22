@@ -8,7 +8,7 @@ public class SoundSetting
     public float SfxVolume = .75f;
 }
 
-public class SoundManager : SingleTone<SoundManager>
+public class SoundManager : MonoBehaviour
 {
     // 필드    
     // - - - - - - - - - - 
@@ -18,6 +18,8 @@ public class SoundManager : SingleTone<SoundManager>
 
     [Header("Audio Clip")]
     public AudioClip LobbyBGM;
+    public AudioClip stageBGM;
+    
     [Header("Button Clip")]
     public AudioClip ButtonSFX;
     [Header("Codex Clip")]
@@ -57,11 +59,9 @@ public class SoundManager : SingleTone<SoundManager>
     private string _saveFileName = "soundSettings.json";
     private SoundSetting _soundSetting;
 
-    protected override void Awake()
+    public void Init()
     {
-        base.Awake();
         _soundSetting = LoadSetting();
-        // Debug.Log(Application.persistentDataPath);
         if(SFX == null || !SFX.gameObject.scene.IsValid())
         {
             Debug.Log("SFX AudioSource가 없거나 유효하지 않습니다. 새로 생성합니다.");

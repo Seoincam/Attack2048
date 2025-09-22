@@ -1,12 +1,14 @@
 using System;
 using System.Collections;
 using DG.Tweening;
-using Unity.VisualScripting;
 using UnityEngine;
 
 // 연출 전담 클래스
 public class Tile : MonoBehaviour
 {
+    private int tiltSpeed;
+    private int tiltPower;
+
     public int value;
     public int x, y; // 현재 좌표
     [SerializeField]
@@ -28,6 +30,12 @@ public class Tile : MonoBehaviour
     private void Awake()
     {
         _sr = GetComponent<SpriteRenderer>();
+    }
+
+    void Update()
+    {
+        if (gameObject.activeSelf)  
+            MoveImage();
     }
     // 좌표 기반으로 기본 order 계산
     // 겹칠경우 프레임마다 랜덤으로 렌더 순서 겹치는경우 방지용
@@ -53,6 +61,9 @@ public class Tile : MonoBehaviour
         IsMoving = false;
         this.x = x; this.y = y;
         RecomputeBaseOrder();
+
+        tiltSpeed = UnityEngine.Random.Range(7, 40);
+        tiltPower = UnityEngine.Random.Range(7, 20);
     }
     /* 타일을 주어진 좌표로 이동시킴
      * 이동중 : IsMoving = true -> 이동 완료 후 좌표 최신위치로 갱신 -> IsMoving = false
@@ -84,7 +95,7 @@ public class Tile : MonoBehaviour
         IsMoving = false;
 
         // 비활성화 되기 직전에도 원래대로
-        if(_sr != null) _sr.sortingOrder = _baseOrder;
+        if (_sr != null) _sr.sortingOrder = _baseOrder;
 
         if (IsProtected)
         {
@@ -113,5 +124,12 @@ public class Tile : MonoBehaviour
     {
         yield return new WaitForSeconds(0.05f);
         EventManager.Unsubscribe(GamePhase.NewTurnPhase, FinishProtect);
+    }
+    
+    private void MoveImage()
+    {
+        float lerpX = Mathf.LerpAngle(transform.eulerAngles.x, Mathf.Sin(Time.time) * tiltPower, tiltSpeed * 1.1f * Time.deltaTime);
+        float lerpY = Mathf.LerpAngle(transform.eulerAngles.y, Mathf.Cos(Time.time) * tiltPower, tiltSpeed * .9f * Time.deltaTime);
+        transform.eulerAngles = new Vector3(lerpX, lerpY, 0);
     }
 }

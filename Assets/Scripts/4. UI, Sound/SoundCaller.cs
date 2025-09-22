@@ -1,5 +1,3 @@
-using System.Collections;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class SoundCaller : MonoBehaviour
@@ -10,29 +8,29 @@ public class SoundCaller : MonoBehaviour
         Codex,
         Shop,
     }
-    [Header("È¿°úÀ½ ¼³Á¤")]
+    [Header("È¿ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½")]
     public SoundType SFXType;
 
     public void PlaySFX()
     {
-        if (SoundManager.Instance == null)
+        if (Main.Instance.Sound == null)
         {
-            Debug.LogWarning("»ç¿îµå¸Å´ÏÀú°¡ ¾Èº¸ÀÓ");
+            Debug.LogWarning("soundê°€ nullìž…ë‹ˆë‹¤.");
             return;
         }
         switch(SFXType)
         {
             case SoundType.Button:
-                SoundManager.Instance.PlayButtonClick();
+                Main.Instance.Sound.PlayButtonClick();
                 break;
             case SoundType.Codex:
-                SoundManager.Instance.PlayCodexClick();
+                Main.Instance.Sound.PlayCodexClick();
                 break;
             case SoundType.Shop:
-                SoundManager.Instance.PlayShopClick();
+                Main.Instance.Sound.PlayShopClick();
                 break;
             default:
-                Debug.LogWarning("»ç¿îµåÅ¸ÀÔÀÌ ¼³Á¤ ¾ÈµÊ");
+                Debug.LogWarning("ï¿½ï¿½ï¿½ï¿½Å¸ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Èµï¿½");
                 break;
         }
     }

@@ -135,7 +135,7 @@ public class StoreManager : MonoBehaviour
 
         _pointManager.UsePoint(AddTurnCost);
         GameManager.Instance.AddTurns(addTurnAmount);
-        SoundManager.Instance.PlayAddTurnSFX();
+        // SoundManager.Instance.PlayAddTurnSFX();
     }
 
     public void DestoryTileBtn()
@@ -167,7 +167,7 @@ public class StoreManager : MonoBehaviour
             _pointManager.UsePoint(DestroyTileCost);
             IsPreventing = false;
             GameManager.Instance.TileArray[x, y].GetComponent<Tile>().StartProtect();
-            SoundManager.Instance.PlayPreventDestroySFX();
+            // SoundManager.Instance.PlayPreventDestroySFX();
         }
     }
 
@@ -184,7 +184,7 @@ public class StoreManager : MonoBehaviour
         {
             _pointManager.UsePoint(DestroyTileCost);
             IsDestroying = false;
-            SoundManager.Instance.PlayBreakBlockSFX();
+            // SoundManager.Instance.PlayBreakBlockSFX();
         }
     }
 

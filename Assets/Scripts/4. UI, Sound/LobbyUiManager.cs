@@ -1,23 +1,29 @@
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.SceneManagement;
 using UnityEditor;
 using System;
 using DG.Tweening;
 
 public class LobbyUiManager : MonoBehaviour
 {
-    [SerializeField] private LoadingSO loadingSO;
+    private Main main;
+    private RectTransform codexRect; 
+
+    [Header("Tween Setting")]
+    public float creditDuration = 0.4f;
+    public float logoDuration = 0.4f;
+    public float buttonsDuration = 0.25f;
+    public Ease buttonsEase = Ease.OutBack;
+    public float panelDuration = 1.2f;
+
+    [Header("Canvas")]
+    [SerializeField] private Canvas defaultCanvas;
+    [SerializeField] private Canvas aboveCanvas;
+
+    [Header("Images")]
     [SerializeField] private GameObject[] hideObjects;
     [SerializeField] private Image logo;
     [SerializeField] private RectTransform sky;
-
-    [Header("Tween Setting")]
-    [SerializeField] float creditDuration = 0.4f;
-    [SerializeField] float logoDuration = 0.4f;
-    [SerializeField] float buttonsDuration = 0.25f;
-    [SerializeField] Ease buttonsEase = Ease.OutBack;
-    [SerializeField] float panelDuration = 0.4f;
 
     [Header("Default Buttons")]
     [SerializeField] private Button startButton;
@@ -49,66 +55,67 @@ public class LobbyUiManager : MonoBehaviour
 
     private Action OnEscapeButtonTapped;
 
-    private float creditPanelY;
-    private float settingPanelY;
-    private float exitPanelY;
-
     // 뒤로가기 감지
     void Update()
     {
+        if (main.State != GameState.Lobby)
+            return;
+
         MoveImage();
 
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            // if (isEscapePopUp)
-            //     OnCancleExitButtonTapped();
-            // else
-            //     OpenExitPannel();
-            // OnEscapeBu
-
-            OnEscapeButtonTapped = OnEscapeButtonTapped != null ? OnEscapeButtonTapped : OpenExitPanel;
+            OnEscapeButtonTapped ??= OpenExitPanel;
             OnEscapeButtonTapped?.Invoke();
         }
     }
 
-
-
     // 초기화
     // - - - - - - - - -
-    void Start()
+    public void Init(Main main)
     {
+        this.main = main;
+
+        codexRect = codexButton.GetComponent<RectTransform>();
         InitSetting();
-        InitCodex();
+        // InitCodex();
         InitCredit();
         InitEscape();
 
         startButton.onClick.AddListener(OnStartButtonTapped);
-        SoundManager.Instance.PlayBGM(SoundManager.Instance.LobbyBGM);
+        main.Sound.PlayBGM(main.Sound.LobbyBGM);
+    }
 
-        SetAllButton(false);
+    public void OnEnterLobby(bool isFirst = false)
+    {
+        defaultCanvas.gameObject.SetActive(true);
+        aboveCanvas.gameObject.SetActive(true);
+        codexButton.gameObject.SetActive(true);
+        logo.gameObject.SetActive(true);
+        main.Sound.InitPanel(bgmSlider, sfxSlider);
+        
 
-        var sequence = DOTween.Sequence();
-        sequence.Append(creditButton.GetComponent<RectTransform>().DOAnchorPosX(0, creditDuration).SetEase(Ease.OutCubic));
-        sequence.Append(logo.DOColor(Color.white, logoDuration).SetEase(Ease.OutCubic));
+        if (isFirst)
+        {
+            SetAllButton(false);
 
-        sequence.Append(startButton.GetComponent<RectTransform>().DOAnchorPosY(550, buttonsDuration).SetEase(buttonsEase));
-        sequence.Join(startButton.GetComponent<Image>().DOColor(Color.white, buttonsDuration).SetEase(Ease.OutCubic));
+            var sequence = DOTween.Sequence();
+            sequence.Append(creditButton.GetComponent<RectTransform>().DOAnchorPosX(0, creditDuration).SetEase(Ease.OutCubic));
+            sequence.Append(logo.DOColor(Color.white, logoDuration).SetEase(Ease.OutCubic));
 
-        sequence.Append(settingButton.GetComponent<RectTransform>().DOAnchorPosY(350, buttonsDuration).SetEase(buttonsEase));
-        sequence.Join(settingButton.GetComponent<Image>().DOColor(Color.white, buttonsDuration).SetEase(Ease.OutCubic));
+            FadeInButton(sequence, startButton, 550);
+            FadeInButton(sequence, settingButton, 350);
+            FadeInButton(sequence, escapeButton, 150);
 
-        sequence.Append(escapeButton.GetComponent<RectTransform>().DOAnchorPosY(150, buttonsDuration).SetEase(buttonsEase));
-        sequence.Join(escapeButton.GetComponent<Image>().DOColor(Color.white, buttonsDuration).SetEase(Ease.OutCubic));
-
-        SetAllButton(true);
+            sequence.OnComplete(() => SetAllButton(true));
+        }
     }
 
     void InitSetting()
     {
         settingButton.onClick.AddListener(OnOpenSettingButtonTapped);
         closeSettingButton.onClick.AddListener(OnCloseSettingButtonTapped);
-        SoundManager.Instance.InitPanel(bgmSlider, sfxSlider);
-        settingPanelY = settingPanel.GetComponent<RectTransform>().localPosition.y;
+        main.Sound.InitPanel(bgmSlider, sfxSlider);
     }
 
     void InitCodex()
@@ -121,7 +128,6 @@ public class LobbyUiManager : MonoBehaviour
     {
         creditButton.onClick.AddListener(OnOpenCreditButtonTapped);
         creditPanel.Find("Close Button").GetComponent<Button>().onClick.AddListener(OnCloseCreditButtonTapped);
-        creditPanelY = creditPanel.GetComponent<RectTransform>().localPosition.y;
     }
 
     void InitEscape()
@@ -129,7 +135,6 @@ public class LobbyUiManager : MonoBehaviour
         escapeButton.onClick.AddListener(OpenExitPanel);
         exitPanel.Find("Button Layout Group/Exit Button").GetComponent<Button>().onClick.AddListener(OnExitButtonTapped);
         exitPanel.Find("Button Layout Group/Cancle Button").GetComponent<Button>().onClick.AddListener(OnCancleExitButtonTapped);
-        exitPanelY = exitPanel.GetComponent<RectTransform>().localPosition.y;
     }
 
 
@@ -138,11 +143,18 @@ public class LobbyUiManager : MonoBehaviour
     private void OnStartButtonTapped()
     {
         var testStartIndex = int.TryParse(testStartIndexInputFied.text, out int inputIndex) ? inputIndex : 0;
-        GameSetting.Instance.testStartIndex = Mathf.Clamp(testStartIndex, 0, 6);
-        loadingSO.SceneName = "2048Game";
-        SceneManager.LoadScene("Loading");
+        var stageIndex = Mathf.Clamp(testStartIndex, 0, 6);
+
+        main.LoadToStage(stageIndex);
     }
 
+    public void TurnOff()
+    {
+        defaultCanvas.gameObject.SetActive(false);
+        aboveCanvas.gameObject.SetActive(false);
+        codexButton.gameObject.SetActive(false);
+        logo.gameObject.SetActive(false);
+    }
     // Exit Panel
     // - - - - - - - - 
     private void OpenExitPanel()
@@ -153,14 +165,7 @@ public class LobbyUiManager : MonoBehaviour
         exitPanel.gameObject.SetActive(true);
 
         var sequence = DOTween.Sequence();
-        sequence.Append(exitPanel.GetComponent<RectTransform>().DOAnchorPosY(-153, panelDuration).SetEase(Ease.OutQuart));
-        sequence.Join(exitPanel.GetComponent<Image>().DOColor(Color.white, panelDuration).SetEase(Ease.OutQuart));
-        sequence.Join(exitPanel.GetComponent<RectTransform>().DOScale(Vector3.one, panelDuration).SetEase(Ease.OutQuart));
-
-        sequence.Join(startButton.GetComponent<Image>().DOColor(new Color(1, 1, 1, 0), panelDuration).SetEase(Ease.OutQuart));
-        sequence.Join(settingButton.GetComponent<Image>().DOColor(new Color(1, 1, 1, 0), panelDuration).SetEase(Ease.OutQuart));
-        sequence.Join(escapeButton.GetComponent<Image>().DOColor(new Color(1, 1, 1, 0), panelDuration).SetEase(Ease.OutQuart));
-        sequence.Join(logo.DOColor(new Color(1, 1, 1, 0), panelDuration).SetEase(Ease.OutQuart));
+        OpenPanel(sequence, exitPanel);
     }
 
     private void OnCancleExitButtonTapped()
@@ -168,14 +173,7 @@ public class LobbyUiManager : MonoBehaviour
         OnEscapeButtonTapped = null;
 
         var sequence = DOTween.Sequence();
-        sequence.Append(exitPanel.GetComponent<RectTransform>().DOAnchorPosY(exitPanelY, panelDuration).SetEase(Ease.InQuart));
-        sequence.Join(exitPanel.GetComponent<Image>().DOColor(new Color(1, 1, 1, 0), panelDuration + .1f).SetEase(Ease.InQuart));
-        sequence.Join(exitPanel.GetComponent<RectTransform>().DOScale(Vector3.zero, panelDuration).SetEase(Ease.InQuart));
-
-        sequence.Join(startButton.GetComponent<Image>().DOColor(Color.white, panelDuration).SetEase(Ease.InQuart));
-        sequence.Join(settingButton.GetComponent<Image>().DOColor(Color.white, panelDuration).SetEase(Ease.InQuart));
-        sequence.Join(escapeButton.GetComponent<Image>().DOColor(Color.white, panelDuration).SetEase(Ease.InQuart));
-        sequence.Join(logo.DOColor(Color.white, panelDuration).SetEase(Ease.InQuart));
+        ClosePanel(sequence, exitPanel);
 
         sequence.OnComplete(() =>
         {
@@ -187,7 +185,7 @@ public class LobbyUiManager : MonoBehaviour
 
     private void OnExitButtonTapped()
     {
-        SoundManager.Instance?.SaveSetting();
+        main.Sound.SaveSetting();
 
 #if UNITY_ANDROID && !UNITY_EDITOR
         using (var unityPlayer = new AndroidJavaClass("com.unity3d.player.UnityPlayer"))
@@ -211,14 +209,7 @@ public class LobbyUiManager : MonoBehaviour
         creditPanel.gameObject.SetActive(true);
 
         var sequence = DOTween.Sequence();
-        sequence.Append(creditPanel.GetComponent<RectTransform>().DOAnchorPosY(-153, panelDuration).SetEase(Ease.OutQuart));
-        sequence.Join(creditPanel.GetComponent<Image>().DOColor(Color.white, panelDuration).SetEase(Ease.OutQuart));
-        sequence.Join(creditPanel.GetComponent<RectTransform>().DOScale(Vector3.one, panelDuration).SetEase(Ease.OutQuart));
-
-        sequence.Join(startButton.GetComponent<Image>().DOColor(new Color(1, 1, 1, 0), panelDuration).SetEase(Ease.OutQuart));
-        sequence.Join(settingButton.GetComponent<Image>().DOColor(new Color(1, 1, 1, 0), panelDuration).SetEase(Ease.OutQuart));
-        sequence.Join(escapeButton.GetComponent<Image>().DOColor(new Color(1, 1, 1, 0), panelDuration).SetEase(Ease.OutQuart));
-        sequence.Join(logo.DOColor(new Color(1, 1, 1, 0), panelDuration).SetEase(Ease.OutQuart));
+        OpenPanel(sequence, creditPanel);
         sequence.OnComplete(() =>
         {
             creditPanel.GetComponentInChildren<ScrollRect>().enabled = true;
@@ -231,22 +222,13 @@ public class LobbyUiManager : MonoBehaviour
 
         creditPanel.GetComponentInChildren<ScrollRect>().enabled = false;
         var sequence = DOTween.Sequence();
-        sequence.Append(creditPanel.GetComponent<RectTransform>().DOAnchorPosY(creditPanelY, panelDuration).SetEase(Ease.InQuart));
-        sequence.Join(creditPanel.GetComponent<Image>().DOColor(new Color(1, 1, 1, 0), panelDuration + .1f).SetEase(Ease.InQuart));
-        sequence.Join(creditPanel.GetComponent<RectTransform>().DOScale(Vector3.zero, panelDuration).SetEase(Ease.InQuart));
-
-        sequence.Join(startButton.GetComponent<Image>().DOColor(Color.white, panelDuration).SetEase(Ease.InQuart));
-        sequence.Join(settingButton.GetComponent<Image>().DOColor(Color.white, panelDuration).SetEase(Ease.InQuart));
-        sequence.Join(escapeButton.GetComponent<Image>().DOColor(Color.white, panelDuration).SetEase(Ease.InQuart));
-        sequence.Join(logo.DOColor(Color.white, panelDuration).SetEase(Ease.InQuart));
-
+        ClosePanel(sequence, creditPanel);
         sequence.OnComplete(() =>
         {
             creditPanel.gameObject.SetActive(false);
             SetAllButton(canInteractive: true);
         });
     }
-
 
     // Setting Panel
     // - - - - - - - - -
@@ -257,14 +239,7 @@ public class LobbyUiManager : MonoBehaviour
         settingPanel.gameObject.SetActive(true);
 
         var sequence = DOTween.Sequence();
-        sequence.Append(settingPanel.GetComponent<RectTransform>().DOAnchorPosY(0, panelDuration).SetEase(Ease.OutQuart));
-        sequence.Join(settingPanel.Find("Setting Panel")?.GetComponent<Image>().DOColor(Color.white, panelDuration).SetEase(Ease.OutQuart));
-        sequence.Join(settingPanel.GetComponent<RectTransform>().DOScale(Vector3.one, panelDuration).SetEase(Ease.OutQuart));
-
-        sequence.Join(startButton.GetComponent<Image>().DOColor(new Color(1, 1, 1, 0), panelDuration).SetEase(Ease.OutQuart));
-        sequence.Join(settingButton.GetComponent<Image>().DOColor(new Color(1, 1, 1, 0), panelDuration).SetEase(Ease.OutQuart));
-        sequence.Join(escapeButton.GetComponent<Image>().DOColor(new Color(1, 1, 1, 0), panelDuration).SetEase(Ease.OutQuart));
-        sequence.Join(logo.DOColor(new Color(1, 1, 1, 0), panelDuration).SetEase(Ease.OutQuart));
+        OpenPanel(sequence, settingPanel);
     }
 
     public void OnCloseSettingButtonTapped()
@@ -272,15 +247,7 @@ public class LobbyUiManager : MonoBehaviour
         OnEscapeButtonTapped = null;
 
         var sequence = DOTween.Sequence();
-        sequence.Append(settingPanel.GetComponent<RectTransform>().DOAnchorPosY(settingPanelY, panelDuration).SetEase(Ease.InQuart));
-        sequence.Join(settingPanel.Find("Setting Panel")?.GetComponent<Image>().DOColor(new Color(1, 1, 1, 0), panelDuration + .1f).SetEase(Ease.InQuart));
-        sequence.Join(settingPanel.GetComponent<RectTransform>().DOScale(Vector3.zero, panelDuration).SetEase(Ease.InQuart));
-
-        sequence.Join(startButton.GetComponent<Image>().DOColor(Color.white, panelDuration).SetEase(Ease.InQuart));
-        sequence.Join(settingButton.GetComponent<Image>().DOColor(Color.white, panelDuration).SetEase(Ease.InQuart));
-        sequence.Join(escapeButton.GetComponent<Image>().DOColor(Color.white, panelDuration).SetEase(Ease.InQuart));
-        sequence.Join(logo.DOColor(Color.white, panelDuration).SetEase(Ease.InQuart));
-
+        ClosePanel(sequence, settingPanel);
         sequence.OnComplete(() =>
         {
             settingPanel.gameObject.SetActive(false);
@@ -296,7 +263,6 @@ public class LobbyUiManager : MonoBehaviour
         OnEscapeButtonTapped = OnCloseCodexButtonTapped;
 
         SetAllButton(canInteractive: false);
-        // SetActiveHideObjects(false);
         codexPanel.gameObject.SetActive(true);
     }
 
@@ -305,7 +271,6 @@ public class LobbyUiManager : MonoBehaviour
         OnEscapeButtonTapped = null;
 
         SetAllButton(canInteractive: true);
-        // SetActiveHideObjects(true);
         codexPanel.gameObject.SetActive(false);
     }
 
@@ -323,15 +288,77 @@ public class LobbyUiManager : MonoBehaviour
 
     private void MoveImage()
     {
+        if (codexRect == null)
+            return;
+            
         var tiltSpeed = 7;
-        float lerpX = Mathf.LerpAngle(codexButton.GetComponent<RectTransform>().eulerAngles.x, Mathf.Sin(Time.time) * 6, tiltSpeed * Time.deltaTime);
-        float lerpY = Mathf.LerpAngle(codexButton.GetComponent<RectTransform>().eulerAngles.y, Mathf.Cos(Time.time) * 6, tiltSpeed * Time.deltaTime);
-        float y = Mathf.Lerp(codexButton.GetComponent<RectTransform>().anchoredPosition.y, 600 + Mathf.Sin(Time.time) * 10, Time.deltaTime);
-        codexButton.GetComponent<RectTransform>().eulerAngles = new Vector3(lerpX, lerpY, 0);
-        codexButton.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, y);
+        float lerpX = Mathf.LerpAngle(codexRect.eulerAngles.x, Mathf.Sin(Time.time) * 6, tiltSpeed * Time.deltaTime);
+        float lerpY = Mathf.LerpAngle(codexRect.eulerAngles.y, Mathf.Cos(Time.time) * 6, tiltSpeed * Time.deltaTime);
+        float y = Mathf.Lerp(codexRect.anchoredPosition.y, 600 + Mathf.Sin(Time.time) * 15, Time.deltaTime);
+        codexRect.eulerAngles = new Vector3(lerpX, lerpY, 0);
+        codexRect.anchoredPosition = new Vector2(0, y);
 
-        var skyLerpX = Mathf.LerpAngle(codexButton.GetComponent<RectTransform>().eulerAngles.x, Mathf.Sin(Time.time) * 10, tiltSpeed * Time.deltaTime);
-        var skyLerpY = Mathf.LerpAngle(codexButton.GetComponent<RectTransform>().eulerAngles.y, Mathf.Cos(Time.time) * 10, tiltSpeed * Time.deltaTime);
+        var skyLerpX = Mathf.LerpAngle(codexRect.eulerAngles.x, Mathf.Sin(Time.time) * 10, tiltSpeed * Time.deltaTime);
+        var skyLerpY = Mathf.LerpAngle(codexRect.eulerAngles.y, Mathf.Cos(Time.time) * 10, tiltSpeed * Time.deltaTime);
         sky.eulerAngles = new Vector3(skyLerpX, skyLerpY, 0);
     }
+
+    // DOTween Helper
+    private void FadeInButton(Sequence sequence, Button button, float targetY)
+    {
+        if (button == null) return;
+        var rect = button.transform as RectTransform;
+        var image = button.image;
+        if (rect == null || image == null) return;
+
+        sequence.Append(rect.DOAnchorPosY(targetY, buttonsDuration)
+            .SetEase(buttonsEase));
+        sequence.Join(image.DOColor(Color.white, buttonsDuration)
+            .SetEase(Ease.OutCubic));
+    }
+
+    /// <summary>투명색</summary>
+    private Color Transparent => new(1, 1, 1, 0);
+
+    private void OpenPanel(Sequence sequence, Transform panel)
+    {
+        if (panel == null) return;
+        var rect = panel as RectTransform;
+        if (rect == null) return;
+        
+        panel.gameObject.SetActive(true);
+
+        sequence.Append(rect.DOAnchorPosY(-155, panelDuration)
+            .SetEase(Ease.OutBack));
+        sequence.Join(rect.DOScale(Vector3.one, panelDuration)
+            .SetEase(Ease.OutBack));
+
+        sequence.Join(startButton.GetComponent<Image>().DOColor(Transparent, panelDuration)
+            .SetEase(Ease.OutQuart));
+        sequence.Join(settingButton.GetComponent<Image>().DOColor(Transparent, panelDuration)
+            .SetEase(Ease.OutQuart));
+        sequence.Join(escapeButton.GetComponent<Image>().DOColor(Transparent, panelDuration)
+            .SetEase(Ease.OutQuart));
+        sequence.Join(logo.DOColor(Transparent, panelDuration)
+            .SetEase(Ease.OutQuart));
+    }
+
+    private void ClosePanel(Sequence sequence, Transform panel)
+    {
+        if (panel == null) return;
+        var rect = panel as RectTransform;
+        if (rect == null) return;
+
+        sequence.Append(rect.DOAnchorPosY(-1500, panelDuration)
+            .SetEase(Ease.InBack));
+        sequence.Join(rect.DOScale(Vector3.zero, panelDuration)
+            .SetEase(Ease.InBack));
+
+
+        sequence.Join(startButton.GetComponent<Image>().DOColor(Color.white, panelDuration).SetEase(Ease.InQuart));
+        sequence.Join(settingButton.GetComponent<Image>().DOColor(Color.white, panelDuration).SetEase(Ease.InQuart));
+        sequence.Join(escapeButton.GetComponent<Image>().DOColor(Color.white, panelDuration).SetEase(Ease.InQuart));
+        sequence.Join(logo.DOColor(Color.white, panelDuration).SetEase(Ease.InQuart));
+    }
+
 }
