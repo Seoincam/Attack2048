@@ -15,6 +15,9 @@ public class MStageUIManager : MonoBehaviour, INewTurnListener
     public bool isSFXPlayed = false;
     private bool isPointHint = false;
 
+    [Header("Slime Movement")]
+    [SerializeField] float moveAmount = 16;
+
     [Header("Tween Setting")]
     [SerializeField] float storeButtonX = 800;
 
@@ -567,8 +570,8 @@ public class MStageUIManager : MonoBehaviour, INewTurnListener
             return;
             
         var tiltSpeed = 7;
-        float lerpX = Mathf.LerpAngle(slimeRect.eulerAngles.x, Mathf.Sin(Time.time) * 14, tiltSpeed * Time.deltaTime);
-        float lerpY = Mathf.LerpAngle(slimeRect.eulerAngles.y, Mathf.Cos(Time.time) * 14, tiltSpeed * Time.deltaTime);
+        float lerpX = Mathf.LerpAngle(slimeRect.eulerAngles.x, Mathf.Sin(Time.time) * moveAmount, tiltSpeed * Time.deltaTime);
+        float lerpY = Mathf.LerpAngle(slimeRect.eulerAngles.y, Mathf.Cos(Time.time) * moveAmount, tiltSpeed * Time.deltaTime);
         float y = Mathf.Lerp(slimeRect.anchoredPosition.y, 550 + Mathf.Sin(Time.time) * 10, Time.deltaTime);
         slimeRect.eulerAngles = new Vector3(lerpX, lerpY, 0);
         slimeRect.anchoredPosition = new Vector2(0, y);
