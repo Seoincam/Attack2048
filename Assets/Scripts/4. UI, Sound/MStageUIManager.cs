@@ -4,6 +4,7 @@ using NUnit.Framework.Interfaces;
 using Unity.Collections;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Collections.Generic;
 
 public class MStageUIManager : MonoBehaviour, INewTurnListener
 {
@@ -69,10 +70,26 @@ public class MStageUIManager : MonoBehaviour, INewTurnListener
     [SerializeField] Button closeLobbyButton;
     [SerializeField] Button lobbyButton;
 
+    [Header("Slime HPBar")]
+    [SerializeField] private Slider hpSlider;
+    [SerializeField] private Image targetIconImage;
+
 
     [Header("Escape")]
     private Action OnEscapeButtonTapped;
 
+    //HP
+    private HashSet<int> _hit = new();// 달성 기록용
+    private int _a1, _a2, _a3, _a4; // 왼쪽부터 타겟/8, 타겟/4 ...
+    private float HP
+    {
+        get => hpSlider != null ? hpSlider.value : 1f;
+        set
+        {
+            if (hpSlider == null) return;
+            hpSlider.value = Mathf.Clamp01(value);
+        }
+    }
 
     public bool IsPanelOn
     {
@@ -94,6 +111,7 @@ public class MStageUIManager : MonoBehaviour, INewTurnListener
         InitStore();
         Subscribe_NewTurn();
         pointHintToggleButton.onClick.AddListener(TogglePointHint);
+        RefreshAndResetHP();
 
         OnPointChanged();
         UpdateStoreButtonState();
@@ -121,6 +139,9 @@ public class MStageUIManager : MonoBehaviour, INewTurnListener
         main.Game.OnRemainingTurnChanged += OnRemainingTurnChanged;
         main.Stage.OnGameFail += OnGameFail;
         main.Store.OnClickButton += OnClickStoreButton;
+        //HPBar구독
+        main.Stage.OnSlimeChanged += OnSlimeChanged_RefreshHP;
+        main.Game.OnGetPoint += OnGetPoint_ProgressHP;
     }
 
     private void InitSetting()
@@ -185,7 +206,9 @@ public class MStageUIManager : MonoBehaviour, INewTurnListener
         targetTileText.text = info.TargetTile.ToString();
 
         failPanel.gameObject.SetActive(false);
-
+        //스테이지 켜질때 HP 리셋
+        RefreshAndResetHP();
+        SetTargetIcon();
         main.Sound.InitPanel(bgmSlider, sfxSlider);
         SetAllButtons(true);
     }
@@ -576,5 +599,69 @@ public class MStageUIManager : MonoBehaviour, INewTurnListener
         slimeRect.eulerAngles = new Vector3(lerpX, lerpY, 0);
         slimeRect.anchoredPosition = new Vector2(0, y);
     }
+
+    //HP Bar 로직
+    private void OnSlimeChanged_RefreshHP(object _, StageManager.SlimeInfo __)
+    {
+        RefreshAndResetHP();
+        SetTargetIcon();
+    }
+
+    private void RefreshAndResetHP()
+    {
+        _hit.Clear();
+
+        int target = (main.Stage.CurrentSlime != null) ? main.Stage.CurrentSlime.ClearValue :
+            (main.CurrentStageInfo != null) ? main.CurrentStageInfo.TargetTile : 128;
+        _a1 = target / 8;
+        _a2 = target / 4;
+        _a3 = target / 2;
+        _a4 = target;
+        HP = 1f;
+    }
+
+    private void OnGetPoint_ProgressHP(object _, PointManager.PointGetInfo info)
+    {
+        // 타일 값이 처음 달성할시 표시하고 HP 감소
+        int v = info.tileValue;
+        if(v == _a4)
+        {
+            TryMark(_a4);
+            HP = 0f;
+            return;
+        }
+        if(v == _a3)
+        {
+            if (TryMark(_a3)) HP -= 0.25f;
+            return;
+        }
+        if(v == _a2)
+        {
+            if (TryMark(_a2)) HP -= 0.25f;
+            return;
+        }
+        if (v == _a1)
+        { 
+            if (TryMark(_a1)) HP -= 0.25f;
+            return;
+        }
+    }
+
+    private bool TryMark(int a)
+    {
+        if (_hit.Contains(a)) return false;
+        _hit.Add(a);
+        return true;
+    }
+
+    private void SetTargetIcon()
+    {
+        if (targetIconImage == null) return;
+
+        Sprite spr = (main.CurrentStageInfo != null) ? main.CurrentStageInfo.TargetTileSprite : null;
+        if (spr != null) targetIconImage.sprite = spr;
+        targetIconImage.raycastTarget = false;
+    }
 }
+
 
