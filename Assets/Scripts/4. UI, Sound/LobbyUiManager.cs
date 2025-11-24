@@ -45,6 +45,18 @@ public class LobbyUiManager : MonoBehaviour
     [SerializeField] private Transform codexPanel;
     [SerializeField] private Button codexCloseButton;
 
+    [Header("Stage Selection")] 
+    [SerializeField] private Sprite[] descriptionSprites;
+    [SerializeField] private Text stageText;
+    [SerializeField] private Image stageSelectionPanel;
+    [SerializeField] private Image stageSelectionBackground;
+    [SerializeField] private RectTransform stageSelectionPrevButton;
+    [SerializeField] private RectTransform stageSelectionNextButton;
+    [SerializeField] private Button stageSelectionCloseButton;
+    [SerializeField] private Button enterStageButton;
+    [SerializeField] private Image slimeDescription;
+    private float _stageSelectionBackgroundAlpha;
+
     [Header("Exit")]
     [SerializeField] private Button escapeButton;
     [SerializeField] private Transform exitPanel;
@@ -54,7 +66,8 @@ public class LobbyUiManager : MonoBehaviour
     [SerializeField] private InputField testStartIndexInputFied;
 
     private Action OnEscapeButtonTapped;
-
+    private int _stageIndex;
+    
     // 뒤로가기 감지
     void Update()
     {
@@ -77,12 +90,11 @@ public class LobbyUiManager : MonoBehaviour
         this.main = main;
 
         codexRect = codexButton.GetComponent<RectTransform>();
+        InitStart();
         InitSetting();
         // InitCodex();
         InitCredit();
         InitEscape();
-
-        startButton.onClick.AddListener(OnStartButtonTapped);
         main.Sound.PlayBGM(main.Sound.LobbyBGM);
     }
 
@@ -137,15 +149,142 @@ public class LobbyUiManager : MonoBehaviour
         exitPanel.Find("Button Layout Group/Cancle Button").GetComponent<Button>().onClick.AddListener(OnCancleExitButtonTapped);
     }
 
+    private void InitStart()
+    {
+        startButton.onClick.AddListener(OnStartButtonTapped);
+        stageSelectionCloseButton.onClick.AddListener(OnCloseStageSelectionButtonTapped);
+        enterStageButton.onClick.AddListener(OnEnterStageButtonTapped);
+        stageSelectionPrevButton.GetComponent<Button>().onClick.AddListener(OnPrevStageButtonTapped);
+        stageSelectionNextButton.GetComponent<Button>().onClick.AddListener(OnNextStageButtonTapped);
+        _stageIndex = 0;
+        ChangeStageInfo(_stageIndex);
+    }
+
 
     // Lobby Buttons
     // - - - - - - - - -    
     private void OnStartButtonTapped()
     {
-        var testStartIndex = int.TryParse(testStartIndexInputFied.text, out int inputIndex) ? inputIndex : 0;
-        var stageIndex = Mathf.Clamp(testStartIndex, 0, 6);
+        OnEscapeButtonTapped = OnCloseStageSelectionButtonTapped;
+        
+        // 준비
+        _stageSelectionBackgroundAlpha = stageSelectionBackground.color.a;
+        stageSelectionBackground.color -= new Color(0, 0, 0, _stageSelectionBackgroundAlpha);
+        stageSelectionBackground.gameObject.SetActive(true);
+        
+        stageSelectionPanel.rectTransform.localScale = Vector3.zero;
+        stageSelectionPanel.gameObject.SetActive(true);
+        
+        ChangeStageInfo(_stageIndex, true);
+        
+        // 트윈
+        var seq = DOTween.Sequence()
+                .Append(stageSelectionBackground.DOColor(
+            stageSelectionBackground.color + new Color(0, 0, 0, _stageSelectionBackgroundAlpha), .4f))
+                .Join(stageSelectionPanel.rectTransform.DOScale(Vector3.one, .4f)
+                    .SetEase(Ease.OutBack));
+    }
 
-        main.LoadToStage(stageIndex);
+    private void OnCloseStageSelectionButtonTapped()
+    {
+        OnEscapeButtonTapped = null;
+        
+        var seq = DOTween.Sequence()
+            .Append(stageSelectionPanel.rectTransform.DOScale(Vector3.zero, .4f)
+                .SetEase(Ease.InBack))
+            .Join(stageSelectionBackground.DOColor(
+                stageSelectionBackground.color - new Color(0, 0, 0, _stageSelectionBackgroundAlpha), .8f))
+            .OnComplete(() =>
+            {
+                stageSelectionPanel.gameObject.SetActive(false);
+                stageSelectionBackground.gameObject.SetActive(false);
+                stageSelectionBackground.color += new Color(0, 0, 0, _stageSelectionBackgroundAlpha);
+            });
+    }
+    
+    private void OnPrevStageButtonTapped() => ChangeStageInfo(--_stageIndex);
+    private void OnNextStageButtonTapped() => ChangeStageInfo(++_stageIndex);
+
+    private void ChangeStageInfo(int stageIndex, bool isOpen = false)
+    {
+        if (!stageSelectionPanel.gameObject.activeSelf)
+            return;
+
+        if (stageIndex is < 0 or > 6)
+            stageIndex = Mathf.Clamp(0, 6, stageIndex);
+
+        stageText.text = $"{stageIndex + 1} STAGE";
+
+        if (isOpen)
+        {
+            Change(stageIndex);
+            
+            switch (stageIndex)
+            {
+                case 0:
+                    stageSelectionPrevButton.gameObject.SetActive(false);
+                    return;
+                case 6:
+                    stageSelectionNextButton.gameObject.SetActive(false);
+                    return;
+            }
+
+            stageSelectionNextButton.gameObject.SetActive(true);
+            stageSelectionPrevButton.gameObject.SetActive(true);
+            return;
+        }
+
+        var dur = .4f;
+        stageSelectionNextButton.GetComponent<Button>().interactable = false;
+        stageSelectionPrevButton.GetComponent<Button>().interactable = false;
+        enterStageButton.interactable = false;
+        var seq = DOTween.Sequence()
+            .Append(slimeDescription.rectTransform.DOScale(Vector3.zero, dur)
+                .SetEase(Ease.InCubic))
+            .AppendCallback(() => Change(stageIndex))
+            .Append(slimeDescription.rectTransform.DOScale(Vector3.one, dur)
+                .SetEase(Ease.OutCubic))
+            .OnComplete(() =>
+            {
+                enterStageButton.interactable = true;
+                stageSelectionPrevButton.GetComponent<Button>().interactable = true;
+                stageSelectionNextButton.GetComponent<Button>().interactable = true;
+            });
+
+        switch (stageIndex)
+        {
+            case 0:
+                stageSelectionPrevButton.DOScale(Vector3.zero, dur)
+                    .SetEase(Ease.InBack)
+                    .OnComplete(() => stageSelectionPrevButton.gameObject.SetActive(false));
+                return;
+            case 6:
+                stageSelectionNextButton.DOScale(Vector3.zero, dur)
+                    .SetEase(Ease.InBack)
+                    .OnComplete(() => stageSelectionNextButton.gameObject.SetActive(false));
+                return;
+        }
+
+        stageSelectionNextButton.gameObject.SetActive(true);
+        stageSelectionPrevButton.gameObject.SetActive(true);
+        
+        stageSelectionPrevButton.DOScale(Vector3.one, dur)
+            .SetEase(Ease.OutBack);
+        stageSelectionNextButton.DOScale(Vector3.one, dur)
+            .SetEase(Ease.OutBack);
+        
+        return;
+        void Change(int stageIndex)
+        {
+            slimeDescription.sprite = descriptionSprites[stageIndex];
+            slimeDescription.SetNativeSize();
+        }
+    }
+    
+    private void OnEnterStageButtonTapped()
+    {
+        main.LoadToStage(_stageIndex);
+        OnCloseStageSelectionButtonTapped();
     }
 
     public void TurnOff()

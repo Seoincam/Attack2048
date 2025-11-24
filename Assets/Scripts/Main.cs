@@ -85,7 +85,7 @@ public class Main : SingleTone<Main>
         transition.TransitToStage(stageInfos[stageIndex]);
     }
 
-    public void LoadToLobby(bool isWin = true)
+    public void LoadToLobby(bool isWin)
     {
         _state = GameState.Lobby;
         transition.TransitToLobby(isWin);

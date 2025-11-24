@@ -53,6 +53,18 @@ public class MStageUIManager : MonoBehaviour, INewTurnListener
     [Header("Fail")]
     [SerializeField] Transform failPanel;
 
+    [Header("End")] 
+    [SerializeField] private Sprite clearSprite;
+    [SerializeField] private Sprite failSprite;
+    [SerializeField] private Sprite nextStageSprite;
+    [SerializeField] private Sprite endRetrySprite;
+    [SerializeField] private Image endBackground;
+    private float _endBackgroundAlpha;
+    [SerializeField] private Transform endPanel;
+    [SerializeField] private Image endMessage;
+    [SerializeField] private Button endNextOrRetryButton;
+    [SerializeField] private Button endLobbyButton;
+
     [Header("Setting")]
     [SerializeField] Transform settingPanel;
     [SerializeField] Button settingButton;
@@ -115,6 +127,12 @@ public class MStageUIManager : MonoBehaviour, INewTurnListener
 
         OnPointChanged();
         UpdateStoreButtonState();
+
+        endLobbyButton.onClick.AddListener(() =>
+        {
+            main.LoadToLobby(true);
+        });
+        _endBackgroundAlpha = endBackground.color.a;
     }
 
     // 뒤로가기 감지
@@ -183,6 +201,9 @@ public class MStageUIManager : MonoBehaviour, INewTurnListener
     // - - - - - - - - - - - -
     public void TurnOn()
     {
+        endPanel.gameObject.SetActive(false);
+        endBackground.gameObject.SetActive(false);
+        
         defaultCanvas.gameObject.SetActive(true);
         aboveCanvas.gameObject.SetActive(true);
         wallImage.sprite = wallSprite;
@@ -276,30 +297,9 @@ public class MStageUIManager : MonoBehaviour, INewTurnListener
             isSFXPlayed = true;
         }
         SetAllButtons(false);
-
-        if (clearTile != null)
-        {
-            var sequence = DOTween.Sequence();
-            sequence.AppendInterval(1f);
-            sequence.Append(clearTile.DOLocalMove(new Vector3(0, 2.6f), .6f)
-                .SetEase(Ease.InBack))
-                .SetSpeedBased();
-            sequence.AppendCallback(() =>
-            {
-                var particle = main.Pooler.GetObject(27, Group.Effect).GetComponent<ParticleSystem>();
-                particle.transform.localScale = new Vector3(2f, 2f);
-                particle.transform.position = clearTile.position;
-                particle.Play();
-                clearTile.DOScale(Vector3.zero, 0.3f);
-            });
-            var scale = slimeImage.transform.localScale.x * 1.3f;
-            sequence.Append(slimeImage.transform.DOScale(scale, .1f)
-                .SetLoops(2, LoopType.Yoyo));
-            sequence.OnComplete(() =>
-            {
-                main.LoadToLobby();
-            });
-        }
+        
+        ChangeEndPanel(true);
+        endPanel.gameObject.SetActive(true);
     }
 
     // Fail
@@ -308,8 +308,64 @@ public class MStageUIManager : MonoBehaviour, INewTurnListener
     {
         main.Game.IsPaused = true;
         SetAllButtons(false);
-        failPanel.GetComponentInChildren<Button>().onClick.AddListener(LoadToLobbyOnFail);
-        failPanel.gameObject.SetActive(true);
+        
+        ChangeEndPanel(false);
+        endPanel.gameObject.SetActive(true);
+        
+    }
+
+    private void ChangeEndPanel(bool isClear)
+    {
+        endNextOrRetryButton.onClick.RemoveAllListeners();
+        if (isClear)
+        {
+            endMessage.sprite = clearSprite;
+            endNextOrRetryButton.image.sprite = nextStageSprite;
+            endNextOrRetryButton.onClick.AddListener(() =>
+            {
+                CloseEndPanel().OnComplete(() =>
+                {
+                    endBackground.gameObject.SetActive(false);
+                    endPanel.gameObject.SetActive(false);
+                    main.LoadToStage(main.CurrentStageIndex + 1);
+                    board.DOScale(Vector3.zero, .5f)
+                        .SetEase(Ease.InBack);
+                });
+            });
+        }
+        else
+        {
+            endMessage.sprite = failSprite;
+            endNextOrRetryButton.image.sprite = endRetrySprite;
+            endNextOrRetryButton.onClick.AddListener(() =>
+            {
+                CloseEndPanel().OnComplete(() =>
+                {
+                    endBackground.gameObject.SetActive(false);
+                    endPanel.gameObject.SetActive(false);
+                    main.Game.OnEnterStage();
+                    TurnOn();
+                    main.Game.StartGame();
+                });
+            });
+        }
+
+        endBackground.color -= new Color(0, 0, 0, _endBackgroundAlpha);
+        endBackground.gameObject.SetActive(true);
+        endPanel.transform.localScale = Vector3.zero;
+
+        var seq = DOTween.Sequence()
+            .Append(endPanel.DOScale(Vector3.one, .5f)
+                .SetEase(Ease.OutBack))
+            .Join(endBackground.DOColor(endBackground.color + new Color(0, 0, 0, _endBackgroundAlpha), .4f));
+    }
+
+    private Sequence CloseEndPanel()
+    {
+        return DOTween.Sequence()
+            .Append(endPanel.DOScale(Vector3.zero, .5f)
+                .SetEase(Ease.InBack))
+            .Join(endBackground.DOColor(endBackground.color - new Color(0, 0, 0, _endBackgroundAlpha), .4f));
     }
 
     private void LoadToLobbyOnFail()
@@ -414,8 +470,9 @@ public class MStageUIManager : MonoBehaviour, INewTurnListener
         sequence.OnComplete(() =>
         {
             retryPanel.gameObject.SetActive(false);
+            endBackground.gameObject.SetActive(false);
             // TurnOn();
-            main.LoadToLobby();
+            main.LoadToLobby(true);
         });
     }
 
