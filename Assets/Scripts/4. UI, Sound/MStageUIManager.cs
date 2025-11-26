@@ -1,7 +1,5 @@
 using System;
 using DG.Tweening;
-using NUnit.Framework.Interfaces;
-using Unity.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
@@ -50,20 +48,20 @@ public class MStageUIManager : MonoBehaviour, INewTurnListener
     [SerializeField] private Sprite openEye;
     [SerializeField] private Sprite closeEye;
 
-    [Header("Fail")]
-    [SerializeField] Transform failPanel;
-
     [Header("End")] 
     [SerializeField] private Sprite clearSprite;
     [SerializeField] private Sprite failSprite;
     [SerializeField] private Sprite nextStageSprite;
     [SerializeField] private Sprite endRetrySprite;
     [SerializeField] private Image endBackground;
-    private float _endBackgroundAlpha;
+    private const float endBGAlpha = .85f;
     [SerializeField] private Transform endPanel;
     [SerializeField] private Image endMessage;
     [SerializeField] private Button endNextOrRetryButton;
     [SerializeField] private Button endLobbyButton;
+    [Space] 
+    [SerializeField] private Sprite winCatSprite;
+    [SerializeField] private Sprite failCatSprite;
 
     [Header("Setting")]
     [SerializeField] Transform settingPanel;
@@ -85,7 +83,11 @@ public class MStageUIManager : MonoBehaviour, INewTurnListener
     [Header("Slime HPBar")]
     [SerializeField] private Slider hpSlider;
     [SerializeField] private Image targetIconImage;
-
+    private Tween _hpTween;
+    
+    private bool _isEnd;
+    private bool _isWin;
+    private Sprite _catCache;
 
     [Header("Escape")]
     private Action OnEscapeButtonTapped;
@@ -95,11 +97,26 @@ public class MStageUIManager : MonoBehaviour, INewTurnListener
     private int _a1, _a2, _a3, _a4; // 왼쪽부터 타겟/8, 타겟/4 ...
     private float HP
     {
-        get => hpSlider != null ? hpSlider.value : 1f;
+        get => hpSlider != null ? 1 - hpSlider.value : 1f;
         set
         {
             if (hpSlider == null) return;
-            hpSlider.value = Mathf.Clamp01(value);
+            
+            _hpTween?.Kill();
+            _hpTween = DOTween.To(
+                    () => hpSlider.value,
+                    x => hpSlider.value = x,
+                    1 - Mathf.Clamp01(value),
+                    .3f)
+                .SetEase(Ease.InCubic)
+                .OnComplete(() =>
+                {
+                    _hpTween = null;
+                    if (!_isEnd) return;
+
+                    ChangeEndPanel(_isWin);
+                    endPanel.gameObject.SetActive(true);
+                });
         }
     }
 
@@ -132,7 +149,6 @@ public class MStageUIManager : MonoBehaviour, INewTurnListener
         {
             main.LoadToLobby(true);
         });
-        _endBackgroundAlpha = endBackground.color.a;
     }
 
     // 뒤로가기 감지
@@ -201,6 +217,10 @@ public class MStageUIManager : MonoBehaviour, INewTurnListener
     // - - - - - - - - - - - -
     public void TurnOn()
     {
+        if (_catCache)
+            pointHintToggleButton.image.sprite = _catCache;
+            
+        _isEnd = false;
         endPanel.gameObject.SetActive(false);
         endBackground.gameObject.SetActive(false);
         
@@ -226,7 +246,6 @@ public class MStageUIManager : MonoBehaviour, INewTurnListener
 
         targetTileText.text = info.TargetTile.ToString();
 
-        failPanel.gameObject.SetActive(false);
         //스테이지 켜질때 HP 리셋
         RefreshAndResetHP();
         SetTargetIcon();
@@ -286,7 +305,7 @@ public class MStageUIManager : MonoBehaviour, INewTurnListener
         var currentColor = GameManager.Instance.CurTurns > 5 ? "#6c6ca8" : "#ff4d4d";
         turnText.text = $"<color={currentColor}>{GameManager.Instance.CurTurns}</color>/<color=#6c6ca8>{main.Stage.MaxTurn}</color>";
     }
-
+    
     // Game Clear
     // - - - - - - - - - - - -
     private void OnGameClear(Transform clearTile)
@@ -297,9 +316,9 @@ public class MStageUIManager : MonoBehaviour, INewTurnListener
             isSFXPlayed = true;
         }
         SetAllButtons(false);
-        
-        ChangeEndPanel(true);
-        endPanel.gameObject.SetActive(true);
+
+        _isEnd = true;
+        _isWin = true;
     }
 
     // Fail
@@ -308,10 +327,17 @@ public class MStageUIManager : MonoBehaviour, INewTurnListener
     {
         main.Game.IsPaused = true;
         SetAllButtons(false);
-        
-        ChangeEndPanel(false);
-        endPanel.gameObject.SetActive(true);
-        
+
+        if (_hpTween != null)
+        {
+            _isEnd = true;
+            _isWin = false;
+        }
+        else
+        {
+            ChangeEndPanel(false);
+            endPanel.gameObject.SetActive(true);
+        }
     }
 
     private void ChangeEndPanel(bool isClear)
@@ -319,6 +345,9 @@ public class MStageUIManager : MonoBehaviour, INewTurnListener
         endNextOrRetryButton.onClick.RemoveAllListeners();
         if (isClear)
         {
+            _catCache = pointHintToggleButton.image.sprite;
+            pointHintToggleButton.image.sprite = winCatSprite;
+            
             endMessage.sprite = clearSprite;
             endNextOrRetryButton.image.sprite = nextStageSprite;
             endNextOrRetryButton.onClick.AddListener(() =>
@@ -335,6 +364,9 @@ public class MStageUIManager : MonoBehaviour, INewTurnListener
         }
         else
         {
+            _catCache = pointHintToggleButton.image.sprite;
+            pointHintToggleButton.image.sprite = failCatSprite;
+            
             endMessage.sprite = failSprite;
             endNextOrRetryButton.image.sprite = endRetrySprite;
             endNextOrRetryButton.onClick.AddListener(() =>
@@ -350,14 +382,14 @@ public class MStageUIManager : MonoBehaviour, INewTurnListener
             });
         }
 
-        endBackground.color -= new Color(0, 0, 0, _endBackgroundAlpha);
+        endBackground.color -= new Color(0, 0, 0, endBackground.color.a);
         endBackground.gameObject.SetActive(true);
         endPanel.transform.localScale = Vector3.zero;
 
         var seq = DOTween.Sequence()
             .Append(endPanel.DOScale(Vector3.one, .5f)
                 .SetEase(Ease.OutBack))
-            .Join(endBackground.DOColor(endBackground.color + new Color(0, 0, 0, _endBackgroundAlpha), .4f));
+            .Join(endBackground.DOColor(endBackground.color + new Color(0, 0, 0, endBGAlpha), .4f));
     }
 
     private Sequence CloseEndPanel()
@@ -365,7 +397,7 @@ public class MStageUIManager : MonoBehaviour, INewTurnListener
         return DOTween.Sequence()
             .Append(endPanel.DOScale(Vector3.zero, .5f)
                 .SetEase(Ease.InBack))
-            .Join(endBackground.DOColor(endBackground.color - new Color(0, 0, 0, _endBackgroundAlpha), .4f));
+            .Join(endBackground.DOColor(endBackground.color - new Color(0, 0, 0, endBackground.color.a), .4f));
     }
 
     private void LoadToLobbyOnFail()

@@ -7,7 +7,6 @@ using DG.Tweening;
 public class LobbyUiManager : MonoBehaviour
 {
     private Main main;
-    private RectTransform codexRect; 
 
     [Header("Tween Setting")]
     public float creditDuration = 0.4f;
@@ -41,7 +40,7 @@ public class LobbyUiManager : MonoBehaviour
     [SerializeField] private Button creditCloseButton;
 
     [Header("Codex")]
-    [SerializeField] private Button codexButton;
+    [SerializeField] private RectTransform codexButton;
     [SerializeField] private Transform codexPanel;
     [SerializeField] private Button codexCloseButton;
 
@@ -89,7 +88,6 @@ public class LobbyUiManager : MonoBehaviour
     {
         this.main = main;
 
-        codexRect = codexButton.GetComponent<RectTransform>();
         InitStart();
         InitSetting();
         // InitCodex();
@@ -132,7 +130,7 @@ public class LobbyUiManager : MonoBehaviour
 
     void InitCodex()
     {
-        codexButton.onClick.AddListener(OnOpenCodexButtonTapped);
+        // codexButton.onClick.AddListener(OnOpenCodexButtonTapped);
         codexCloseButton.onClick.AddListener(OnCloseCodexButtonTapped);
     }
 
@@ -239,10 +237,10 @@ public class LobbyUiManager : MonoBehaviour
         stageSelectionPrevButton.GetComponent<Button>().interactable = false;
         enterStageButton.interactable = false;
         var seq = DOTween.Sequence()
-            .Append(slimeDescription.rectTransform.DOScale(Vector3.zero, dur)
+            .Append(slimeDescription.DOFade(0f, dur)
                 .SetEase(Ease.InCubic))
             .AppendCallback(() => Change(stageIndex))
-            .Append(slimeDescription.rectTransform.DOScale(Vector3.one, dur)
+            .Append(slimeDescription.DOFade(1f, dur)
                 .SetEase(Ease.OutCubic))
             .OnComplete(() =>
             {
@@ -272,6 +270,7 @@ public class LobbyUiManager : MonoBehaviour
             .SetEase(Ease.OutBack);
         stageSelectionNextButton.DOScale(Vector3.one, dur)
             .SetEase(Ease.OutBack);
+        
         
         return;
         void Change(int stageIndex)
@@ -422,23 +421,20 @@ public class LobbyUiManager : MonoBehaviour
         escapeButton.interactable = canInteractive;
 
         settingButton.interactable = canInteractive;
-        codexButton.interactable = canInteractive;
+        // codexButton.interactable = canInteractive;
     }
 
     private void MoveImage()
     {
-        if (codexRect == null)
-            return;
-            
         var tiltSpeed = 7;
-        float lerpX = Mathf.LerpAngle(codexRect.eulerAngles.x, Mathf.Sin(Time.time) * 6, tiltSpeed * Time.deltaTime);
-        float lerpY = Mathf.LerpAngle(codexRect.eulerAngles.y, Mathf.Cos(Time.time) * 6, tiltSpeed * Time.deltaTime);
-        float y = Mathf.Lerp(codexRect.anchoredPosition.y, 600 + Mathf.Sin(Time.time) * 15, Time.deltaTime);
-        codexRect.eulerAngles = new Vector3(lerpX, lerpY, 0);
-        codexRect.anchoredPosition = new Vector2(0, y);
+        float lerpX = Mathf.LerpAngle(codexButton.eulerAngles.x, Mathf.Sin(Time.time) * 6, tiltSpeed * Time.deltaTime);
+        float lerpY = Mathf.LerpAngle(codexButton.eulerAngles.y, Mathf.Cos(Time.time) * 6, tiltSpeed * Time.deltaTime);
+        float y = Mathf.Lerp(codexButton.anchoredPosition.y, 600 + Mathf.Sin(Time.time) * 15, Time.deltaTime);
+        codexButton.eulerAngles = new Vector3(lerpX, lerpY, 0);
+        codexButton.anchoredPosition = new Vector2(0, y);
 
-        var skyLerpX = Mathf.LerpAngle(codexRect.eulerAngles.x, Mathf.Sin(Time.time) * 10, tiltSpeed * Time.deltaTime);
-        var skyLerpY = Mathf.LerpAngle(codexRect.eulerAngles.y, Mathf.Cos(Time.time) * 10, tiltSpeed * Time.deltaTime);
+        var skyLerpX = Mathf.LerpAngle(codexButton.eulerAngles.x, Mathf.Sin(Time.time) * 10, tiltSpeed * Time.deltaTime);
+        var skyLerpY = Mathf.LerpAngle(codexButton.eulerAngles.y, Mathf.Cos(Time.time) * 10, tiltSpeed * Time.deltaTime);
         sky.eulerAngles = new Vector3(skyLerpX, skyLerpY, 0);
     }
 
