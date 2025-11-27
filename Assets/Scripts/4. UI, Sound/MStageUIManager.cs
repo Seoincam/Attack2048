@@ -219,6 +219,7 @@ public class MStageUIManager : MonoBehaviour, INewTurnListener
     {
         if (_catCache)
             pointHintToggleButton.image.sprite = _catCache;
+        pointHintToggleButton.interactable = true;
             
         _isEnd = false;
         endPanel.gameObject.SetActive(false);
@@ -317,6 +318,13 @@ public class MStageUIManager : MonoBehaviour, INewTurnListener
         }
         SetAllButtons(false);
 
+        var nextStage = main.CurrentStageIndex + 2;
+        if (nextStage <= 7)
+        {
+            main.stagesOpened[nextStage] = true;
+            PlayerPrefs.SetInt($"stage{nextStage}", 1);
+        }
+
         _isEnd = true;
         _isWin = true;
     }
@@ -390,6 +398,8 @@ public class MStageUIManager : MonoBehaviour, INewTurnListener
             .Append(endPanel.DOScale(Vector3.one, .5f)
                 .SetEase(Ease.OutBack))
             .Join(endBackground.DOColor(endBackground.color + new Color(0, 0, 0, endBGAlpha), .4f));
+
+        pointHintToggleButton.interactable = false;
     }
 
     private Sequence CloseEndPanel()
@@ -427,6 +437,8 @@ public class MStageUIManager : MonoBehaviour, INewTurnListener
     private void OnCloseSettingButtonTapped()
     {
         OnEscapeButtonTapped = null;
+        
+        main.Sound.SaveSetting();
 
         // SetActiveHideObjects(true);
         var sequence = DOTween.Sequence();

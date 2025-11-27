@@ -212,10 +212,16 @@ public class LobbyUiManager : MonoBehaviour
             stageIndex = Mathf.Clamp(0, 6, stageIndex);
 
         stageText.text = $"{stageIndex + 1} STAGE";
+        
+        Debug.Log($"{stageIndex}  " + main.stagesOpened[stageIndex]);
+        Debug.Log($"{stageIndex + 2}  " + main.stagesOpened[stageIndex + 2]);
 
         if (isOpen)
         {
             Change(stageIndex);
+
+            stageSelectionPrevButton.GetComponent<Button>().interactable = main.stagesOpened[stageIndex];
+            stageSelectionNextButton.GetComponent<Button>().interactable = main.stagesOpened[stageIndex + 2];
             
             switch (stageIndex)
             {
@@ -245,8 +251,9 @@ public class LobbyUiManager : MonoBehaviour
             .OnComplete(() =>
             {
                 enterStageButton.interactable = true;
-                stageSelectionPrevButton.GetComponent<Button>().interactable = true;
-                stageSelectionNextButton.GetComponent<Button>().interactable = true;
+
+                stageSelectionPrevButton.GetComponent<Button>().interactable = main.stagesOpened[stageIndex];
+                stageSelectionNextButton.GetComponent<Button>().interactable = main.stagesOpened[stageIndex + 2];
             });
 
         switch (stageIndex)
@@ -384,6 +391,7 @@ public class LobbyUiManager : MonoBehaviour
     {
         OnEscapeButtonTapped = null;
 
+        main.Sound.SaveSetting();
         var sequence = DOTween.Sequence();
         ClosePanel(sequence, settingPanel);
         sequence.OnComplete(() =>

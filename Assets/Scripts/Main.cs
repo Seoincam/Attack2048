@@ -31,7 +31,7 @@ public class Main : SingleTone<Main>
     private GameState _state;
     private int _currentStageIndex;
 
-
+    public bool[] stagesOpened;
 
     public LobbyUiManager LobbyUI => _lobbyUIManager;
     public MStageUIManager StageUI => _stageUIManager;
@@ -56,6 +56,16 @@ public class Main : SingleTone<Main>
     {
         base.Awake();
 
+        stagesOpened = new bool[9];
+        stagesOpened[1] = true;
+        for (int i = 2; i <= 7; i++)
+        {
+            var saveName = $"stage{i}";
+            // 0 false, 1 true
+            var save = PlayerPrefs.GetInt(saveName, 0);
+            stagesOpened[i] = (save == 1);
+        }
+        
         _sound.Init();
     }
 

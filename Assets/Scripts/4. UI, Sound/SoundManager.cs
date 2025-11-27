@@ -1,4 +1,3 @@
-using System.IO;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -6,6 +5,12 @@ public class SoundSetting
 {
     public float BgmVolume = .25f;
     public float SfxVolume = .75f;
+
+    public SoundSetting(float bgmVolume, float sfxVolume)
+    {
+        BgmVolume = bgmVolume;
+        SfxVolume = sfxVolume;
+    }
 }
 
 public class SoundManager : MonoBehaviour
@@ -214,37 +219,12 @@ public class SoundManager : MonoBehaviour
     // 저장 
     public void SaveSetting()
     {
-        string json = JsonUtility.ToJson(_soundSetting, prettyPrint: true);
-        string path = Path.Combine(Application.persistentDataPath, _saveFileName);
-
-        try
-        {
-            File.WriteAllText(path, json);
-        }
-        catch (IOException e)
-        {
-            Debug.LogError($"사운드 설정 저장을 실패했습니다: {e.Message}");
-        }
+        PlayerPrefs.SetFloat("bgm", _soundSetting.BgmVolume);
+        PlayerPrefs.SetFloat("sfx", _soundSetting.SfxVolume);
     }
 
     private SoundSetting LoadSetting()
     {
-        string path = Path.Combine(Application.persistentDataPath, _saveFileName);
-
-        if (File.Exists(path))
-        {
-            try
-            {
-                string json = File.ReadAllText(path);
-                return JsonUtility.FromJson<SoundSetting>(json);
-            }
-
-            catch (IOException e)
-            {
-                Debug.LogError($"사운드 설정 불러오기를 실패했습니다: {e.Message}");
-            }
-        }
-
-        return new SoundSetting();
+        return new SoundSetting(PlayerPrefs.GetFloat("bgm", .5f),  PlayerPrefs.GetFloat("sfx", .5f));
     }
 }
