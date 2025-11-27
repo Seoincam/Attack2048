@@ -212,9 +212,6 @@ public class LobbyUiManager : MonoBehaviour
             stageIndex = Mathf.Clamp(0, 6, stageIndex);
 
         stageText.text = $"{stageIndex + 1} STAGE";
-        
-        Debug.Log($"{stageIndex}  " + main.stagesOpened[stageIndex]);
-        Debug.Log($"{stageIndex + 2}  " + main.stagesOpened[stageIndex + 2]);
 
         if (isOpen)
         {

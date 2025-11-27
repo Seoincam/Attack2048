@@ -369,6 +369,8 @@ public class MStageUIManager : MonoBehaviour, INewTurnListener
                         .SetEase(Ease.InBack);
                 });
             });
+
+            endNextOrRetryButton.gameObject.SetActive(main.CurrentStageIndex < 6);
         }
         else
         {
