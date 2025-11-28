@@ -60,6 +60,8 @@ public class SoundManager : MonoBehaviour
     public AudioClip ShieldCreateWallSFX; // 방패 슬라임 벽생성 겸 병정 감옥 패턴
     public AudioClip ShieldDeleteSFX;
 
+    [Header("Lock")] 
+    [SerializeField] private AudioClip lockSfx;
 
     private string _saveFileName = "soundSettings.json";
     private SoundSetting _soundSetting;
@@ -216,6 +218,12 @@ public class SoundManager : MonoBehaviour
     {
         PlaySFX(ShieldDeleteSFX);
     }
+
+    public void PlayLockSFX()
+    {
+        PlaySFX(lockSfx);
+    }
+    
     // 저장 
     public void SaveSetting()
     {

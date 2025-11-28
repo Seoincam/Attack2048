@@ -422,6 +422,7 @@ public class GameManager : MonoBehaviour, INewTurnListener
         //이동 시킨 타일을 상위 타일로 교체
         foreach (var (x, y, newVal) in mergesToApply)
         {
+            Main.Instance.Sound.PlayCombineSFX();
             var moverGo = TileArray[x, y];
             if (moverGo == null) continue;
 

@@ -201,7 +201,20 @@ public class LobbyUiManager : MonoBehaviour
     }
     
     private void OnPrevStageButtonTapped() => ChangeStageInfo(--_stageIndex);
-    private void OnNextStageButtonTapped() => ChangeStageInfo(++_stageIndex);
+
+    private void OnNextStageButtonTapped()
+    {
+        if (main.stagesOpened[_stageIndex + 2])
+        {
+            main.Sound.PlayCodexClick();
+            ChangeStageInfo(++_stageIndex);    
+        }
+        else
+        {
+            main.Sound.PlayLockSFX();
+        }
+        
+    }
 
     private void ChangeStageInfo(int stageIndex, bool isOpen = false)
     {
@@ -218,7 +231,10 @@ public class LobbyUiManager : MonoBehaviour
             Change(stageIndex);
 
             stageSelectionPrevButton.GetComponent<Button>().interactable = main.stagesOpened[stageIndex];
-            stageSelectionNextButton.GetComponent<Button>().interactable = main.stagesOpened[stageIndex + 2];
+            stageSelectionNextButton.GetComponent<Image>().color = main.stagesOpened[stageIndex + 2]
+                ? Color.white
+                : new Color(.8f, .8f, .8f);
+                
             
             switch (stageIndex)
             {
@@ -249,8 +265,11 @@ public class LobbyUiManager : MonoBehaviour
             {
                 enterStageButton.interactable = true;
 
-                stageSelectionPrevButton.GetComponent<Button>().interactable = main.stagesOpened[stageIndex];
-                stageSelectionNextButton.GetComponent<Button>().interactable = main.stagesOpened[stageIndex + 2];
+                stageSelectionPrevButton.GetComponent<Button>().interactable = true;
+                stageSelectionNextButton.GetComponent<Button>().interactable = true;
+                stageSelectionNextButton.GetComponent<Image>().color = main.stagesOpened[stageIndex + 2]
+                    ? Color.white
+                    : new Color(.8f, .8f, .8f);
             });
 
         switch (stageIndex)
