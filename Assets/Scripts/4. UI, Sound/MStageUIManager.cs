@@ -80,6 +80,14 @@ public class MStageUIManager : MonoBehaviour, INewTurnListener
     [SerializeField] Button closeLobbyButton;
     [SerializeField] Button lobbyButton;
 
+    [Header("Codex")] 
+    [SerializeField] private Sprite[] descriptionSprites;
+    [SerializeField] private Button codexButton;
+    [SerializeField] private Transform codexPanel;
+    [SerializeField] private Button codexCloseButton;
+    [SerializeField] private Image slimeDescription;
+    [SerializeField] private Image codexBackground;
+
     [Header("Slime HPBar")]
     [SerializeField] private Slider hpSlider;
     [SerializeField] private Image targetIconImage;
@@ -138,6 +146,7 @@ public class MStageUIManager : MonoBehaviour, INewTurnListener
         InitDelegate();
         InitSetting();
         InitStore();
+        InitCodex();
         Subscribe_NewTurn();
         pointHintToggleButton.onClick.AddListener(TogglePointHint);
         RefreshAndResetHP();
@@ -198,6 +207,54 @@ public class MStageUIManager : MonoBehaviour, INewTurnListener
         addTurnButton.onClick.AddListener(main.Store.AddTurnBtn);
         destroyTileButton.onClick.AddListener(main.Store.DestoryTileBtn);
     }
+
+    private void InitCodex()
+    {
+        codexButton.onClick.AddListener(OpenCodex);
+        codexCloseButton.onClick.AddListener(CloseCodex);
+    }
+
+    private float _codexBgAlpha;
+    
+    private void OpenCodex()
+    {
+        _codexBgAlpha = codexBackground.color.a;
+        codexBackground.color -= new Color(0, 0, 0, _codexBgAlpha);
+        codexBackground.gameObject.SetActive(true);
+        
+        codexPanel.localScale = Vector3.zero;
+        codexPanel.gameObject.SetActive(true);
+            
+        slimeDescription.sprite = descriptionSprites[main.CurrentStageIndex];
+        slimeDescription.SetNativeSize();
+        
+        // 트윈
+        DOTween.Sequence()
+            .Join(codexBackground.DOFade(_codexBgAlpha, .4f))
+            .Join(codexPanel.DOScale(Vector3.one, .4f)
+                .SetEase(Ease.OutBack))
+            .OnComplete(() =>
+            {
+                OnEscapeButtonTapped += CloseCodex;
+            });
+    }
+
+    private void CloseCodex()
+    {
+        OnEscapeButtonTapped = null;
+
+        DOTween.Sequence()
+            .Join(codexPanel.DOScale(Vector3.zero, .4f)
+                .SetEase(Ease.InBack))
+            .Join(codexBackground.DOFade(0f, .4f))
+            .OnComplete(() =>
+            {
+                codexPanel.gameObject.SetActive(false);
+                codexBackground.gameObject.SetActive(false);
+                codexBackground.color += new Color(0, 0, 0, _codexBgAlpha);
+            });
+    }
+    
 
 
 
