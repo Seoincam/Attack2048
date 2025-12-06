@@ -224,7 +224,7 @@ public class LobbyUiManager : MonoBehaviour
         if (stageIndex is < 0 or > 6)
             stageIndex = Mathf.Clamp(0, 6, stageIndex);
 
-        stageText.text = $"{stageIndex + 1} STAGE";
+        stageText.text = $"{stageIndex + 1} / 7 STAGE";
 
         if (isOpen)
         {

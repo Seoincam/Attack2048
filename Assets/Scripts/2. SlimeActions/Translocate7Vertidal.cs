@@ -126,7 +126,8 @@ public class Translocate7Vertical : SlimeActionBase, IShowLife, IMakeWarningEffe
 
     public void UpdateWarningEffect()
     {
-        float alpha = Mathf.PingPong(Time.time * 0.45f, 0.5f);
+        float alpha = Mathf.PingPong(Time.time * 0.45f, 0.9f);
+        alpha = Mathf.Clamp(alpha, .3f, .9f);
         foreach (SpriteRenderer renderer in tList)
             renderer.color = new Color(renderer.color.r, renderer.color.g, renderer.color.b, alpha);
     }
