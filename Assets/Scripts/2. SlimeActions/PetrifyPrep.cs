@@ -94,7 +94,8 @@ public class PetrifyPrep : SlimeActionBase, IShowLife, IMakeWarningEffect
     
     public void UpdateWarningEffect()
     {
-        float alpha = Mathf.PingPong(Time.time * 0.45f, .95f);
+        float alpha = Mathf.PingPong(Time.time * 0.6f, 1f);
+        alpha = Mathf.Clamp(alpha, .7f, 1f);
         _renderer.color = new Color(_renderer.color.r, _renderer.color.g, _renderer.color.b, alpha);
     }
 }

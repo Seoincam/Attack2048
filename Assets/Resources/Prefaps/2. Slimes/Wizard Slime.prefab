@@ -103,7 +103,7 @@ MonoBehaviour:
   DefaltTurns: 80
   ClearValue: 128
   slimeBgm: {fileID: 8300000, guid: 115c6035244354c25a21c33a724ed065, type: 3}
-  ReverseMoveInterval: 5
+  ReverseMoveInterval: 7
   _reverseMoveCounter: 0
   TranslocateInterval: 10
   _translocateCounter: 0
