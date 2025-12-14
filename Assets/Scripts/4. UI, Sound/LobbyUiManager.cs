@@ -39,8 +39,9 @@ public class LobbyUiManager : MonoBehaviour
     [SerializeField] private Transform creditPanel;
     [SerializeField] private Button creditCloseButton;
 
-    [Header("Codex")]
-    [SerializeField] private RectTransform codexButton;
+    [Header("Codex")] 
+    [SerializeField] private Sprite[] slimeSprites;
+    [SerializeField] private Image slimeImage;
     [SerializeField] private Transform codexPanel;
     [SerializeField] private Button codexCloseButton;
 
@@ -100,11 +101,10 @@ public class LobbyUiManager : MonoBehaviour
     {
         defaultCanvas.gameObject.SetActive(true);
         aboveCanvas.gameObject.SetActive(true);
-        codexButton.gameObject.SetActive(true);
+        slimeImage.gameObject.SetActive(true);
         logo.gameObject.SetActive(true);
         main.Sound.InitPanel(bgmSlider, sfxSlider);
         
-
         if (isFirst)
         {
             SetAllButton(false);
@@ -119,6 +119,12 @@ public class LobbyUiManager : MonoBehaviour
 
             sequence.OnComplete(() => SetAllButton(true));
         }
+
+        slimeImage.sprite = slimeSprites[main.CurrentStageIndex];
+        slimeImage.rectTransform.localScale = main.CurrentStageIndex == 2
+            ? Vector3.one * .6f
+            : Vector3.one * .85f;
+        slimeImage.SetNativeSize();
     }
 
     void InitSetting()
@@ -313,7 +319,7 @@ public class LobbyUiManager : MonoBehaviour
     {
         defaultCanvas.gameObject.SetActive(false);
         aboveCanvas.gameObject.SetActive(false);
-        codexButton.gameObject.SetActive(false);
+        slimeImage.gameObject.SetActive(false);
         logo.gameObject.SetActive(false);
     }
     // Exit Panel
@@ -451,15 +457,15 @@ public class LobbyUiManager : MonoBehaviour
     private void MoveImage()
     {
         var tiltSpeed = 7;
-        float lerpX = Mathf.LerpAngle(codexButton.eulerAngles.x, Mathf.Sin(Time.time) * 6, tiltSpeed * Time.deltaTime);
-        float lerpY = Mathf.LerpAngle(codexButton.eulerAngles.y, Mathf.Cos(Time.time) * 6, tiltSpeed * Time.deltaTime);
-        float y = Mathf.Lerp(codexButton.anchoredPosition.y, 600 + Mathf.Sin(Time.time) * 15, Time.deltaTime);
-        codexButton.eulerAngles = new Vector3(lerpX, lerpY, 0);
-        codexButton.anchoredPosition = new Vector2(0, y);
+        float lerpX = Mathf.LerpAngle(slimeImage.rectTransform.eulerAngles.x, Mathf.Sin(Time.time) * 13, tiltSpeed * Time.deltaTime);
+        float lerpY = Mathf.LerpAngle(slimeImage.rectTransform.eulerAngles.y, Mathf.Cos(Time.time) * 13, tiltSpeed * Time.deltaTime);
+        float y = Mathf.Lerp(slimeImage.rectTransform.anchoredPosition.y, 460 + Mathf.Sin(Time.time) * 15, Time.deltaTime);
+        slimeImage.rectTransform.eulerAngles = new Vector3(lerpX, lerpY, 0);
+        slimeImage.rectTransform.anchoredPosition = new Vector2(0, y);
 
-        var skyLerpX = Mathf.LerpAngle(codexButton.eulerAngles.x, Mathf.Sin(Time.time) * 10, tiltSpeed * Time.deltaTime);
-        var skyLerpY = Mathf.LerpAngle(codexButton.eulerAngles.y, Mathf.Cos(Time.time) * 10, tiltSpeed * Time.deltaTime);
-        sky.eulerAngles = new Vector3(skyLerpX, skyLerpY, 0);
+        // var skyLerpX = Mathf.LerpAngle(codexButton.eulerAngles.x, Mathf.Sin(Time.time) * 10, tiltSpeed * Time.deltaTime);
+        // var skyLerpY = Mathf.LerpAngle(codexButton.eulerAngles.y, Mathf.Cos(Time.time) * 10, tiltSpeed * Time.deltaTime);
+        // sky.eulerAngles = new Vector3(skyLerpX, skyLerpY, 0);
     }
 
     // DOTween Helper

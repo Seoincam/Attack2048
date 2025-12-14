@@ -29,7 +29,7 @@ public class Main : SingleTone<Main>
     [SerializeField] List<StageInfoSO> stageInfos;
 
     private GameState _state;
-    private int _currentStageIndex;
+    [SerializeField] int _currentStageIndex;
 
     public bool[] stagesOpened;
 

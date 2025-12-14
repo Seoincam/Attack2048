@@ -38,7 +38,7 @@ public abstract class SlimeBase : MonoBehaviour, INewTurnListener
     public void Die(bool isRetry) {
         // if (!isRetry) _slimeManager.GameClear(null);
         EventManager.Unsubscribe(GamePhase.NewTurnPhase, OnEnter_NewTurn);
-        gameObject.SetActive(false);
+        Destroy(gameObject);
     }
 
     // - - - - - - - - - - 
