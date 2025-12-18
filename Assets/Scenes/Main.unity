@@ -1775,7 +1775,7 @@ MonoBehaviour:
   slimeDescription: {fileID: 931141704}
   escapeButton: {fileID: 1006712142}
   exitPanel: {fileID: 2007202673}
-  testStartIndexInputFied: {fileID: 1006712141}
+  testStartIndexInputFied: {fileID: 0}
 --- !u!1 &629119248 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3899223883859581377, guid: 1415ec4cd1b8f4d82b6caf09e1e185c5, type: 3}
@@ -2042,7 +2042,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4578942701457870228, guid: a02c0932dec3e4baaa81a30eabcfc5c6, type: 3}
       propertyPath: m_Text
-      value: v1.0.0-rc5
+      value: v1.0.0
       objectReference: {fileID: 0}
     - target: {fileID: 6151202533825289078, guid: a02c0932dec3e4baaa81a30eabcfc5c6, type: 3}
       propertyPath: m_Pivot.x
@@ -2124,12 +2124,17 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6275147619626181021, guid: a02c0932dec3e4baaa81a30eabcfc5c6, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7604637921400026007, guid: a02c0932dec3e4baaa81a30eabcfc5c6, type: 3}
       propertyPath: m_Camera
       value: 
       objectReference: {fileID: 1123769084}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 6275147619626181021, guid: a02c0932dec3e4baaa81a30eabcfc5c6, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a02c0932dec3e4baaa81a30eabcfc5c6, type: 3}
@@ -2142,17 +2147,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &1006712141 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 3938613764532724376, guid: a02c0932dec3e4baaa81a30eabcfc5c6, type: 3}
-  m_PrefabInstance: {fileID: 1006712139}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d199490a83bb2b844b9695cbf13b01ef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &1006712142 stripped
