@@ -14,6 +14,7 @@ public class SlimeActionManager: MonoBehaviour
     // - - - - - - - - - - - - - - - - - - - - -
     // 필드
     // - - - - - - - - - - - - - - - - - - - - -
+    private Main main;
     public static SlimeActionManager Instance;
 
     private ObjectPoolManager _pooler;
@@ -22,11 +23,11 @@ public class SlimeActionManager: MonoBehaviour
     // - - - - - - - - - - - - - - - - - - - - -
     // Unity 콜백
     // - - - - - - - - - - - - - - - - - - - - -
-    void Awake()
+    public void Init(Main main)
     {
-        Instance = this;
-
-        _pooler = ObjectPoolManager.Instance;
+        this.main = main;
+        _pooler = main.Pooler;
+        if (Instance == null) Instance = this;
     }
 
 

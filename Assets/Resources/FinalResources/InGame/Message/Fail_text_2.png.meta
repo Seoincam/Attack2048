@@ -1,0 +1,1092 @@
+fileFormatVersion: 2
+guid: 4f8d38474db9a4604a5974e9f1b4edeb
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -7517410147291840767
+    second: Fail_text_2_0
+  - first:
+      213: -7214538413245916060
+    second: Fail_text_2_1
+  - first:
+      213: 843412078847590926
+    second: Fail_text_2_2
+  - first:
+      213: 5558557356356744325
+    second: Fail_text_2_3
+  - first:
+      213: 6319169088040020644
+    second: Fail_text_2_4
+  - first:
+      213: 2402893205664696545
+    second: Fail_text_2_5
+  - first:
+      213: -6537766255820559957
+    second: Fail_text_2_6
+  - first:
+      213: -5319827592632031110
+    second: Fail_text_2_7
+  - first:
+      213: 4830199159454854902
+    second: Fail_text_2_8
+  - first:
+      213: -7170517303920084125
+    second: Fail_text_2_9
+  - first:
+      213: -585227834818289273
+    second: Fail_text_2_10
+  - first:
+      213: 3124463985857484840
+    second: Fail_text_2_11
+  - first:
+      213: 7028372679639913463
+    second: Fail_text_2_12
+  - first:
+      213: 1632040182712467471
+    second: Fail_text_2_13
+  - first:
+      213: 7343945427765968465
+    second: Fail_text_2_14
+  - first:
+      213: -2691112490829424631
+    second: Fail_text_2_15
+  - first:
+      213: 4109884815284819332
+    second: Fail_text_2_16
+  - first:
+      213: 951407936877759842
+    second: Fail_text_2_17
+  - first:
+      213: 8924530949964931425
+    second: Fail_text_2_18
+  - first:
+      213: 7751662799870618504
+    second: Fail_text_2_19
+  - first:
+      213: -9108325420294809912
+    second: Fail_text_2_20
+  - first:
+      213: -2520916938138024314
+    second: Fail_text_2_21
+  - first:
+      213: -2648899235686325291
+    second: Fail_text_2_22
+  - first:
+      213: 4633702226834084323
+    second: Fail_text_2_23
+  - first:
+      213: 7778112600219178228
+    second: Fail_text_2_24
+  - first:
+      213: -612177091187200257
+    second: Fail_text_2_25
+  - first:
+      213: 1521567354783717060
+    second: Fail_text_2_26
+  - first:
+      213: 3742089543327724489
+    second: Fail_text_2_27
+  - first:
+      213: -4172187906354119352
+    second: Fail_text_2_28
+  - first:
+      213: -800551433901122692
+    second: Fail_text_2_29
+  - first:
+      213: 6329352773552006718
+    second: Fail_text_2_30
+  - first:
+      213: -3525975149794520228
+    second: Fail_text_2_31
+  - first:
+      213: -6937719571632566561
+    second: Fail_text_2_32
+  - first:
+      213: -5543545258235239313
+    second: Fail_text_2_33
+  - first:
+      213: -5679036380059471631
+    second: Fail_text_2_34
+  - first:
+      213: 5903838364793358001
+    second: Fail_text_2_35
+  - first:
+      213: -2282259604629181912
+    second: Fail_text_2_36
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 1
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Fail_text_2_0
+      rect:
+        serializedVersion: 2
+        x: 227
+        y: 324
+        width: 134
+        height: 161
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 10fb0cbcc4bcca790800000000000000
+      internalID: -7517410147291840767
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fail_text_2_1
+      rect:
+        serializedVersion: 2
+        x: 368
+        y: 324
+        width: 159
+        height: 161
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 46c1114998fc0eb90800000000000000
+      internalID: -7214538413245916060
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fail_text_2_2
+      rect:
+        serializedVersion: 2
+        x: 537
+        y: 324
+        width: 26
+        height: 161
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e020cfe21d664bb00800000000000000
+      internalID: 843412078847590926
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fail_text_2_3
+      rect:
+        serializedVersion: 2
+        x: 588
+        y: 324
+        width: 136
+        height: 163
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 58437411776f32d40800000000000000
+      internalID: 5558557356356744325
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fail_text_2_4
+      rect:
+        serializedVersion: 2
+        x: 83
+        y: 206
+        width: 47
+        height: 30
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4aa21402ec232b750800000000000000
+      internalID: 6319169088040020644
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fail_text_2_5
+      rect:
+        serializedVersion: 2
+        x: 140
+        y: 203
+        width: 49
+        height: 33
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1e808d4b3aac85120800000000000000
+      internalID: 2402893205664696545
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fail_text_2_6
+      rect:
+        serializedVersion: 2
+        x: 200
+        y: 216
+        width: 47
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ba9a7499a303545a0800000000000000
+      internalID: -6537766255820559957
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fail_text_2_7
+      rect:
+        serializedVersion: 2
+        x: 273
+        y: 209
+        width: 37
+        height: 27
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a78a8da7dfc2c26b0800000000000000
+      internalID: -5319827592632031110
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fail_text_2_8
+      rect:
+        serializedVersion: 2
+        x: 315
+        y: 209
+        width: 16
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6fe62b54b80580340800000000000000
+      internalID: 4830199159454854902
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fail_text_2_9
+      rect:
+        serializedVersion: 2
+        x: 335
+        y: 215
+        width: 47
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 36b3d0cc0843d7c90800000000000000
+      internalID: -7170517303920084125
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fail_text_2_10
+      rect:
+        serializedVersion: 2
+        x: 391
+        y: 188
+        width: 30
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7812cf8826ad0e7f0800000000000000
+      internalID: -585227834818289273
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fail_text_2_11
+      rect:
+        serializedVersion: 2
+        x: 412
+        y: 187
+        width: 20
+        height: 50
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8285986e0735c5b20800000000000000
+      internalID: 3124463985857484840
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fail_text_2_12
+      rect:
+        serializedVersion: 2
+        x: 434
+        y: 187
+        width: 8
+        height: 51
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7f35ff6d6bbc98160800000000000000
+      internalID: 7028372679639913463
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fail_text_2_13
+      rect:
+        serializedVersion: 2
+        x: 467
+        y: 209
+        width: 37
+        height: 27
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f008db536eb26a610800000000000000
+      internalID: 1632040182712467471
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fail_text_2_14
+      rect:
+        serializedVersion: 2
+        x: 510
+        y: 209
+        width: 9
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 15e38d7e47feae560800000000000000
+      internalID: 7343945427765968465
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fail_text_2_15
+      rect:
+        serializedVersion: 2
+        x: 525
+        y: 188
+        width: 32
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 908de7d927f37aad0800000000000000
+      internalID: -2691112490829424631
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fail_text_2_16
+      rect:
+        serializedVersion: 2
+        x: 557
+        y: 187
+        width: 21
+        height: 51
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 485d2d2e67e390930800000000000000
+      internalID: 4109884815284819332
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fail_text_2_17
+      rect:
+        serializedVersion: 2
+        x: 583
+        y: 229
+        width: 32
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 26d06125a74143d00800000000000000
+      internalID: 951407936877759842
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fail_text_2_18
+      rect:
+        serializedVersion: 2
+        x: 615
+        y: 206
+        width: 21
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 161a3a36d9d4adb70800000000000000
+      internalID: 8924530949964931425
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fail_text_2_19
+      rect:
+        serializedVersion: 2
+        x: 644
+        y: 216
+        width: 50
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 88be5e41f30739b60800000000000000
+      internalID: 7751662799870618504
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fail_text_2_20
+      rect:
+        serializedVersion: 2
+        x: 702
+        y: 188
+        width: 36
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8c6daa8c94ab89180800000000000000
+      internalID: -9108325420294809912
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fail_text_2_21
+      rect:
+        serializedVersion: 2
+        x: 744
+        y: 187
+        width: 9
+        height: 51
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6868402b667e30dd0800000000000000
+      internalID: -2520916938138024314
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fail_text_2_22
+      rect:
+        serializedVersion: 2
+        x: 760
+        y: 188
+        width: 36
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5d3ec1bfd283d3bd0800000000000000
+      internalID: -2648899235686325291
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fail_text_2_23
+      rect:
+        serializedVersion: 2
+        x: 801
+        y: 187
+        width: 16
+        height: 51
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3e1d169ff973e4040800000000000000
+      internalID: 4633702226834084323
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fail_text_2_24
+      rect:
+        serializedVersion: 2
+        x: 195
+        y: 209
+        width: 57
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4f4dd0f133861fb60800000000000000
+      internalID: 7778112600219178228
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fail_text_2_25
+      rect:
+        serializedVersion: 2
+        x: 200
+        y: 187
+        width: 47
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ffea724dd2c1187f0800000000000000
+      internalID: -612177091187200257
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fail_text_2_26
+      rect:
+        serializedVersion: 2
+        x: 277
+        y: 187
+        width: 46
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4c6d6b39271bd1510800000000000000
+      internalID: 1521567354783717060
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fail_text_2_27
+      rect:
+        serializedVersion: 2
+        x: 330
+        y: 207
+        width: 57
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9c3b0cbfc929ee330800000000000000
+      internalID: 3742089543327724489
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fail_text_2_28
+      rect:
+        serializedVersion: 2
+        x: 470
+        y: 187
+        width: 50
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 84df49154396916c0800000000000000
+      internalID: -4172187906354119352
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fail_text_2_29
+      rect:
+        serializedVersion: 2
+        x: 584
+        y: 207
+        width: 30
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c7bd4ed56bed3e4f0800000000000000
+      internalID: -800551433901122692
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fail_text_2_30
+      rect:
+        serializedVersion: 2
+        x: 640
+        y: 209
+        width: 58
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e3663bd20d066d750800000000000000
+      internalID: 6329352773552006718
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fail_text_2_31
+      rect:
+        serializedVersion: 2
+        x: 645
+        y: 187
+        width: 47
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c5394ad5848311fc0800000000000000
+      internalID: -3525975149794520228
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fail_text_2_32
+      rect:
+        serializedVersion: 2
+        x: 78
+        y: 189
+        width: 57
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fdec095aec448bf90800000000000000
+      internalID: -6937719571632566561
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fail_text_2_33
+      rect:
+        serializedVersion: 2
+        x: 136
+        y: 189
+        width: 57
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f64669665fe5113b0800000000000000
+      internalID: -5543545258235239313
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fail_text_2_34
+      rect:
+        serializedVersion: 2
+        x: 335
+        y: 187
+        width: 47
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1f0f80c40820031b0800000000000000
+      internalID: -5679036380059471631
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fail_text_2_35
+      rect:
+        serializedVersion: 2
+        x: 586
+        y: 186
+        width: 53
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1b6c4d086b5aee150800000000000000
+      internalID: 5903838364793358001
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fail_text_2_36
+      rect:
+        serializedVersion: 2
+        x: 817
+        y: 188
+        width: 11
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 82aaad44bf8c350e0800000000000000
+      internalID: -2282259604629181912
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      Fail_text_2_0: -7517410147291840767
+      Fail_text_2_1: -7214538413245916060
+      Fail_text_2_10: -585227834818289273
+      Fail_text_2_11: 3124463985857484840
+      Fail_text_2_12: 7028372679639913463
+      Fail_text_2_13: 1632040182712467471
+      Fail_text_2_14: 7343945427765968465
+      Fail_text_2_15: -2691112490829424631
+      Fail_text_2_16: 4109884815284819332
+      Fail_text_2_17: 951407936877759842
+      Fail_text_2_18: 8924530949964931425
+      Fail_text_2_19: 7751662799870618504
+      Fail_text_2_2: 843412078847590926
+      Fail_text_2_20: -9108325420294809912
+      Fail_text_2_21: -2520916938138024314
+      Fail_text_2_22: -2648899235686325291
+      Fail_text_2_23: 4633702226834084323
+      Fail_text_2_24: 7778112600219178228
+      Fail_text_2_25: -612177091187200257
+      Fail_text_2_26: 1521567354783717060
+      Fail_text_2_27: 3742089543327724489
+      Fail_text_2_28: -4172187906354119352
+      Fail_text_2_29: -800551433901122692
+      Fail_text_2_3: 5558557356356744325
+      Fail_text_2_30: 6329352773552006718
+      Fail_text_2_31: -3525975149794520228
+      Fail_text_2_32: -6937719571632566561
+      Fail_text_2_33: -5543545258235239313
+      Fail_text_2_34: -5679036380059471631
+      Fail_text_2_35: 5903838364793358001
+      Fail_text_2_36: -2282259604629181912
+      Fail_text_2_4: 6319169088040020644
+      Fail_text_2_5: 2402893205664696545
+      Fail_text_2_6: -6537766255820559957
+      Fail_text_2_7: -5319827592632031110
+      Fail_text_2_8: 4830199159454854902
+      Fail_text_2_9: -7170517303920084125
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

@@ -11,11 +11,15 @@ public class GameSetting : SingleTone<GameSetting>
     public float CameraSize { get; private set; }
     public int testStartIndex;
 
+    [SerializeField] GameObject globalVolume;
+
     protected override void Awake()
     {
         base.Awake();
-
         SetUp();
+
+        var vloume = Instantiate(globalVolume);
+        DontDestroyOnLoad(vloume);
     }
 
     private void SetUp()

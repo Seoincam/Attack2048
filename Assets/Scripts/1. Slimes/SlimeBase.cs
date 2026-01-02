@@ -21,8 +21,8 @@ public abstract class SlimeBase : MonoBehaviour, INewTurnListener
     protected virtual void Start()
     {
         Subscribe_NewTurn();
-        if (SoundManager.Instance != null)
-            SoundManager.Instance.PlayBGM(slimeBgm);
+        if (Main.Instance.Sound != null)
+            Main.Instance.Sound.PlayBGM(slimeBgm);
     }
 
     public void Init(StageManager slimeManager)
@@ -36,9 +36,9 @@ public abstract class SlimeBase : MonoBehaviour, INewTurnListener
     // 사망 로직
     // - - - - - - - - - - 
     public void Die(bool isRetry) {
-        if (!isRetry) _slimeManager.GameClear();
+        // if (!isRetry) _slimeManager.GameClear(null);
         EventManager.Unsubscribe(GamePhase.NewTurnPhase, OnEnter_NewTurn);
-        gameObject.SetActive(false);
+        Destroy(gameObject);
     }
 
     // - - - - - - - - - - 
@@ -46,7 +46,7 @@ public abstract class SlimeBase : MonoBehaviour, INewTurnListener
     // - - - - - - - - - - 
     public void Fail() {
         EventManager.Unsubscribe(GamePhase.NewTurnPhase, OnEnter_NewTurn);
-        _slimeManager.GameClear();
+        _slimeManager.GameClear(null);
         gameObject.SetActive(false);
     }
 

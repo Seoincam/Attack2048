@@ -4,42 +4,100 @@
     - Awake 말고, 임의로 초기화 순서 설정 위해 사용
 */
 
+using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
-public class Main : MonoBehaviour
+public enum GameState { Lobby, Stage }
+public class Main : SingleTone<Main>
 {
-    [SerializeField] private Transform Managers;
-    [SerializeField] private Transform UiManager;
+    [SerializeField] private LobbyUiManager _lobbyUIManager;
+    [SerializeField] private MStageUIManager _stageUIManager;
+    [SerializeField] private TransitionManager transition;
 
-    public GameManager Game { get; private set; }
-    public PointManager Point { get; private set; }
-    public StoreManager Store { get; private set; }
-    public StageManager Stage { get; private set; }
+    [Space]
+    [SerializeField] GameManager _game;
+    [SerializeField] PointManager _point;
+    [SerializeField] StoreManager _store;
+    [SerializeField] StageManager _stage;
+    [SerializeField] SlimeActionManager _slimeAction;
 
-    void Awake()
+    [Space]
+    [SerializeField] private SoundManager _sound;
+    [SerializeField] ObjectPoolManager _pooler;
+
+    [Header("StageInfo")]
+    [SerializeField] List<StageInfoSO> stageInfos;
+
+    private GameState _state;
+    [SerializeField] int _currentStageIndex;
+
+    public bool[] stagesOpened;
+
+    public LobbyUiManager LobbyUI => _lobbyUIManager;
+    public MStageUIManager StageUI => _stageUIManager;
+    public SlimeActionManager SlimeAction => _slimeAction;
+    public ObjectPoolManager Pooler => _pooler;
+    public GameManager Game => _game;
+
+    public SoundManager Sound => _sound;
+
+    public GameState State => _state;
+
+
+    public PointManager Point => _point;
+    public StoreManager Store => _store;
+    public StageManager Stage => _stage;
+
+    public int CurrentStageIndex => _currentStageIndex;
+    public StageInfoSO CurrentStageInfo => stageInfos[_currentStageIndex];
+
+
+    protected override void Awake()
     {
-        // 로딩 됐나 체크
-        if (ObjectPoolManager.Instance == null)
-            SceneManager.LoadScene("Lobby");
+        base.Awake();
 
-        Game = Managers.GetComponent<GameManager>();
-        Point = Managers.GetComponent<PointManager>();
-        Store = Managers.GetComponent<StoreManager>();
-        Stage = Managers.GetComponent<StageManager>();
+        stagesOpened = new bool[9];
+        stagesOpened[1] = true;
+        for (int i = 2; i <= 7; i++)
+        {
+            var saveName = $"stage{i}";
+            // 0 false, 1 true
+            var save = PlayerPrefs.GetInt(saveName, 0);
+            stagesOpened[i] = (save == 1);
+        }
+        
+        _sound.Init();
     }
 
     void Start()
     {
         EventManager.InitEvents();
-        var ui = UiManager.GetComponent<InGameUiMnanager>();
-        ui.Init(this);
-        Game.Init();
-        Store.Init(Point);
-        Point.Init();
-        Stage.Init();
+        _lobbyUIManager.Init(this);
+        _stageUIManager.Init(this);
 
-        GameManager.Instance.StartGame();
-        ui.RefreshAllUi();
+        _state = GameState.Lobby;
+        _lobbyUIManager.OnEnterLobby(true);
+
+        _game.Init(_pooler);
+        _store.Init(Point);
+        _point.Init();
+        _stage.Init(this);
+        transition.Init(this);
+        _slimeAction.Init(this);
+
+        // ui.RefreshAllUi();
     }
+
+    public void LoadToStage(int stageIndex)
+    {
+        _state = GameState.Stage;
+        _currentStageIndex = stageIndex;
+        transition.TransitToStage(stageInfos[stageIndex]);
+    }
+
+    public void LoadToLobby(bool isWin)
+    {
+        _state = GameState.Lobby;
+        transition.TransitToLobby(isWin);
+    }    
 }

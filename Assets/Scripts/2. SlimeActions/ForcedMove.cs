@@ -6,10 +6,13 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System.Collections;
-public class ForcedMove : SlimeActionBase
+using Random = UnityEngine.Random;
+
+public class ForcedMove : SlimeActionBase, IMakeWarningEffect
 {
     // 필드    
     // - - - - - - - - - - 
+    private SpriteRenderer _renderer;
     private int _x = 2, _y = 2; // Square 배열 상의 현재 위치
     private ForcedMovedir dir;
     private static readonly Dictionary<ForcedMovedir, Vector3> directionVectors = new()
@@ -19,6 +22,18 @@ public class ForcedMove : SlimeActionBase
         {ForcedMovedir.Left, Vector3.left},
         {ForcedMovedir.Right, Vector3.right}
     };
+    
+    // Unity 콜백
+    // - - - - - - - - - -
+    private void Awake()
+    {
+        GetRenderer();
+    }
+
+    private void Update()
+    {
+        UpdateWarningEffect();
+    }
 
 
     // 초기화
@@ -42,16 +57,16 @@ public class ForcedMove : SlimeActionBase
                 switch (dir)
                 {
                     case ForcedMovedir.Up:
-                        transform.rotation = Quaternion.Euler(0, 0, 180);
+                        transform.rotation = Quaternion.Euler(0, 0, 90);
                         break;
                     case ForcedMovedir.Down:
-                        transform.rotation = Quaternion.Euler(0, 0, 0);
-                        break;
-                    case ForcedMovedir.Left:
                         transform.rotation = Quaternion.Euler(0, 0, -90);
                         break;
+                    case ForcedMovedir.Left:
+                        transform.rotation = Quaternion.Euler(0, 0, 180);
+                        break;
                     case ForcedMovedir.Right:
-                        transform.rotation = Quaternion.Euler(0, 0, 90);
+                        transform.rotation = Quaternion.Euler(0, 0, 0);
                         break;
                 }
                 return;
@@ -68,9 +83,20 @@ public class ForcedMove : SlimeActionBase
         base.Execute();
     }
 
-    public override IEnumerator DestroySelf()
+    public override void Destroy()
     {
         GameManager.Instance.forcedDirection = ForcedMovedir.None;
-        return base.DestroySelf();
+        base.Destroy();
+    }
+
+    public void GetRenderer()
+    {
+        _renderer = GetComponent<SpriteRenderer>();
+    }
+
+    public void UpdateWarningEffect()
+    {
+        float alpha = Mathf.PingPong(Time.time * 0.45f, 0.5f);
+        _renderer.color = new Color(_renderer.color.r, _renderer.color.g, _renderer.color.b, alpha);
     }
 }
